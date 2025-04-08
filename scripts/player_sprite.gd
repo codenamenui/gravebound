@@ -1,7 +1,9 @@
 extends Node2D
+class_name CharacterSpriteComponent
 
 var current_direction: Vector2 = Vector2(0, 1)
 var current_animation: String = ""
+var target_animation: String = ""
 
 @export var attack_speed_scale: float = 3.0
 
@@ -12,24 +14,16 @@ func set_direction(direction: Vector2):
 	current_direction = direction
 
 func play_idle():
-	var anim_prefix = get_direction_prefix()
-	play_animation(anim_prefix + "_idle")
+	play_animation("idle")
 
 func play_walk():
-	var anim_prefix = get_direction_prefix()
-	play_animation(anim_prefix + "_walk")
-
-func play_attack():
-	var anim_prefix = get_direction_prefix()
-	play_animation(anim_prefix + "_attack", true)
+	play_animation("walk")
 
 func play_hit():
-	var anim_prefix = get_direction_prefix()
-	play_animation(anim_prefix + "_hit")
+	play_animation("hit", true)
 
 func play_death():
-	var anim_prefix = get_direction_prefix()
-	play_animation(anim_prefix + "_death")
+	play_animation("death", true)
 
 func get_direction_prefix():
 	var x = current_direction.x
@@ -38,8 +32,10 @@ func get_direction_prefix():
 	if abs(x) > 0.3 and abs(y) > 0.3:
 		if x > 0:
 			if y > 0:
+				animated_sprite.flip_h = false
 				return "bs"
 			else:
+				animated_sprite.flip_h = false
 				return "ts"
 		else:
 			if y > 0:
@@ -62,17 +58,21 @@ func get_direction_prefix():
 		else:
 			return "b"
 
-func play_animation(anim_name, is_attack: bool = false):
-	current_animation = anim_name
+func play_animation(anim_name: String, speed_scale: float = 1.0, force_restart: bool = false):
+	var dir_prefix = get_direction_prefix()
+	var full_anim_name = dir_prefix + "_" + anim_name
+	if current_animation == full_anim_name and !force_restart:
+		return
+		
+	animated_sprite.speed_scale = speed_scale
 	
-	animated_sprite.speed_scale = 1.0
-	
-	if animated_sprite.sprite_frames.has_animation(anim_name):
-		animated_sprite.play(anim_name)
-		if is_attack:
+	if animated_sprite.sprite_frames.has_animation(full_anim_name):
+		current_animation = full_anim_name
+		animated_sprite.play(full_anim_name)
+		if anim_name == "attack":
 			animated_sprite.speed_scale = attack_speed_scale
 	else:
-		var fallback = anim_name.split("_")[0] + "_idle"
+		var fallback = dir_prefix + "_idle"
 		if animated_sprite.sprite_frames.has_animation(fallback):
 			current_animation = fallback
 			animated_sprite.play(fallback)
@@ -81,14 +81,20 @@ func play_animation(anim_name, is_attack: bool = false):
 			animated_sprite.play("f_idle")
 
 func play_animation_frames(anim_name: String, start_frame: int, end_frame: int, speed: float = 1.0) -> void:
-	animated_sprite.play(get_direction_prefix() + "_" + anim_name)
-	animated_sprite.speed_scale = speed
-	animated_sprite.frame = start_frame
+	var full_anim_name = get_direction_prefix() + "_" + anim_name
+	
+	if animated_sprite.sprite_frames.has_animation(full_anim_name):
+		current_animation = full_anim_name
+		animated_sprite.play(full_anim_name)
+		animated_sprite.speed_scale = speed
+		animated_sprite.frame = start_frame
+	else:
+		play_idle()
 
-func _on_animation_finished():
-	if current_animation.ends_with("_attack"):
-		player.on_attack_animation_finished()
-	elif current_animation.ends_with("_hit"):
-		player.on_hit_animation_finished()
-	elif current_animation.ends_with("_death"):
-		player.on_death_animation_finished()
+func update_animation_based_on_state():
+	if player.is_attacking:
+		return
+	elif player.velocity.length() > 10:
+		play_walk()
+	else:
+		play_idle()

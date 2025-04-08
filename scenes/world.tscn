@@ -42,6 +42,7 @@ script = ExtResource("2_71j4m")
 target = NodePath("../Player")
 shake_trauma_power = 1.0
 attack_zoom_amount = 1.0
+hit_stop_time = 0.0
 
 [node name="Player" parent="." instance=ExtResource("1_kqs1s")]
 position = Vector2(436, 242)
@@ -64,14 +65,15 @@ position = Vector2(866, 86)
 shape = SubResource("WorldBoundaryShape2D_qfnet")
 
 [node name="EnemySpawn" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+visible = false
 script = ExtResource("3_k0juu")
 enemy_scene = ExtResource("3_4wyf3")
 player = NodePath("../Player")
 min_spawn_distance = 100.0
 max_spawn_distance = 200.0
 spawn_interval = 3.0
-enemies_per_cycle = 10
-max_concurrent_enemies = 30
+enemies_per_cycle = 1
+max_concurrent_enemies = 1
 
 [connection signal="attacked" from="Player" to="Camera2D" method="_on_player_attacked"]
 [connection signal="took_damage" from="Player" to="Camera2D" method="_on_player_took_damage"]

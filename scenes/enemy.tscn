@@ -598,7 +598,7 @@ radius = 198.091
 [sub_resource type="CircleShape2D" id="CircleShape2D_c4w8v"]
 radius = 15.0333
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_c4w8v")
 show_detection_range = false
 
