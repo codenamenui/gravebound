@@ -1,8 +1,8 @@
 extends Node
-class_name SM
+class_name SkillManager
 
 # Skill slots
-@export var max_skill_slots: int = 4
+@export var max_skill_slots: int = 3
 var equipped_skills: Array[BaseSkill] = []
 var active_skill_index: int = 0
 

@@ -80,6 +80,11 @@ func play_animation(anim_name, is_attack: bool = false):
 			current_animation = "f_idle"
 			animated_sprite.play("f_idle")
 
+func play_animation_frames(anim_name: String, start_frame: int, end_frame: int, speed: float = 1.0) -> void:
+	animated_sprite.play(get_direction_prefix() + "_" + anim_name)
+	animated_sprite.speed_scale = speed
+	animated_sprite.frame = start_frame
+
 func _on_animation_finished():
 	if current_animation.ends_with("_attack"):
 		player.on_attack_animation_finished()

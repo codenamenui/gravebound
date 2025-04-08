@@ -1,12 +1,12 @@
 extends Resource
-class_name BaseSkill
+class_name BS
 
 # Basic skill properties
 @export var skill_name: String = "Unnamed Skill"
 @export var icon: Texture2D
 @export var description: String = ""
 @export var cooldown_time: float = 1.0
-@export var execution_time: float = 0.3
+@export var anticipation_time: float = 0.3
 @export var recovery_time: float = 0.2
 @export var speed_multiplier: float = 0.5
 @export var animation_name: String = "attack"
@@ -35,7 +35,7 @@ var last_use_direction: Vector2 = Vector2.ZERO
 
 # Timers
 var cooldown_timer: Timer
-var execution_timer: Timer
+var anticipation_timer: Timer
 var recovery_timer: Timer
 var hitbox_timer: Timer
 
@@ -61,10 +61,10 @@ func initialize(skill_owner: Node) -> void:
 	cooldown_timer.name = skill_name + "_CooldownTimer"
 	cooldown_timer.timeout.connect(_on_cooldown_timeout)
 	
-	execution_timer = Timer.new()
-	execution_timer.one_shot = true
-	execution_timer.name = skill_name + "_ExecutionTimer"
-	execution_timer.timeout.connect(_on_execution_timeout)
+	anticipation_timer = Timer.new()
+	anticipation_timer.one_shot = true
+	anticipation_timer.name = skill_name + "_anticipationTimer"
+	anticipation_timer.timeout.connect(_on_anticipation_timeout)
 	
 	recovery_timer = Timer.new()
 	recovery_timer.one_shot = true
@@ -78,7 +78,7 @@ func initialize(skill_owner: Node) -> void:
 	
 	# Add timers to the owner node
 	owner_node.add_child(cooldown_timer)
-	owner_node.add_child(execution_timer)
+	owner_node.add_child(anticipation_timer)
 	owner_node.add_child(recovery_timer)
 	owner_node.add_child(hitbox_timer)
 
@@ -91,7 +91,7 @@ func execute(direction: Vector2) -> bool:
 	is_executing = true
 	
 	# Start timers
-	execution_timer.start(execution_time)
+	anticipation_timer.start(anticipation_time)
 	cooldown_timer.start(cooldown_time)
 	
 	# Apply the skill effects
@@ -113,8 +113,8 @@ func _on_cooldown_timeout() -> void:
 	is_on_cooldown = false
 	emit_signal("skill_ready")
 
-# Called when the skill's execution time is complete
-func _on_execution_timeout() -> void:
+# Called when the skill's anticipation time is complete
+func _on_anticipation_timeout() -> void:
 	is_executing = false
 	recovery_timer.start(recovery_time)
 
