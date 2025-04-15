@@ -15,11 +15,28 @@ var current_skill = null
 
 @onready var character_sprite_component: CharacterSpriteComponent = $CharacterSpriteComponent
 @onready var hit_timer: Timer = $Timers/HitTimer
+@onready var skill_manager: SkillManagerComponent = $SkillManagerComponent
 
 signal took_damage
 signal attacked
 
 func _ready():
+	# Initialize the skill manager with this character
+	skill_manager.initialize(self)
+	
+	# Connect to signals if needed
+	skill_manager.skill_executed.connect(_on_skill_executed)
+	skill_manager.skill_ready.connect(_on_skill_ready)
+	
+	# Initialize basic attacks (doesn't use skill slots)
+	var slash_attack_scene = preload("res://scenes/skills/BasicAttackSkill1.tscn")
+	var slash_attack = slash_attack_scene.instantiate()
+	skill_manager.add_basic_attack(slash_attack)
+
+	# Initialize movement skills (doesn't use skill slots)
+	#var dash_skill = preload("res://skills/dash.tres").duplicate()
+	#skill_manager.add_movement_skill(dash_skill)
+	
 	character_sprite_component.set_direction(last_direction)
 	character_sprite_component.play_idle()
 	hit_timer.wait_time = hit_timer_duration
@@ -41,9 +58,25 @@ func _physics_process(delta):
 		character_sprite_component.update_animation_based_on_state()
 	
 	move_and_slide()
+	
+		# Process skill input
+	var action_pressed = {
+		"skill_1": Input.is_action_just_pressed("skill_1"),
+		"skill_2": Input.is_action_just_pressed("skill_2"),
+		"attack": Input.is_action_just_pressed("attack"),
+		"dash": Input.is_action_just_pressed("dash")
+	}
+	
+	skill_manager.process_input(last_direction, action_pressed)
 
+func _on_skill_executed(skill: BaseSkill) -> void:
+	print("Player executed skill: ", skill.skill_name)
+
+func _on_skill_ready(skill: BaseSkill) -> void:
+	print("Skill ready: ", skill.skill_name)
+	
 func handle_movement(direction: Vector2 = Vector2()):
-	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	#direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if is_attacking and current_skill and current_skill.movement_control_mode == 1:
 		if direction != Vector2.ZERO and current_skill.can_change_direction_during_skill:
@@ -64,16 +97,6 @@ func handle_movement(direction: Vector2 = Vector2()):
 func _input(event):
 	if is_dying or is_hit or is_attacking:
 		return
-	
-	if Input.is_action_just_pressed("attack"):
-		var skill = $BasicAttackSkill1
-		if skill.execute(last_direction):
-			current_skill = skill
-			emit_signal("attacked")
-	if Input.is_action_just_pressed("dash"):
-			var skill = $DashSkill
-			if skill.execute(last_direction):
-				current_skill = skill
 
 func apply_impulse(impulse: Vector2):
 	velocity = impulse

@@ -162,6 +162,13 @@ func create_or_get_hitbox() -> void:
 func _physics_process(delta):
 	if !is_skill_active():
 		return
+	
+	# Update hitbox position while active
+	if hitbox and hitbox.monitoring:
+		var player_facing_angle = last_use_direction.angle()
+		var rotated_offset = hitbox_offset.rotated(player_facing_angle)
+		hitbox.global_position = owner_node.global_position + rotated_offset
+		hitbox.rotation = player_facing_angle
 		
 	if is_on_anticipation and not applied_anticipation_impulse:
 		_apply_anticipation_impulse()
@@ -173,7 +180,7 @@ func _physics_process(delta):
 		handle_override_movement()
 	# Movement control mode 1 (Add To Input) is handled in the Player class
 	# Player Control (2) doesn't need special handling
-
+	
 func handle_override_movement():
 	if !is_skill_active():
 		return
@@ -238,19 +245,18 @@ func _update_hitbox_orientation(direction: Vector2) -> void:
 	if not hitbox:
 		return
 		
-	# For a directional hitbox, you might want to rotate it based on the direction
+	# Store the angle for use in other functions
 	var angle = direction.angle()
 	
 	# Get the collision shape
 	var collision_shape = hitbox.get_node_or_null("CollisionShape2D")
 	if collision_shape:
-		# If using a capsule or rectangle shape, you might want to rotate it
-		collision_shape.rotation = angle
+		# Update rotation of collision shape based on facing direction
+		collision_shape.rotation = 0  # Reset rotation first
 		
-		# If your hitbox is offset from the player, adjust its position based on direction
-		var rotated_offset = hitbox_offset.rotated(angle)
-		collision_shape.position = rotated_offset
-
+		# Don't set position here - this will be handled in _activate_hitbox()
+		# We only want to setup the initial orientation
+		
 func _apply_anticipation_impulse():
 	if anticipation_impulse.length() > 0:
 		var rotated_impulse = _get_rotated_vector(anticipation_impulse)
@@ -318,38 +324,39 @@ func _activate_hitbox() -> void:
 	if not hitbox or not is_instance_valid(hitbox):
 		create_or_get_hitbox()
 	
-	# Make sure the hitbox exists before trying to use it
-	if hitbox and is_instance_valid(hitbox):
-		print("Activating hitbox for skill: ", skill_name)
+	if hitbox:
+		# Get facing angle from the last use direction
+		var player_facing_angle = last_use_direction.angle()
 		
-		# Update the hitbox orientation based on last direction
-		_update_hitbox_orientation(last_use_direction)
+		# Rotate the hitbox offset based on facing direction
+		var rotated_offset = hitbox_offset.rotated(player_facing_angle)
 		
-		# Configure the hitbox with damage and knockback
-		var config = {
-			"damage": get_current_damage(),
-			"knockback": knockback_force,
-			"owner": owner_node
-		}
+		# Position hitbox relative to player using the rotated offset
+		hitbox.global_position = owner_node.global_position + rotated_offset
 		
-		# Apply configuration if method exists
-		if hitbox.has_method("configure"):
-			hitbox.configure(config)
+		# Set hitbox rotation to match facing direction
+		hitbox.rotation = player_facing_angle
 		
-		# Make sure the hitbox is actively monitoring for collisions
+		# Update collision shape (reset its local position since offset is handled at hitbox level)
+		var collision_shape = hitbox.get_node("CollisionShape2D")
+		if collision_shape:
+			collision_shape.position = Vector2.ZERO
+			collision_shape.rotation = 0  # Reset rotation since parent hitbox handles it
+		
+		# Enable monitoring
 		hitbox.monitoring = true
 		hitbox.monitorable = true
 		
-		# Show debug visualization if enabled
+		# Make hitbox follow player
+		hitbox.set_as_top_level(true)  # Important for proper positioning
+		
+		# Debug visualization
 		if display_hitbox:
 			_show_hitbox_visualization(hitbox)
 		
-		# Start the hitbox duration timer if specified
 		if hitbox_duration > 0:
 			hitbox_timer.start(hitbox_duration)
-	else:
-		push_error("Failed to create hitbox for skill: " + skill_name)
-		
+			
 func _deactivate_hitbox() -> void:
 	if hitbox:
 		hitbox.monitoring = false
