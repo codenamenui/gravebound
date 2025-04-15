@@ -24,7 +24,6 @@ func _ready():
 	character_sprite_component.play_idle()
 	hit_timer.wait_time = hit_timer_duration
 	
-	# Initialize all skills that might be children of this node
 	for child in get_children():
 		if child is BaseSkill:
 			child.initialize(self)
@@ -33,32 +32,26 @@ func _physics_process(delta):
 	if is_dying:
 		return
 	
-	# Let the active skill handle movement if in override mode and a skill is active
 	if is_attacking and current_skill and current_skill.movement_control_mode == 0:
-		# Don't call handle_movement - let the skill override it
 		pass
 	else:
 		handle_movement()
 	
-	# Only update animation if not currently hit or attacking
 	if not is_hit and not is_attacking:
 		character_sprite_component.update_animation_based_on_state()
 	
 	move_and_slide()
 
-func handle_movement():
-	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	
-	# If we're in a skill with add-to-input mode, let the skill handle the movement additions
+func handle_movement(direction: Vector2 = Vector2()):
+	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+
 	if is_attacking and current_skill and current_skill.movement_control_mode == 1:
-		# We still want to update direction if possible
 		if direction != Vector2.ZERO and current_skill.can_change_direction_during_skill:
 			current_direction = direction.normalized()
 			last_direction = current_direction
 			character_sprite_component.set_direction(last_direction)
 		return
 	
-	# Normal movement
 	if direction != Vector2.ZERO:
 		current_direction = direction.normalized()
 		last_direction = current_direction

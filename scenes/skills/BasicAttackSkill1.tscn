@@ -7,10 +7,11 @@
 [node name="BasicAttackSkill1" type="Node2D"]
 script = ExtResource("1_h1i5x")
 skill_name = "bs1"
-cooldown_time = 0.3
-anticipation_time = 0.1
-contact_time = 0.1
-recovery_time = 0.2
+animation_speed = 3.0
+cooldown_time = 0.1
+anticipation_time = 0.02
+contact_time = 0.05
+recovery_time = 0.03
 hitbox_duration = 0.1
 speed_multiplier = 0.0
 contact_impulse = Vector2(50, 0)

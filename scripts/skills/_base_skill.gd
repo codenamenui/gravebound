@@ -6,6 +6,7 @@ class_name BaseSkill
 @export var icon: Texture2D
 @export var description: String
 @export var animation_name: String
+@export var animation_speed: float
 
 @export_group("Timing")
 @export var cooldown_time: float
@@ -213,7 +214,7 @@ func execute(direction: Vector2) -> bool:
 	_update_hitbox_orientation(direction)
 	
 	if owner_node.get_node("CharacterSpriteComponent").has_method("play_animation"):
-		owner_node.get_node("CharacterSpriteComponent").play_animation(animation_name)
+		owner_node.get_node("CharacterSpriteComponent").play_animation(animation_name, animation_speed)
 	
 	if skill_sfx != null:
 		var audio_player = AudioStreamPlayer.new()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=76 format=3 uid="uid://c84k2nic04m2f"]
 
-[ext_resource type="Script" uid="uid://6fhyrr88sb2c" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://6fhyrr88sb2c" path="res://scripts/entities/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://bsgusnwvl6w5n" path="res://scenes/skills/BasicAttackSkill1.tscn" id="2_ur7pv"]
 [ext_resource type="PackedScene" uid="uid://cs56ppoyoum5u" path="res://scenes/animated_sprite.tscn" id="3_fjrip"]
@@ -602,13 +602,13 @@ height = 32.0
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_mask = 2
 script = ExtResource("1_3vyb7")
+deceleration_factor = 15.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_smehm")
 
 [node name="BasicAttackSkill1" parent="." instance=ExtResource("2_ur7pv")]
 animation_name = "attack"
-movement_control_mode = 0
 can_change_direction_during_skill = true
 
 [node name="CharacterSpriteComponent" parent="." instance=ExtResource("3_fjrip")]
