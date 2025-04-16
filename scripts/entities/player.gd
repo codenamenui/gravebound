@@ -33,7 +33,12 @@ func _ready():
 	skill_manager.skill_ready.connect(_on_skill_ready)
 	
 	for skill in skills.get_children():
-		skill_manager.add_basic_attack(skill)
+		if skill.name.begins_with("BA"):
+			skill_manager.add_basic_attack(skill)
+		elif skill.name.begins_with("Dash"):
+			skill_manager.add_movement_skill(skill)
+		else:
+			skill_manager.add_skill(skill, 3)
 	# Initialize basic attacks (doesn't use skill slots)
 	#var slash_attack_scene = preload("res://scenes/skills/ba1.tscn")
 	#var slash_attack = slash_attack_scene.instantiate()
@@ -79,7 +84,6 @@ func _process(delta: float) -> void:
 			current_ba += 1
 			attack_index = current_ba  # Set the attack index to the current BA value
 			
-	print(current_ba)
 	var action_pressed = {
 		"skill_1": Input.is_action_just_pressed("skill_1"),
 		"skill_2": Input.is_action_just_pressed("skill_2"),

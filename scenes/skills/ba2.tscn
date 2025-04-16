@@ -2,16 +2,16 @@
 
 [ext_resource type="Script" uid="uid://ci0i031g2wim2" path="res://scripts/skills/basic_attack_skill_1.gd" id="1_cwpw3"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cwpw3"]
 
 [node name="BA2" type="Node"]
 script = ExtResource("1_cwpw3")
 skill_name = "bs2"
 animation_name = "attack"
 animation_speed = 3.0
-anticipation_time = 0.05
-contact_time = 0.1
-recovery_time = 0.05
+anticipation_time = 0.02
+contact_time = 0.07
+recovery_time = 0.02
 hitbox_duration = 0.1
 speed_multiplier = 0.0
 contact_impulse = Vector2(200, 0)
@@ -26,4 +26,5 @@ metadata/_custom_type_script = "uid://btielatq3l0jg"
 [node name="Hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-shape = SubResource("RectangleShape2D_h1i5x")
+scale = Vector2(0.501683, 1.81096)
+shape = SubResource("RectangleShape2D_cwpw3")
