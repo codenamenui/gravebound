@@ -130,20 +130,18 @@ func add_movement_skill(skill: BaseSkill) -> void:
 
 # Centralized skill initialization
 func _initialize_skill(skill: BaseSkill) -> void:
-	# Only initialize if not already initialized
-	if !skill.is_inside_tree():
-		skill.initialize(character)
-		add_child(skill)
-		
-		# Connect signals
-		if !skill.is_connected("skill_ready", _on_skill_ready):
-			skill.skill_ready.connect(_on_skill_ready.bind(skill))
-		
-		if !skill.is_connected("skill_finished", _on_skill_finished):
-			skill.skill_finished.connect(_on_skill_finished.bind(skill))
-		
-		if !skill.is_connected("skill_hit_enemy", _on_skill_hit_enemy):
-			skill.skill_hit_enemy.connect(_on_skill_hit_enemy.bind(skill))
+	skill.initialize(character)
+	add_child(skill)
+	
+	# Connect signals
+	if !skill.is_connected("skill_ready", _on_skill_ready):
+		skill.skill_ready.connect(_on_skill_ready.bind(skill))
+	
+	if !skill.is_connected("skill_finished", _on_skill_finished):
+		skill.skill_finished.connect(_on_skill_finished.bind(skill))
+	
+	if !skill.is_connected("skill_hit_enemy", _on_skill_hit_enemy):
+		skill.skill_hit_enemy.connect(_on_skill_hit_enemy.bind(skill))
 
 # Skill execution functions
 func execute_skill(slot_index: int, direction: Vector2 = Vector2.RIGHT) -> bool:
@@ -355,9 +353,9 @@ func process_input(input_direction: Vector2, action_pressed: Dictionary) -> void
 		
 	if action_pressed.get("skill_4", false):
 		execute_skill(3, effective_direction)
-	
-	if action_pressed.get("attack", false):
-		execute_basic_attack(0, effective_direction)
+		
+	if action_pressed.get("attack", -1) >= 0:
+		execute_basic_attack(action_pressed.get("attack", -1), effective_direction)
 	
 	if action_pressed.get("dash", false):
 		execute_movement_skill(0, effective_direction)

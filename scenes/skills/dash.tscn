@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvggagoyatlr8"]
+
+[ext_resource type="Script" uid="uid://ci0i031g2wim2" path="res://scripts/skills/basic_attack_skill_1.gd" id="1_w4kms"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
+
+[node name="BasicAttackSkill1" type="Node"]
+script = ExtResource("1_w4kms")
+skill_name = "bs1"
+animation_name = "attack"
+animation_speed = 3.0
+cooldown_time = 0.2
+anticipation_time = 0.05
+contact_time = 0.1
+recovery_time = 0.05
+hitbox_duration = 0.1
+speed_multiplier = 0.0
+contact_impulse = Vector2(200, 0)
+movement_control_mode = 2
+base_damage = 10.0
+knockback_force = 5.0
+zoom_amount = 1.0
+hitbox_offset = Vector2(15, 0)
+display_hitbox = true
+metadata/_custom_type_script = "uid://btielatq3l0jg"
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_h1i5x")

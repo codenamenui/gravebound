@@ -1,15 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://bsgusnwvl6w5n"]
 
-[ext_resource type="Script" uid="uid://ci0i031g2wim2" path="res://scripts/skills/basic_attack_skill_1.gd" id="1_h1i5x"]
+[ext_resource type="Script" uid="uid://ci0i031g2wim2" path="res://scripts/skills/basic_attack_skill_1.gd" id="1_ib5y3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
 
-[node name="BasicAttackSkill1" type="Node"]
-script = ExtResource("1_h1i5x")
+[node name="BA1" type="Node"]
+script = ExtResource("1_ib5y3")
 skill_name = "bs1"
 animation_name = "attack"
 animation_speed = 3.0
-cooldown_time = 0.2
 anticipation_time = 0.05
 contact_time = 0.1
 recovery_time = 0.05
