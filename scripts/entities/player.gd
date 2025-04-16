@@ -13,6 +13,7 @@ var is_dying: bool = false
 var speed_multiplier: float = 1.0
 var current_skill = null
 var current_ba = -1
+var current_dash = 0
 
 @onready var character_sprite_component: CharacterSpriteComponent = $CharacterSpriteComponent
 @onready var hit_timer: Timer = $Timers/HitTimer
@@ -83,6 +84,16 @@ func _process(delta: float) -> void:
 		if ba_timer.time_left > 0:
 			current_ba += 1
 			attack_index = current_ba  # Set the attack index to the current BA value
+	
+	var can_dash
+	if Input.is_action_just_pressed("dash"):
+		dash_timer.start(0.3)
+		if dash_timer.time_left > 0:
+			current_dash += 1
+		if current_dash >= 3:
+			can_dash = false
+		else:
+			can_dash = true
 			
 	var action_pressed = {
 		"skill_1": Input.is_action_just_pressed("skill_1"),
@@ -156,3 +167,6 @@ func die():
 
 func _on_ba_timer_timeout() -> void:
 	current_ba = -1
+
+func _on_dash_timer_timeout() -> void:
+	current_dash = 0

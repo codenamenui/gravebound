@@ -121,54 +121,49 @@ func initialize(skill_owner: Node) -> void:
 	create_or_get_hitbox()
 
 func create_or_get_hitbox() -> void:
-	# First check if hitbox exists as a direct child of the skill
 	hitbox = get_node_or_null("Hitbox")
 	
 	if not hitbox:
 		# Create a new hitbox
 		hitbox = Area2D.new()
 		hitbox.name = "Hitbox"
-		# Set collision layers for combat
+		# Set collision layers for combat - adjust these values based on your project's collision settings
 		hitbox.collision_layer = 4  # Layer for attack hitboxes
 		hitbox.collision_mask = 8   # Layer for enemy hurtboxes
 		
-		# Add a collision shape
+		# Add a collision shape if one was provided
 		var shape_node = CollisionShape2D.new()
 		shape_node.name = "CollisionShape2D"
 		
 		# Use the exported shape or create a default one
 		if hitbox_shape:
-			shape_node.shape = hitbox_shape.duplicate()
+			shape_node.shape = hitbox_shape
 		else:
 			var default_shape = CircleShape2D.new()
 			default_shape.radius = 50  # Default radius
 			shape_node.shape = default_shape
 		
-		# Apply scale to the collision shape
+		shape_node.position = hitbox_offset
 		shape_node.scale = hitbox_scale
 		
 		hitbox.add_child(shape_node)
 		add_child(hitbox)
 	
-	# Make sure the hitbox is initially disabled
+	# Configure the hitbox
 	hitbox.monitoring = false
 	hitbox.monitorable = false
 	
-	# Clear existing connections to avoid duplicates
-	if hitbox.is_connected("body_entered", _on_hitbox_body_entered):
-		hitbox.body_entered.disconnect(_on_hitbox_body_entered)
-	if hitbox.is_connected("area_entered", _on_hitbox_area_entered):
-		hitbox.area_entered.disconnect(_on_hitbox_area_entered)
-	
 	# Connect signals
-	hitbox.body_entered.connect(_on_hitbox_body_entered)
-	hitbox.area_entered.connect(_on_hitbox_area_entered)
+	if not hitbox.is_connected("body_entered", _on_hitbox_body_entered):
+		hitbox.body_entered.connect(_on_hitbox_body_entered)
+	if not hitbox.is_connected("area_entered", _on_hitbox_area_entered):
+		hitbox.area_entered.connect(_on_hitbox_area_entered)
 
 func _physics_process(delta):
 	if !is_skill_active():
 		return
 	
-	# Update hitbox position while active - make sure it tracks the player
+	# Update hitbox position while active
 	if hitbox and hitbox.monitoring:
 		var player_facing_angle = last_use_direction.angle()
 		var rotated_offset = hitbox_offset.rotated(player_facing_angle)
@@ -256,8 +251,8 @@ func _update_hitbox_orientation(direction: Vector2) -> void:
 	# Get the collision shape
 	var collision_shape = hitbox.get_node_or_null("CollisionShape2D")
 	if collision_shape:
-		# Reset rotation first
-		collision_shape.rotation = 0
+		# Update rotation of collision shape based on facing direction
+		collision_shape.rotation = 0  # Reset rotation first
 		
 		# Don't set position here - this will be handled in _activate_hitbox()
 		# We only want to setup the initial orientation
@@ -333,9 +328,6 @@ func _activate_hitbox() -> void:
 		# Get facing angle from the last use direction
 		var player_facing_angle = last_use_direction.angle()
 		
-		# Set hitbox to be a top-level node (not affected by parent transformations)
-		hitbox.set_as_top_level(true)
-		
 		# Rotate the hitbox offset based on facing direction
 		var rotated_offset = hitbox_offset.rotated(player_facing_angle)
 		
@@ -345,9 +337,18 @@ func _activate_hitbox() -> void:
 		# Set hitbox rotation to match facing direction
 		hitbox.rotation = player_facing_angle
 		
+		# Update collision shape (reset its local position since offset is handled at hitbox level)
+		var collision_shape = hitbox.get_node("CollisionShape2D")
+		if collision_shape:
+			collision_shape.position = Vector2.ZERO
+			collision_shape.rotation = 0  # Reset rotation since parent hitbox handles it
+		
 		# Enable monitoring
 		hitbox.monitoring = true
 		hitbox.monitorable = true
+		
+		# Make hitbox follow player
+		hitbox.set_as_top_level(true)  # Important for proper positioning
 		
 		# Debug visualization
 		if display_hitbox:
@@ -467,26 +468,19 @@ func set_hitbox_visibility(visible: bool) -> void:
 				_hide_hitbox_visualization(hitbox)
 
 func _on_hitbox_body_entered(body) -> void:
-	print("Hitbox hit body: ", body.name) # Debug print
 	_handle_hit(body)
 
 func _on_hitbox_area_entered(area) -> void:
-	print("Hitbox hit area: ", area.name) # Debug print
-	# Check if this is a hurtbox
-	if area.get_parent() and "Hurtbox" in area.name:
+	if area.get_parent() and area.name.begins_with("Hurtbox"):
 		_handle_hit(area.get_parent())
 
 func _handle_hit(target) -> void:
-	print("Handling hit on: ", target.name) # Debug print
-	
-	# Check if target is valid for damage
 	if target.has_method("take_damage") and target.is_in_group("Enemy"):
 		var damage = get_current_damage()
+		var knockback_direction = (target.global_position - owner_node.global_position).normalized()
 		
-		# Use last_use_direction for knockback direction
 		target.take_damage(damage, last_use_direction)
-		
-		print("Applied damage: ", damage) # Debug print
+
 		emit_signal("skill_hit_enemy", target)
 		
 		if hit_stop_time > 0:

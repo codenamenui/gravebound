@@ -658,3 +658,4 @@ ignore_time_scale = true
 
 [connection signal="animation_finished" from="CharacterSpriteComponent/AnimatedSprite2D" to="CharacterSpriteComponent" method="_on_animation_finished"]
 [connection signal="timeout" from="Timers/BATimer" to="." method="_on_ba_timer_timeout"]
+[connection signal="timeout" from="Timers/DashTimer" to="." method="_on_dash_timer_timeout"]
