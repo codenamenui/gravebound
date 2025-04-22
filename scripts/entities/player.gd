@@ -34,6 +34,7 @@ func _ready():
 	skill_manager.skill_ready.connect(_on_skill_ready)
 	
 	for skill in skills.get_children():
+		skill.camera = get_parent().get_node_or_null("Camera2D")
 		if skill.name.begins_with("BA"):
 			skill_manager.add_basic_attack(skill)
 		elif skill.name.begins_with("Dash"):

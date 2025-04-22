@@ -82,8 +82,8 @@ player = NodePath("../Player")
 min_spawn_distance = 100.0
 max_spawn_distance = 200.0
 spawn_interval = 3.0
-enemies_per_cycle = 1
-max_concurrent_enemies = 1
+enemies_per_cycle = 10
+max_concurrent_enemies = 10
 
 [connection signal="attacked" from="Player" to="Camera2D" method="_on_player_attacked"]
 [connection signal="took_damage" from="Player" to="Camera2D" method="_on_player_took_damage"]

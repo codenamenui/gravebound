@@ -161,7 +161,7 @@ func apply_hit_effect():
 	zoom_to(hit_zoom_amount, hit_zoom_duration)
 	flash_screen(hit_flash_color, hit_flash_duration)
 
-func apply_attack_effect():
+func apply_attack_effect(attack_zoom_amount, attack_zoom_duration, hit_stop_time):
 	zoom_to(attack_zoom_amount, attack_zoom_duration)
 	apply_hit_pause(hit_stop_time)
 
@@ -184,12 +184,8 @@ func flash_screen(color: Color, duration: float):
 
 func apply_hit_pause(duration: float = 0.1):
 	Engine.time_scale = 0.01  # Nearly frozen
-	await get_tree().create_timer(duration * 0.01).timeout
+	await get_tree().create_timer(duration * 0.02).timeout
 	Engine.time_scale = 1.0
-	print(duration)
-
+	
 func _on_player_took_damage():
 	apply_hit_effect()
-
-func _on_player_attacked():
-	apply_attack_effect()

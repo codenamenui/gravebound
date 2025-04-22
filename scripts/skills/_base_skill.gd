@@ -27,7 +27,8 @@ class_name BaseSkill
 @export var base_damage: float
 @export var knockback_force: float
 @export var hit_stop_time: float
-@export var zoom_amount: float
+@export var zoom_amount: float = 1.0
+@export var zoom_duration: float = 0.0
 
 @export_group("Hitbox")
 @export var hitbox_shape: Shape2D
@@ -37,6 +38,7 @@ class_name BaseSkill
 @export_group("Effects")
 @export var skill_sfx: AudioStream
 @export var skill_vfx_scene: PackedScene
+@export var camera: PlayerCamera
 
 @export_group("Debug")
 @export var display_hitbox: bool = false
@@ -483,11 +485,7 @@ func _handle_hit(target) -> void:
 
 		emit_signal("skill_hit_enemy", target)
 		
-		if hit_stop_time > 0:
-			var original_timescale = Engine.time_scale
-			Engine.time_scale = 0.05
-			await owner_node.get_tree().create_timer(hit_stop_time * 0.05).timeout
-			Engine.time_scale = original_timescale
+		camera.apply_attack_effect(zoom_amount, zoom_duration, hit_stop_time)
 
 func get_current_damage() -> float:
 	return base_damage
