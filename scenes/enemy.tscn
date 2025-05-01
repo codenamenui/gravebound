@@ -607,6 +607,8 @@ initial_state = NodePath("ChaseState")
 [node name="AttackState" parent="StateMachine" instance=ExtResource("3_nenq2")]
 
 [node name="ChaseState" parent="StateMachine" instance=ExtResource("4_md484")]
+attack_range = 25.0
+avoidance_strength = 0.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
 
