@@ -12,10 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://cvggagoyatlr8" path="res://scenes/skills/dash.tscn" id="5_d2wvv"]
 [ext_resource type="PackedScene" uid="uid://ryr8eir3qxrd" path="res://scenes/hitbox_component.tscn" id="5_smehm"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_smehm"]
-radius = 6.0
-height = 16.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
 atlas = ExtResource("4_smehm")
 region = Rect2(128, 128, 32, 32)
@@ -603,6 +599,10 @@ animations = [{
 radius = 16.0
 height = 32.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_smehm"]
+radius = 6.0
+height = 16.0
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_mask = 2
 script = ExtResource("1_3vyb7")
@@ -619,9 +619,6 @@ deceleration_factor = 15.0
 [node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_smehm")
 
 [node name="SkillManagerComponent" parent="." instance=ExtResource("2_smehm")]
 max_skill_slots = 2
@@ -655,6 +652,9 @@ ignore_time_scale = true
 [node name="DashTimer" type="Timer" parent="Timers"]
 one_shot = true
 ignore_time_scale = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_smehm")
 
 [connection signal="animation_finished" from="CharacterSpriteComponent/AnimatedSprite2D" to="CharacterSpriteComponent" method="_on_animation_finished"]
 [connection signal="timeout" from="Timers/BATimer" to="." method="_on_ba_timer_timeout"]
