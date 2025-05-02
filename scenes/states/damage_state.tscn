@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgmme83vhk7ti"]
+
+[ext_resource type="Script" uid="uid://cec66r07elchm" path="res://scripts/states/damage_state.gd" id="1_q2jir"]
+
+[node name="DamageState" type="Node"]
+script = ExtResource("1_q2jir")
+metadata/_custom_type_script = "uid://y4k8ivq7xr31"

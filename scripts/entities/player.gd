@@ -41,15 +41,6 @@ func _ready():
 			skill_manager.add_movement_skill(skill)
 		else:
 			skill_manager.add_skill(skill, 3)
-	# Initialize basic attacks (doesn't use skill slots)
-	#var slash_attack_scene = preload("res://scenes/skills/ba1.tscn")
-	#var slash_attack = slash_attack_scene.instantiate()
-	#print(slash_attack)
-	#skill_manager.add_basic_attack(slash_attack)
-
-	# Initialize movement skills (doesn't use skill slots)
-	#var dash_skill = preload("res://skills/dash.tres").duplicate()
-	#skill_manager.add_movement_skill(dash_skill)
 	
 	character_sprite_component.set_direction(last_direction)
 	character_sprite_component.play_idle()
@@ -106,11 +97,9 @@ func _process(delta: float) -> void:
 	skill_manager.process_input(last_direction, action_pressed)
 	
 func _on_skill_executed(skill: BaseSkill) -> void:
-	#print("Player executed skill: ", skill.skill_name)
 	pass
 
 func _on_skill_ready(skill: BaseSkill) -> void:
-	#print("Skill ready: ", skill.skill_name)
 	pass
 	
 func handle_movement(direction: Vector2 = Vector2()):

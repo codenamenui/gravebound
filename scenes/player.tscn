@@ -611,12 +611,16 @@ deceleration_factor = 15.0
 [node name="Skills" type="Node" parent="."]
 
 [node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
+knockback_force = 300.0
 
 [node name="BA2" parent="Skills" instance=ExtResource("3_y4r1p")]
+knockback_force = 300.0
 
 [node name="BA3" parent="Skills" instance=ExtResource("2_ur7pv")]
+knockback_force = 300.0
 
 [node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
+knockback_force = 300.0
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 
@@ -637,9 +641,6 @@ shape = SubResource("CapsuleShape2D_fjrip")
 [node name="Health Component" parent="." instance=ExtResource("2_qlg0r")]
 
 [node name="HealthBar" parent="Health Component" instance=ExtResource("3_tuyoq")]
-position = Vector2(-5, -19)
-scale = Vector2(0.5, 0.5)
-script = null
 
 [node name="Timers" type="Node" parent="."]
 

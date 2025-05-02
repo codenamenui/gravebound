@@ -3,7 +3,6 @@ extends State
 
 # Movement parameters
 @export var speed: float = 150.0
-@export var attack_range: float = 50.0
 @export var path_smoothing: float = 0.25  # 0=sharp turns, 1=very smooth
 
 # Pathfinding parameters
@@ -20,22 +19,32 @@ extends State
 @export var stuck_threshold: float = 1.0
 @export var unstuck_force: float = 200.0
 
+# Attack area reference (set this in inspector)
+@export var attack_area: Area2D
+
 # Private variables
 var _path_timer: float = 0.0
 var _stuck_timer: float = 0.0
 var _last_position: Vector2
 var _current_direction: Vector2 = Vector2.ZERO
+var _target_in_attack_range: bool = false
 
-func enter():
+func enter(msg: Dictionary = {}):
 	_path_timer = 0.0
 	_stuck_timer = 0.0
 	_last_position = enemy.global_position
+	_target_in_attack_range = false
 	
 	if enemy.navigation_agent:
 		enemy.navigation_agent.path_max_distance = path_max_distance
 		enemy.navigation_agent.target_desired_distance = target_desired_distance
 		enemy.navigation_agent.avoidance_enabled = true
 		enemy.navigation_agent.radius = detection_radius * 0.5
+	
+	# Connect to attack area signals if not already connected
+	if attack_area and !attack_area.body_entered.is_connected(_on_attack_area_body_entered):
+		attack_area.body_entered.connect(_on_attack_area_body_entered)
+		attack_area.body_exited.connect(_on_attack_area_body_exited)
 
 func physics_update(delta: float):
 	if !enemy.target or !enemy.navigation_agent:
@@ -67,13 +76,22 @@ func physics_update(delta: float):
 	# Stuck detection and recovery
 	_handle_stuck_situation(delta)
 	
-	# Attack transition check
-	if distance_to_target <= attack_range:
+	# Attack transition check (now handled by Area2D signals)
+	if _target_in_attack_range:
 		transition_requested.emit("AttackState")
 
 func exit():
 	enemy.velocity = Vector2.ZERO
 
+func _on_attack_area_body_entered(body: Node2D):
+	if body == enemy.target:
+		_target_in_attack_range = true
+
+func _on_attack_area_body_exited(body: Node2D):
+	if body == enemy.target:
+		_target_in_attack_range = false
+
+# Rest of the helper functions remain the same...
 func _get_predictive_target_position() -> Vector2:
 	var base_target = enemy.target.global_position
 	

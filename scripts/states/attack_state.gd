@@ -8,7 +8,7 @@ extends State
 
 var _attack_timer: float = 0.0
 
-func enter() -> void:
+func enter(msg : Dictionary = {}) -> void:
 	_attack_timer = attack_cooldown
 
 func physics_update(delta: float) -> void:
@@ -27,5 +27,4 @@ func physics_update(delta: float) -> void:
 
 func _attack() -> void:
 	# Your damage logic here
-	print("attack")
 	pass

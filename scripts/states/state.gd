@@ -6,14 +6,13 @@ extends Node
 signal transition_requested(new_state_name: StringName)
 
 # Reference to the enemy using this state
-var enemy: CharacterBody2D
+var enemy: Enemy
 
 func _ready() -> void:
 	enemy = get_parent().get_parent()
-	print(enemy)
 
 # Called when entering the state
-func enter() -> void:
+func enter(msg : Dictionary = {}) -> void:
 	pass
 
 # Called when exiting the state

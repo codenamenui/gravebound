@@ -25,7 +25,7 @@ class_name BaseSkill
 
 @export_group("Combat")
 @export var base_damage: float
-@export var knockback_force: float
+@export var knockback_force: float = 300
 @export var hit_stop_time: float
 @export var zoom_amount: float = 1.0
 @export var zoom_duration: float = 0.0
@@ -476,14 +476,14 @@ func _on_hitbox_area_entered(area) -> void:
 	if area.get_parent() and area.name.begins_with("Hurtbox"):
 		_handle_hit(area.get_parent())
 
+# baseskill.gd
 func _handle_hit(target) -> void:
 	if target.has_method("take_damage") and target.is_in_group("Enemy"):
 		var damage = get_current_damage()
 		var knockback_direction = (target.global_position - owner_node.global_position).normalized()
+		var knockback = knockback_direction * knockback_force  # Adjust force as needed
 		
-		target.take_damage(damage, last_use_direction)
-
-		emit_signal("skill_hit_enemy", target)
+		target.take_damage(damage, knockback)
 		
 		camera.apply_attack_effect(zoom_amount, zoom_duration, hit_stop_time)
 
