@@ -10,15 +10,6 @@ signal skill_hit_enemy(skill, enemy)
 
 # Configuration
 @export var max_skill_slots: int = 4
-@export_group("AI Skill Settings")
-@export var enable_random_skills_for_ai: bool = false
-@export var ai_skill_chance: float = 0.3
-@export var ai_skill_cooldown: float = 3.0
-@export var ai_skill_weights: Dictionary = {
-	"basic_attack": 40,
-	"movement_skill": 30,
-	"equipped_skill": 30
-}
 
 # Skill categories
 enum SkillCategory {
@@ -38,28 +29,12 @@ var skill_categories: Dictionary = {
 	SkillCategory.SPECIAL_SKILL: []
 }
 
-# AI variables
-var ai_skill_timer: Timer
-var is_ai_controlled: bool = false
-
 func _ready():
 	# Initialize arrays
 	equipped_skills.resize(max_skill_slots)
-	
-	# Set up AI timer if needed
-	if enable_random_skills_for_ai:
-		ai_skill_timer = Timer.new()
-		ai_skill_timer.one_shot = false
-		ai_skill_timer.wait_time = ai_skill_cooldown
-		ai_skill_timer.timeout.connect(_on_ai_skill_timer_timeout)
-		add_child(ai_skill_timer)
 
-func initialize(character_node: CharacterBody2D, is_ai: bool = false):
+func initialize(character_node: CharacterBody2D):
 	character = character_node
-	is_ai_controlled = is_ai
-	
-	if is_ai_controlled and enable_random_skills_for_ai:
-		ai_skill_timer.start()
 
 # Core skill management functions
 func equip_skill(skill: BaseSkill, slot_index: int) -> bool:
@@ -182,92 +157,6 @@ func _execute_skill(skill: BaseSkill, direction: Vector2) -> bool:
 		emit_signal("skill_executed", skill)
 	
 	return success
-
-# AI skill execution
-func _on_ai_skill_timer_timeout():
-	if not is_ai_controlled or character.current_skill != null:
-		return
-	
-	# Roll chance to use a skill
-	if randf() > ai_skill_chance:
-		return
-	
-	# Get direction toward target (if available) or random direction
-	var direction = _get_ai_direction()
-	
-	# Choose skill type based on weights
-	var skill_type = _weighted_random_selection(ai_skill_weights)
-	var skill_used = false
-	
-	match skill_type:
-		"basic_attack":
-			skill_used = _try_execute_random_skill(SkillCategory.BASIC_ATTACK, direction)
-		"movement_skill":
-			skill_used = _try_execute_random_skill(SkillCategory.MOVEMENT_SKILL, direction)
-		"equipped_skill":
-			skill_used = _try_execute_random_equipped_skill(direction)
-	
-	# If selected skill type couldn't be used, try any available skill
-	if !skill_used:
-		for category in skill_categories.keys():
-			if _try_execute_random_skill(category, direction):
-				skill_used = true
-				break
-		
-		if !skill_used and equipped_skills.size() > 0:
-			_try_execute_random_equipped_skill(direction)
-
-func _get_ai_direction() -> Vector2:
-	# If character has an AI component with target information, use that
-	if character.has_method("get_target_direction"):
-		var target_direction = character.get_target_direction()
-		if target_direction.length() > 0:
-			return target_direction
-	
-	# Fallback to random direction
-	return Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-
-func _try_execute_random_skill(category: int, direction: Vector2) -> bool:
-	var skills = skill_categories[category]
-	if skills.size() == 0:
-		return false
-	
-	# Shuffle skills to try them in random order
-	skills.shuffle()
-	
-	for skill in skills:
-		if not skill.is_skill_active() and not skill.is_on_cooldown:
-			return _execute_skill(skill, direction)
-	
-	return false
-
-func _try_execute_random_equipped_skill(direction: Vector2) -> bool:
-	var valid_slots = []
-	for i in range(equipped_skills.size()):
-		if equipped_skills[i] != null and not equipped_skills[i].is_on_cooldown:
-			valid_slots.append(i)
-			
-	if valid_slots.size() > 0:
-		var slot_index = valid_slots[randi() % valid_slots.size()]
-		return execute_skill(slot_index, direction)
-	
-	return false
-
-func _weighted_random_selection(weights: Dictionary) -> String:
-	var total_weight = 0
-	for key in weights:
-		total_weight += weights[key]
-	
-	var random_value = randf() * total_weight
-	var current_sum = 0
-	
-	for key in weights:
-		current_sum += weights[key]
-		if random_value <= current_sum:
-			return key
-	
-	# Default to first key if something goes wrong
-	return weights.keys()[0]
 
 # Signal callbacks
 func _on_skill_ready(skill: BaseSkill):

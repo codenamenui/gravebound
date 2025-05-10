@@ -32,6 +32,7 @@ var enemy_container: Node
 var is_spawning: bool = false
 # Count of currently active enemies
 var active_enemy_count: int = 0
+var cur_id = 0
 
 func _ready():
 	# Create a timer for spawning
@@ -42,8 +43,8 @@ func _ready():
 	add_child(spawn_timer)
 	
 	# Create a container for the enemies
-	enemy_container = Node.new()
-	enemy_container.name = "EnemyContainer"
+	enemy_container = EnemyContainer.new()
+	#enemy_container = Node.new()
 	add_child(enemy_container)
 	
 	# Find player if not set
@@ -216,7 +217,10 @@ func _spawn_enemy(position: Vector2):
 		push_warning("EnemySpawner: Tried to spawn enemy at invalid position")
 		return
 		
-	var enemy_instance = enemy_scene.instantiate()
+	var enemy_instance: Enemy = enemy_scene.instantiate()
+	enemy_instance.id = cur_id
+	cur_id += 1
+	enemy_instance.container = enemy_container
 	enemy_container.add_child(enemy_instance)
 	enemy_instance.global_position = position
 	

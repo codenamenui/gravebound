@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvtvfbo0h2w5r"]
+
+[sub_resource type="GDScript" id="GDScript_gqxie"]
+script/source = "extends State
+
+func enter(msg: Dictionary = {}) -> void:
+	print('ds')
+	enemy.CharacterSprite.play_idle()
+
+func update(_delta: float) -> void:
+	if enemy.id in enemy.container.enemy_queue:
+		transition_requested.emit(\"AttackState\")
+
+func physics_update(_delta: float) -> void:
+	pass
+"
+
+[node name="IdleState" type="Node"]
+script = SubResource("GDScript_gqxie")
+metadata/_custom_type_script = "uid://y4k8ivq7xr31"

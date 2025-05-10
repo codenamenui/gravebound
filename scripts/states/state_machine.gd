@@ -36,3 +36,7 @@ func _on_state_transition_requested(new_state_name: StringName, msg: Dictionary 
 func _physics_process(delta: float) -> void:
 	if current_state:
 		current_state.physics_update(delta)
+
+func _process(delta: float) -> void:
+	if current_state:
+		current_state.update(delta)

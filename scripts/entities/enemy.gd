@@ -8,6 +8,8 @@ class_name Enemy
 @onready var CharacterSprite : CharacterSpriteComponent = $CharacterSpriteComponent
 
 var target: Node2D  # Player reference
+var id: int
+var container: EnemyContainer
 
 func _ready():
 	target = get_tree().current_scene.get_node("Player")
@@ -23,6 +25,10 @@ func _physics_process(delta):
 		state_machine._physics_process(delta)
 	move_and_slide()
 	
+func _process(delta: float) -> void:
+	if state_machine:
+		state_machine._process(delta)
+		
 func _draw():
 	# Debug draw path
 	if Engine.is_editor_hint() && state_machine.current_state is ChaseState:

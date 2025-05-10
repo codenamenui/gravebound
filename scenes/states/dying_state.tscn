@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://kcfs6xlmbggx"]
+
+[ext_resource type="Script" uid="uid://b6pdu3tmhjc7l" path="res://scripts/states/dying_state.gd" id="1_dp0nd"]
+
+[node name="DyingState" type="Node"]
+script = ExtResource("1_dp0nd")
+metadata/_custom_type_script = "uid://y4k8ivq7xr31"

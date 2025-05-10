@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dve1das7ufwj6" path="res://scenes/states/chase_state.tscn" id="4_md484"]
 [ext_resource type="Texture2D" uid="uid://br5lexyl42q2v" path="res://assets/Puny-Characters/Warrior-Red.png" id="5_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://dgmme83vhk7ti" path="res://scenes/states/damage_state.tscn" id="5_md484"]
-[ext_resource type="Script" uid="uid://b6pdu3tmhjc7l" path="res://scripts/states/dying_state.gd" id="6_ipns3"]
+[ext_resource type="PackedScene" uid="uid://kcfs6xlmbggx" path="res://scenes/states/dying_state.tscn" id="6_8qclf"]
 [ext_resource type="Script" uid="uid://csq4m1cv87kf2" path="res://scripts/components/player_sprite.gd" id="9_8qclf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
@@ -611,28 +611,14 @@ script = ExtResource("1_c4w8v")
 initial_state = NodePath("ChaseState")
 
 [node name="AttackState" parent="StateMachine" instance=ExtResource("3_nenq2")]
-damage = null
-attack_cooldown = null
-chase_return_range = null
 
 [node name="ChaseState" parent="StateMachine" node_paths=PackedStringArray("attack_area") instance=ExtResource("4_md484")]
-speed = null
-path_smoothing = null
-min_update_interval = null
-max_update_interval = null
-path_max_distance = null
-target_desired_distance = null
 avoidance_strength = 0.0
-detection_radius = null
-stuck_threshold = null
-unstuck_force = null
 attack_area = NodePath("../../AttackArea")
 
 [node name="DamageState" parent="StateMachine" instance=ExtResource("5_md484")]
 
-[node name="DyingState" type="Node" parent="StateMachine"]
-script = ExtResource("6_ipns3")
-metadata/_custom_type_script = "uid://y4k8ivq7xr31"
+[node name="DyingState" parent="StateMachine" instance=ExtResource("6_8qclf")]
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
 
