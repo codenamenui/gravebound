@@ -11,16 +11,16 @@ signal took_damage(damage, knockback_direction)
 var current_health: int = max_health
 var is_invincible: bool = false
 
-func take_damage(damage: int, source_position: Vector2):
+func take_damage(damage: int):
 	if is_invincible:
 		return
 	
 	current_health = max(current_health - damage, 0)
 	health_changed.emit(current_health)
 	
-	# Calculate knockback direction
-	var knockback_direction = (owner.global_position - source_position).normalized()
-	took_damage.emit(damage, knockback_direction)
+	## Calculate knockback direction
+	#var knockback_direction = (owner.global_position - source_position).normalized()
+	#took_damage.emit(damage, knockback_direction)
 	
 	if current_health <= 0:
 		health_depleted.emit()

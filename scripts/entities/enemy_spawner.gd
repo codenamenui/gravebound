@@ -19,6 +19,10 @@ class_name EnemySpawner
 @export_enum("Random", "Evenly Distributed") var spawn_pattern: int = 0
 # Whether to start spawning immediately on ready
 @export var auto_start: bool = true
+# Maximum attempts to find valid spawn position
+@export var max_spawn_attempts: int = 20
+# Reference to the NavigationRegion2D (optional)
+@export var navigation_region: NavigationRegion2D
 
 # Timer for spawn cycles
 var spawn_timer: Timer
@@ -49,6 +53,22 @@ func _ready():
 			push_error("EnemySpawner: No player reference found!")
 			return
 	
+	# Find navigation region if not explicitly set
+	if navigation_region == null:
+		navigation_region = get_tree().get_first_node_in_group("navigation")
+		if navigation_region == null:
+			# Try to find by class
+			var nodes = get_tree().get_nodes_in_group("_process")
+			for node in nodes:
+				if node is NavigationRegion2D:
+					navigation_region = node
+					break
+	
+	if navigation_region == null:
+		push_error("EnemySpawner: No NavigationRegion2D found!")
+	elif navigation_region.navigation_polygon == null:
+		push_error("EnemySpawner: NavigationRegion2D has no NavigationPolygon!")
+	
 	if auto_start:
 		start_spawning()
 
@@ -64,7 +84,7 @@ func stop_spawning():
 	spawn_timer.stop()
 
 func spawn_enemies():
-	if not is_spawning or player == null:
+	if not is_spawning or player == null or navigation_region == null:
 		return
 	
 	# Check if we've reached the max concurrent enemies
@@ -84,15 +104,9 @@ func spawn_enemies():
 
 func _spawn_random(count: int):
 	for i in range(count):
-		# Random angle
-		var angle = randf() * 2 * PI
-		# Random distance within range
-		var distance = randf_range(min_spawn_distance, max_spawn_distance)
-		# Calculate position
-		var spawn_pos = player.global_position + Vector2(cos(angle), sin(angle)) * distance
-		
-		# Spawn the enemy
-		_spawn_enemy(spawn_pos)
+		var spawn_pos = _find_valid_spawn_position_random()
+		if spawn_pos != Vector2.ZERO:
+			_spawn_enemy(spawn_pos)
 
 func _spawn_distributed(count: int):
 	# Distribute enemies evenly in a circle around the player
@@ -101,18 +115,107 @@ func _spawn_distributed(count: int):
 	
 	for i in range(count):
 		var angle = start_angle + i * angle_step
-		# Use average of min and max for consistent distance
-		var distance = (min_spawn_distance + max_spawn_distance) / 2.0
-		var spawn_pos = player.global_position + Vector2(cos(angle), sin(angle)) * distance
+		var spawn_pos = _find_valid_spawn_position_at_angle(angle)
+		if spawn_pos != Vector2.ZERO:
+			_spawn_enemy(spawn_pos)
+
+func _find_valid_spawn_position_random() -> Vector2:
+	# Try to find a valid position multiple times
+	for attempt in range(max_spawn_attempts):
+		# Random angle
+		var angle = randf() * 2 * PI
+		# Random distance within range
+		var distance = randf_range(min_spawn_distance, max_spawn_distance)
+		# Calculate position
+		var test_pos = player.global_position + Vector2(cos(angle), sin(angle)) * distance
 		
-		# Spawn the enemy
-		_spawn_enemy(spawn_pos)
+		# Check if position is on the navigation mesh
+		if _is_position_on_navmesh(test_pos):
+			return test_pos
+	
+	# If we failed to find a position, return zero vector
+	push_warning("EnemySpawner: Failed to find valid spawn position after " + str(max_spawn_attempts) + " attempts")
+	return Vector2.ZERO
+
+func _find_valid_spawn_position_at_angle(angle: float) -> Vector2:
+	# Try different distances at the given angle
+	var base_distance = (min_spawn_distance + max_spawn_distance) / 2.0
+	var distance_range = (max_spawn_distance - min_spawn_distance) / 2.0
+	
+	for attempt in range(max_spawn_attempts):
+		# Vary the distance a bit each attempt, moving outward
+		var distance_offset = (attempt / float(max_spawn_attempts)) * distance_range
+		var distances_to_try = [
+			base_distance,                  # Try the middle distance first
+			base_distance + distance_offset, # Try a bit further
+			base_distance - distance_offset  # Try a bit closer
+		]
+		
+		for distance in distances_to_try:
+			if distance < min_spawn_distance or distance > max_spawn_distance:
+				continue
+				
+			var test_pos = player.global_position + Vector2(cos(angle), sin(angle)) * distance
+			
+			if _is_position_on_navmesh(test_pos):
+				return test_pos
+	
+	# If all attempts failed at this angle, try a slightly different angle
+	for deviation in [PI/8, -PI/8, PI/4, -PI/4]:
+		var new_angle = angle + deviation
+		var test_pos = player.global_position + Vector2(cos(new_angle), sin(new_angle)) * base_distance
+		
+		if _is_position_on_navmesh(test_pos):
+			return test_pos
+	
+	# If we failed to find a position, return zero vector
+	return Vector2.ZERO
+
+func _is_position_on_navmesh(position: Vector2) -> bool:
+	if navigation_region == null or navigation_region.navigation_polygon == null:
+		return false
+	
+	# Convert global position to local space
+	var local_position = navigation_region.to_local(position)
+	
+	# Check if the position is inside any of the navigation polygon's outlines
+	var polygon = navigation_region.navigation_polygon
+	
+	# For Godot 4.4, we need to check if the point is inside any of the polygon's outlines
+	for i in range(polygon.get_outline_count()):
+		var outline = polygon.get_outline(i)
+		if Geometry2D.is_point_in_polygon(local_position, outline):
+			return true
+	
+	return false
+
+func _can_reach_player(from_position: Vector2) -> bool:
+	if navigation_region == null or player == null:
+		return false
+	
+	# Check if both positions are on the navmesh
+	if not _is_position_on_navmesh(from_position) or not _is_position_on_navmesh(player.global_position):
+		return false
+	
+	# Get a path using Navigation2D
+	var path = navigation_region.get_simple_path(
+		navigation_region.to_local(from_position),
+		navigation_region.to_local(player.global_position),
+		true  # Optimize path
+	)
+	
+	return not path.is_empty()
 
 func _spawn_enemy(position: Vector2):
 	if enemy_scene == null:
 		push_error("EnemySpawner: No enemy scene set!")
 		return
 	
+	# Double-check position is valid
+	if not _is_position_on_navmesh(position):
+		push_warning("EnemySpawner: Tried to spawn enemy at invalid position")
+		return
+		
 	var enemy_instance = enemy_scene.instantiate()
 	enemy_container.add_child(enemy_instance)
 	enemy_instance.global_position = position

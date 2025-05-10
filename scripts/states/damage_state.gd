@@ -17,10 +17,9 @@ func enter(msg: Dictionary = {}):
 	play_hit_effects()
 	
 	if enemy.health_component:
-		enemy.health_component.set_invincible(true)
-		await get_tree().create_timer(invincibility_duration).timeout
-		enemy.health_component.set_invincible(false)
-	
+		enemy.health_component.take_damage(msg["damage"])
+		if enemy.health_component.current_health <= 0:
+			transition_requested.emit("DyingState")
 	# Only transition if knockback is complete
 	if knockback_velocity.length() <= 5.0:
 		transition_requested.emit("ChaseState")
@@ -28,7 +27,6 @@ func enter(msg: Dictionary = {}):
 func physics_update(delta: float):
 	if knockback_velocity.length() > 5.0:
 		enemy.velocity = knockback_velocity
-		print(enemy.velocity)
 		knockback_velocity *= knockback_decay
 		enemy.move_and_slide()
 	else:

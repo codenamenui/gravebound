@@ -5,6 +5,7 @@ class_name Enemy
 @onready var state_machine: StateMachine = $StateMachine
 @onready var health_component : HealthComponent = $HealthComponent
 @onready var health_bar : HealthBar = $HealthBar
+@onready var CharacterSprite : CharacterSpriteComponent = $CharacterSpriteComponent
 
 var target: Node2D  # Player reference
 

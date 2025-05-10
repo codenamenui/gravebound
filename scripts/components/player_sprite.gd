@@ -8,7 +8,7 @@ var target_animation: String = ""
 @export var attack_speed_scale: float = 3.0
 
 @onready var animated_sprite = $AnimatedSprite2D
-@onready var player: Player = get_parent()
+@onready var player = get_parent()
 
 func set_direction(direction: Vector2):
 	current_direction = direction
