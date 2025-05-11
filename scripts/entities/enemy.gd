@@ -6,12 +6,20 @@ class_name Enemy
 @onready var health_component : HealthComponent = $HealthComponent
 @onready var health_bar : HealthBar = $HealthBar
 @onready var CharacterSprite : CharacterSpriteComponent = $CharacterSpriteComponent
+@onready var skill_manager: SkillManagerComponent = $SkillManagerComponent
+@onready var skill : BaseSkill = $Skill
 
 var target: Node2D  # Player reference
 var id: int
 var container: EnemyContainer
+var last_direction: Vector2
+var is_attacking: bool = false
+var speed_multiplier
+var current_skill
 
 func _ready():
+	skill.initialize(self)
+
 	target = get_tree().current_scene.get_node("Player")
 	# Wait until NavigationAgent is fully initialized
 	await get_tree().physics_frame
@@ -38,3 +46,10 @@ func _draw():
 
 func take_damage(damage: int, knockback):
 	state_machine.change_state($StateMachine/DamageState, {"knockback": knockback, "damage": damage})
+
+func _on_skill_executed(skill: BaseSkill) -> void:
+	pass
+
+func _on_skill_ready(skill: BaseSkill) -> void:
+	pass
+	

@@ -8,10 +8,8 @@ signal skill_ready(skill)
 signal skill_finished(skill)
 signal skill_hit_enemy(skill, enemy)
 
-# Configuration
 @export var max_skill_slots: int = 4
 
-# Skill categories
 enum SkillCategory {
 	BASIC_ATTACK,
 	MOVEMENT_SKILL,
@@ -19,7 +17,6 @@ enum SkillCategory {
 	SPECIAL_SKILL
 }
 
-# Core reference to the character using this component
 var character: CharacterBody2D
 var equipped_skills: Array = []
 var skill_categories: Dictionary = {
@@ -30,29 +27,23 @@ var skill_categories: Dictionary = {
 }
 
 func _ready():
-	# Initialize arrays
 	equipped_skills.resize(max_skill_slots)
 
 func initialize(character_node: CharacterBody2D):
 	character = character_node
 
-# Core skill management functions
 func equip_skill(skill: BaseSkill, slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= max_skill_slots:
 		push_error("Invalid skill slot index: " + str(slot_index))
 		return false
-	
-	# Unequip current skill in this slot if any
+
 	if equipped_skills[slot_index] != null:
 		unequip_skill(slot_index)
-	
-	# Initialize the skill if it hasn't been initialized yet
+
 	if !skill.is_inside_tree():
 		_initialize_skill(skill)
-	
-	# Store the skill
+
 	equipped_skills[slot_index] = skill
-	
 	emit_signal("skill_equipped", slot_index, skill)
 	return true
 
@@ -60,105 +51,64 @@ func unequip_skill(slot_index: int) -> BaseSkill:
 	if slot_index < 0 or slot_index >= max_skill_slots:
 		push_error("Invalid skill slot index: " + str(slot_index))
 		return null
-		
+
 	var skill = equipped_skills[slot_index]
 	if skill != null:
-		# Remove from array
 		equipped_skills[slot_index] = null
-		
 		emit_signal("skill_unequipped", slot_index)
-		return skill
-	
-	return null
+	return skill
 
-# New improved methods for adding skills with categorization
 func add_skill(skill: BaseSkill, category: int) -> void:
 	if !skill_categories.has(category):
 		push_error("Invalid skill category: " + str(category))
 		return
-	
+
 	_initialize_skill(skill)
-	skill_categories[category].append(skill)
-	
-	# For backward compatibility
-	if category == SkillCategory.BASIC_ATTACK:
-		# Previous code referred to these directly
-		add_basic_attack(skill)
-	elif category == SkillCategory.MOVEMENT_SKILL:
-		# Previous code referred to these directly
-		add_movement_skill(skill)
+	if !skill_categories[category].has(skill):
+		skill_categories[category].append(skill)
 
-# These methods are kept for backward compatibility
-func add_basic_attack(attack: BaseSkill) -> void:
-	_initialize_skill(attack)
-	
-	# Only add if not already in the array
-	if !skill_categories[SkillCategory.BASIC_ATTACK].has(attack):
-		skill_categories[SkillCategory.BASIC_ATTACK].append(attack)
-
-func add_movement_skill(skill: BaseSkill) -> void:
-	_initialize_skill(skill)
-	
-	# Only add if not already in the array
-	if !skill_categories[SkillCategory.MOVEMENT_SKILL].has(skill):
-		skill_categories[SkillCategory.MOVEMENT_SKILL].append(skill)
-
-# Centralized skill initialization
 func _initialize_skill(skill: BaseSkill) -> void:
 	skill.initialize(character)
 	add_child(skill)
-	
-	# Connect signals
+
 	if !skill.is_connected("skill_ready", _on_skill_ready):
 		skill.skill_ready.connect(_on_skill_ready.bind(skill))
-	
 	if !skill.is_connected("skill_finished", _on_skill_finished):
 		skill.skill_finished.connect(_on_skill_finished.bind(skill))
-	
 	if !skill.is_connected("skill_hit_enemy", _on_skill_hit_enemy):
 		skill.skill_hit_enemy.connect(_on_skill_hit_enemy.bind(skill))
 
-# Skill execution functions
 func execute_skill(slot_index: int, direction: Vector2 = Vector2.RIGHT) -> bool:
 	if slot_index < 0 or slot_index >= max_skill_slots:
 		push_error("Invalid skill slot index: " + str(slot_index))
 		return false
-		
+
 	var skill = equipped_skills[slot_index]
-	if skill != null and not skill.is_skill_active() and not skill.is_on_cooldown:
+	if skill and not skill.is_skill_active() and not skill.is_on_cooldown:
 		return _execute_skill(skill, direction)
-	
+
 	return false
 
 func execute_skill_by_category(category: int, skill_index: int = 0, direction: Vector2 = Vector2.RIGHT) -> bool:
 	if !skill_categories.has(category) or skill_index < 0 or skill_index >= skill_categories[category].size():
 		return false
-		
+
 	var skill = skill_categories[category][skill_index]
-	if skill != null and not skill.is_skill_active() and not skill.is_on_cooldown:
+	if skill and not skill.is_skill_active() and not skill.is_on_cooldown:
 		return _execute_skill(skill, direction)
-	
+
 	return false
 
-func execute_basic_attack(attack_index: int = 0, direction: Vector2 = Vector2.RIGHT) -> bool:
-	return execute_skill_by_category(SkillCategory.BASIC_ATTACK, attack_index, direction)
-
-func execute_movement_skill(skill_index: int = 0, direction: Vector2 = Vector2.RIGHT) -> bool:
-	return execute_skill_by_category(SkillCategory.MOVEMENT_SKILL, skill_index, direction)
-
 func _execute_skill(skill: BaseSkill, direction: Vector2) -> bool:
-	if character.current_skill != null and character.current_skill.is_skill_active():
-		# Don't interrupt an ongoing skill unless it's configured to allow that
+	if character.current_skill and character.current_skill.is_skill_active():
 		return false
-	
+
 	var success = skill.execute(direction)
 	if success:
 		character.current_skill = skill
 		emit_signal("skill_executed", skill)
-	
 	return success
 
-# Signal callbacks
 func _on_skill_ready(skill: BaseSkill):
 	emit_signal("skill_ready", skill)
 
@@ -168,83 +118,51 @@ func _on_skill_finished(skill: BaseSkill):
 func _on_skill_hit_enemy(enemy, skill: BaseSkill):
 	emit_signal("skill_hit_enemy", skill, enemy)
 
-# Utility functions
 func get_equipped_skill(slot_index: int) -> BaseSkill:
 	if slot_index < 0 or slot_index >= max_skill_slots:
 		return null
 	return equipped_skills[slot_index]
 
 func get_skills_by_category(category: int) -> Array:
-	if skill_categories.has(category):
-		return skill_categories[category]
-	return []
+	return skill_categories.get(category, [])
 
 func get_all_skills() -> Array:
-	var all_skills = []
-	
-	# Add equipped skills
+	var all_skills: Array = []
 	for skill in equipped_skills:
 		if skill != null and !all_skills.has(skill):
 			all_skills.append(skill)
-	
-	# Add all categorized skills
 	for category in skill_categories.values():
 		for skill in category:
 			if !all_skills.has(skill):
 				all_skills.append(skill)
-	
 	return all_skills
 
 func can_use_skill(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= max_skill_slots:
 		return false
-		
 	var skill = equipped_skills[slot_index]
-	if skill == null:
-		return false
-		
-	return not skill.is_skill_active() and not skill.is_on_cooldown
+	return skill != null and not skill.is_skill_active() and not skill.is_on_cooldown
 
 func can_use_skill_by_category(category: int, skill_index: int = 0) -> bool:
 	if !skill_categories.has(category) or skill_index < 0 or skill_index >= skill_categories[category].size():
 		return false
-		
 	var skill = skill_categories[category][skill_index]
 	return not skill.is_skill_active() and not skill.is_on_cooldown
 
-func can_use_basic_attack(attack_index: int = 0) -> bool:
-	return can_use_skill_by_category(SkillCategory.BASIC_ATTACK, attack_index)
-
-func can_use_movement_skill(skill_index: int = 0) -> bool:
-	return can_use_skill_by_category(SkillCategory.MOVEMENT_SKILL, skill_index)
-
-# Handle input for player character
 func process_input(input_direction: Vector2, action_pressed: Dictionary) -> void:
-	if character.current_skill != null and character.current_skill.is_skill_active():
-		# Don't allow new skills while one is active unless it's configured differently
+	if character.current_skill and character.current_skill.is_skill_active():
 		if character.current_skill.can_change_direction_during_skill:
-			# Update the skill's direction if allowed
 			character.current_skill.last_use_direction = input_direction.normalized()
 		return
-	
-	# Get effective direction - use input direction if available, otherwise use character's facing
+
 	var effective_direction = input_direction.normalized() if input_direction.length() > 0 else character.facing_direction
-	
-	# Process skill inputs - customize these based on your input mapping
-	if action_pressed.get("skill_1", false):
-		execute_skill(0, effective_direction)
-	
-	if action_pressed.get("skill_2", false):
-		execute_skill(1, effective_direction)
-		
-	if action_pressed.get("skill_3", false):
-		execute_skill(2, effective_direction)
-		
-	if action_pressed.get("skill_4", false):
-		execute_skill(3, effective_direction)
-		
+
+	for i in range(max_skill_slots):
+		if action_pressed.get("skill_%d" % (i + 1), false):
+			execute_skill(i, effective_direction)
+
 	if action_pressed.get("attack", -1) >= 0:
-		execute_basic_attack(action_pressed.get("attack", -1), effective_direction)
-	
+		execute_skill_by_category(SkillCategory.BASIC_ATTACK, action_pressed.get("attack", -1), effective_direction)
+
 	if action_pressed.get("dash", false):
-		execute_movement_skill(0, effective_direction)
+		execute_skill_by_category(SkillCategory.MOVEMENT_SKILL, 0, effective_direction)

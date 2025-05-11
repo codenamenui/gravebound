@@ -1,8 +1,9 @@
-[gd_scene load_steps=79 format=3 uid="uid://ciflnhdm2rhx1"]
+[gd_scene load_steps=81 format=3 uid="uid://ciflnhdm2rhx1"]
 
 [ext_resource type="Script" uid="uid://dfr362y3h1td5" path="res://scripts/entities/enemy.gd" id="1_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_5uy6h"]
 [ext_resource type="PackedScene" uid="uid://bw5hi1dl7w3bt" path="res://scenes/states/state_machine.tscn" id="2_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://bsgusnwvl6w5n" path="res://scenes/skills/ba1.tscn" id="2_w8i8w"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/health_bar.tscn" id="3_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://ccxkvcnybd8no" path="res://scenes/states/attack_state.tscn" id="3_nenq2"]
 [ext_resource type="PackedScene" uid="uid://dve1das7ufwj6" path="res://scenes/states/chase_state.tscn" id="4_md484"]
@@ -601,16 +602,22 @@ height = 16.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_nenq2"]
 radius = 24.0208
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_w8i8w"]
+radius = 60.0
+
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 motion_mode = 1
 script = ExtResource("1_c4w8v")
 
-[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+[node name="Skill" parent="." instance=ExtResource("2_w8i8w")]
+base_damage = 0.0
+hitbox_offset = Vector2(0, 0)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
 initial_state = NodePath("ChaseState")
 
 [node name="AttackState" parent="StateMachine" instance=ExtResource("3_nenq2")]
+attack_range_area_path = NodePath("../../Area2D")
 
 [node name="ChaseState" parent="StateMachine" node_paths=PackedStringArray("attack_area") instance=ExtResource("4_md484")]
 avoidance_strength = 0.0
@@ -640,10 +647,17 @@ frame_progress = 0.762365
 position = Vector2(0, -1)
 shape = SubResource("CapsuleShape2D_5uy6h")
 
+[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+
 [node name="AttackArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("CircleShape2D_nenq2")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_w8i8w")
 
 [connection signal="body_entered" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_entered"]
 [connection signal="body_exited" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_exited"]

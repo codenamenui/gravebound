@@ -611,17 +611,24 @@ deceleration_factor = 15.0
 [node name="Skills" type="Node" parent="."]
 
 [node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
+base_damage = 0.0
 knockback_force = 300.0
+hitbox_offset = Vector2(0, 0)
 
 [node name="BA2" parent="Skills" instance=ExtResource("3_y4r1p")]
+base_damage = 0.0
 knockback_force = 300.0
+hitbox_offset = Vector2(0, 0)
 
 [node name="BA3" parent="Skills" instance=ExtResource("2_ur7pv")]
+base_damage = 0.0
 knockback_force = 300.0
+hitbox_offset = Vector2(0, 0)
 
 [node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
 base_damage = 1000.0
 knockback_force = 300.0
+hitbox_offset = Vector2(0, 0)
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 
