@@ -87,7 +87,9 @@ visible = false
 script = ExtResource("3_k0juu")
 enemy_scene = ExtResource("3_4wyf3")
 player = NodePath("../Player")
-enemies_per_cycle = 10
+spawn_interval = 1.0
+enemies_per_cycle = 20
+max_concurrent_enemies = 40
 navigation_region = NodePath("../NavigationRegion2D")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]

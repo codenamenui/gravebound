@@ -610,8 +610,6 @@ motion_mode = 1
 script = ExtResource("1_c4w8v")
 
 [node name="Skill" parent="." instance=ExtResource("2_w8i8w")]
-base_damage = 0.0
-hitbox_offset = Vector2(0, 0)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
 initial_state = NodePath("ChaseState")

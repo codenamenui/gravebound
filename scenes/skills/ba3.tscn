@@ -1,10 +1,54 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1wxs7aphjf5e"]
+[gd_scene load_steps=11 format=3 uid="uid://b1wxs7aphjf5e"]
 
 [ext_resource type="Script" uid="uid://ci0i031g2wim2" path="res://scripts/skills/basic_attack_skill_1.gd" id="1_iuurw"]
+[ext_resource type="Texture2D" uid="uid://c0uqx6smhenwk" path="res://assets/Pixel Art Animations - Slashes/Slash 1/color2/sprite-sheet.png" id="2_mlgre"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iuurw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mlgre"]
+atlas = ExtResource("2_mlgre")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5e87d"]
+atlas = ExtResource("2_mlgre")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydsrr"]
+atlas = ExtResource("2_mlgre")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do0jr"]
+atlas = ExtResource("2_mlgre")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mvwbr"]
+atlas = ExtResource("2_mlgre")
+region = Rect2(512, 128, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5umsi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mlgre")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5e87d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydsrr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do0jr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mvwbr")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="BA3" type="Node"]
 script = ExtResource("1_iuurw")
@@ -18,13 +62,16 @@ hitbox_duration = 1.0
 speed_multiplier = 0.0
 contact_impulse = Vector2(500, 0)
 movement_control_mode = 2
-base_damage = 20.0
+base_damage = 50.0
 knockback_force = 5.0
 hit_stop_time = 0.9
-zoom_amount = 1.5
+zoom_amount = 1.2
 zoom_duration = 0.3
-hitbox_offset = Vector2(15, 0)
-display_hitbox = true
+hitbox_color = Color(1, 0, 0, 0.227451)
+is_projectile = true
+projectile_speed = 200.0
+projectile_distance = 100.0
+projectile_pierce_count = 1
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
 [node name="Hitbox" type="Area2D" parent="."]
@@ -42,3 +89,12 @@ shape = SubResource("RectangleShape2D_iuurw")
 position = Vector2(-20, -23)
 scale = Vector2(1, 1.4)
 shape = SubResource("RectangleShape2D_iuurw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5umsi")
+frame = 4
+frame_progress = 1.0
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_shape_entered" from="Hitbox" to="." method="_on_hitbox_area_shape_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
