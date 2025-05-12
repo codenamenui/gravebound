@@ -605,20 +605,93 @@ height = 16.0
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_mask = 2
 script = ExtResource("1_3vyb7")
+speed = null
 deceleration_factor = 15.0
+hit_timer_duration = null
 
 [node name="Skills" type="Node" parent="."]
 
 [node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
+description = null
+cooldown_time = null
+hitbox_lifetime = null
+hitbox_delay = null
+anticipation_impulse = null
+can_change_direction_during_skill = null
+zoom_amount = null
+zoom_duration = null
+hitbox_offset = null
+hitbox_scale = null
+display_hitbox = null
+hitbox_color = null
+projectile_pierce_count = null
 
 [node name="BA2" parent="Skills" instance=ExtResource("2_ur7pv")]
+description = null
+cooldown_time = null
+hitbox_lifetime = null
+hitbox_delay = null
+anticipation_impulse = null
+can_change_direction_during_skill = null
+zoom_amount = null
+zoom_duration = null
+hitbox_offset = null
+hitbox_scale = null
+display_hitbox = null
+hitbox_color = null
+projectile_pierce_count = null
 
 [node name="BA3" parent="Skills" instance=ExtResource("2_ur7pv")]
+description = null
+cooldown_time = null
+hitbox_lifetime = null
+hitbox_delay = null
+anticipation_impulse = null
+can_change_direction_during_skill = null
+zoom_amount = null
+zoom_duration = null
+hitbox_offset = null
+hitbox_scale = null
+display_hitbox = null
+hitbox_color = null
+projectile_pierce_count = null
 
 [node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
-projectile_speed = 500.0
+description = null
+cooldown_time = null
+hitbox_lifetime = null
+hitbox_delay = null
+anticipation_impulse = null
+can_change_direction_during_skill = null
+zoom_amount = null
+zoom_duration = null
+hitbox_offset = null
+hitbox_scale = null
+hitbox_color = null
+projectile_pierce_count = null
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
+skill_name = null
+description = null
+hitbox_lifetime = null
+hitbox_delay = null
+speed_multiplier = null
+anticipation_impulse = null
+can_change_direction_during_skill = null
+base_damage = null
+knockback_force = null
+hit_stop_time = null
+zoom_amount = null
+zoom_duration = null
+hitbox_offset = null
+hitbox_scale = null
+display_hitbox = null
+hitbox_color = null
+is_projectile = null
+projectile_speed = null
+projectile_distance = null
+projectile_scale = null
+projectile_pierce_count = null
 
 [node name="SkillManagerComponent" parent="." instance=ExtResource("2_smehm")]
 max_skill_slots = 2

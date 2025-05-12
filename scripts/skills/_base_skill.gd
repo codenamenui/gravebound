@@ -15,7 +15,7 @@ class_name BaseSkill
 @export var anticipation_time: float
 @export var contact_time: float
 @export var recovery_time: float
-@export var hitbox_duration: float
+@export var hitbox_lifetime: float
 @export var hitbox_delay: float
 
 # Movement Properties
@@ -42,7 +42,6 @@ class_name BaseSkill
 # Effect Properties
 @export_group("Effects")
 @export var skill_sfx: AudioStream
-@export var skill_vfx_scene: PackedScene
 @export var camera: PlayerCamera
 
 # Debug Properties
@@ -54,15 +53,13 @@ class_name BaseSkill
 @export_group("Projectile")
 @export var is_projectile: bool = false
 @export var projectile_speed: float = 500.0
-# @export var projectile_lifetime: float = 2.0
 @export var projectile_distance: float = 0.0  # 0 means unlimited by distance
-@export var projectile_sprite: Texture2D
-@export var projectile_animation: String = ""
 @export var projectile_scale: Vector2 = Vector2(1, 1)
 @export var projectile_pierce_count: int = 0  # 0 means no piercing
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $Hitbox
+
 # State Variables
 var is_on_cooldown: bool = false
 var is_on_anticipation: bool = false
@@ -73,14 +70,13 @@ var last_use_direction: Vector2 = Vector2.ZERO
 var applied_anticipation_impulse: bool = false
 var applied_contact_impulse: bool = false
 var original_input_state: bool = false
-var active_projectiles: Array = []
+var active_attacks: Array = []
 
 # Timers
 var cooldown_timer: Timer
 var anticipation_timer: Timer
 var contact_timer: Timer
 var recovery_timer: Timer
-var hitbox_timer: Timer
 
 # Signals
 signal skill_ready
@@ -89,13 +85,6 @@ signal skill_contact_phase
 signal skill_finished
 signal skill_hit_enemy(enemy)
 signal skill_interrupted
-signal projectile_created(projectile)
-signal projectile_hit(projectile, target)
-signal projectile_expired(projectile)
-
-# Initialization
-func _init():
-	pass
 
 func initialize(skill_owner: Node) -> void:
 	owner_node = skill_owner
@@ -135,20 +124,10 @@ func initialize(skill_owner: Node) -> void:
 		owner_node.add_child(recovery_timer)
 	else:
 		recovery_timer = get_node(skill_name + "_RecoveryTimer")
-
-	if not get_node_or_null(skill_name + "_HitboxTimer"):
-		hitbox_timer = Timer.new()
-		hitbox_timer.one_shot = true
-		hitbox_timer.name = skill_name + "_HitboxTimer"
-		hitbox_timer.timeout.connect(_on_hitbox_timeout)
-		owner_node.add_child(hitbox_timer)
-	else:
-		hitbox_timer = get_node(skill_name + "_HitboxTimer")
-
-	if not is_projectile:
-		create_or_get_hitbox()
-
-# Main Process Functions
+		
+	hitbox.monitoring = false
+	hitbox.monitorable = false
+	
 func _physics_process(delta):
 	if !is_skill_active():
 		return
@@ -167,13 +146,9 @@ func _physics_process(delta):
 	if movement_control_mode == 0:
 		handle_override_movement()
 
-	# Update projectiles
-	for i in range(active_projectiles.size() - 1, -1, -1):
-		var proj = active_projectiles[i]
-		if is_instance_valid(proj):
-			proj.update(delta)
-		else:
-			active_projectiles.remove_at(i)
+	for i in range(active_attacks.size() - 1, -1, -1):
+		var attack = active_attacks[i]
+		attack.update(delta)
 
 func handle_override_movement():
 	if !is_skill_active():
@@ -186,7 +161,6 @@ func handle_override_movement():
 	if movement_control_mode == 0:
 		owner_node.velocity = Vector2.ZERO
 
-# Skill Execution
 func execute(direction: Vector2) -> bool:
 	if is_on_cooldown or is_on_anticipation or is_on_contact or is_on_recovery:
 		return false
@@ -219,11 +193,6 @@ func execute(direction: Vector2) -> bool:
 		audio_player.play()
 		audio_player.finished.connect(func(): audio_player.queue_free())
 
-	if skill_vfx_scene != null:
-		var vfx = skill_vfx_scene.instantiate()
-		owner_node.add_child(vfx)
-		vfx.global_position = owner_node.global_position
-
 	owner_node.speed_multiplier = speed_multiplier
 
 	emit_signal("skill_started")
@@ -239,17 +208,12 @@ func interrupt() -> void:
 		contact_timer.stop()
 	if recovery_timer and recovery_timer.is_active():
 		recovery_timer.stop()
-	if hitbox_timer and hitbox_timer.is_active():
-		hitbox_timer.stop()
 
 	is_on_anticipation = false
 	is_on_contact = false
 	is_on_recovery = false
 	applied_anticipation_impulse = false
 	applied_contact_impulse = false
-
-	if not is_projectile:
-		_deactivate_hitbox()
 
 	owner_node.speed_multiplier = 1.0
 	owner_node.is_attacking = false
@@ -283,7 +247,6 @@ func get_info() -> Dictionary:
 		"icon": icon
 	}
 
-# Movement Functions
 func _apply_anticipation_impulse():
 	if anticipation_impulse.length() > 0:
 		var rotated_impulse = _get_rotated_vector(anticipation_impulse)
@@ -306,18 +269,11 @@ func _apply_impulse(impulse: Vector2):
 	else:
 		owner_node.velocity += impulse
 
-# Timer Callback Functions
 func _on_anticipation_timeout() -> void:
 	is_on_anticipation = false
 	is_on_contact = true
 
-	if is_projectile:
-		spawn_projectile()
-	else:
-		if hitbox_delay > 0:
-			await owner_node.get_tree().create_timer(hitbox_delay).timeout
-
-	_activate_hitbox()
+	_create_attack_hitbox()
 
 	emit_signal("skill_contact_phase")
 	contact_timer.start(contact_time)
@@ -343,51 +299,13 @@ func _on_cooldown_timeout() -> void:
 	is_on_cooldown = false
 	emit_signal("skill_ready")
 
-func _on_hitbox_timeout() -> void:
-	_deactivate_hitbox()
-
-# Hitbox Functions
-func create_or_get_hitbox() -> void:
-	hitbox = get_node_or_null("Hitbox")
-	hitbox.monitoring = false
-	hitbox.monitorable = false
-
-	if not hitbox.is_connected("body_entered", _on_hitbox_body_entered):
-		hitbox.body_entered.connect(_on_hitbox_body_entered)
-	if not hitbox.is_connected("area_entered", _on_hitbox_area_entered):
-		hitbox.area_entered.connect(_on_hitbox_area_entered)
-
-func _activate_hitbox() -> void:
-	if not hitbox or not is_instance_valid(hitbox):
-		create_or_get_hitbox()
-
-	if hitbox:
-		var player_facing_angle = last_use_direction.angle()
-		var rotated_offset = hitbox_offset.rotated(player_facing_angle)
-		
-		hitbox.global_position = owner_node.global_position + rotated_offset
-		hitbox.rotation = player_facing_angle
-		
-		var collision_shape = hitbox.get_node("CollisionShape2D")
-		if collision_shape:
-			collision_shape.position = Vector2.ZERO
-			collision_shape.rotation = 0
-		
-		hitbox.monitoring = true
-		hitbox.monitorable = true
-		hitbox.set_as_top_level(true)
-		
-		if display_hitbox:
-			_show_hitbox_visualization(hitbox)
-		
-		if hitbox_duration > 0:
-			hitbox_timer.start(hitbox_duration)
-
-func _deactivate_hitbox() -> void:
-	if hitbox:
-		hitbox.monitoring = false
-		hitbox.monitorable = false
-		_hide_hitbox_visualization(hitbox)
+func _create_attack_hitbox() -> void:
+	var spawn_pos = owner_node.global_position
+	var offset = hitbox_offset.rotated(last_use_direction.angle())
+	spawn_pos += offset
+	
+	var attack = await Attack.new(self, owner_node, spawn_pos, last_use_direction, is_projectile, hitbox_delay, hitbox_lifetime)
+	active_attacks.append(attack)
 
 func _update_hitbox_orientation(direction: Vector2) -> void:
 	if not hitbox:
@@ -397,18 +315,8 @@ func _update_hitbox_orientation(direction: Vector2) -> void:
 	var collision_shape = hitbox.get_node_or_null("CollisionShape2D")
 	if collision_shape:
 		collision_shape.rotation = 0
-
-# Hit Detection Functions
-func _on_hitbox_body_entered(body) -> void:
-	_handle_hit(body)
-
-func _on_hitbox_area_entered(area) -> void:
-	if area.get_parent() and area.name.begins_with("Hurtbox"):
-		_handle_hit(area.get_parent())
-
+		
 func _handle_hit(target) -> void:
-	if skill_name == "bs3":
-		print('hit')
 	if owner_node is Player:
 		if target.has_method("take_damage") and target.is_in_group("Enemy"):
 			var damage = get_current_damage()
@@ -427,7 +335,6 @@ func _handle_hit(target) -> void:
 			
 			target.take_damage(damage, knockback)
 
-# Hitbox Visualization
 func _show_hitbox_visualization(hitbox: Node) -> void:
 	if not display_hitbox:
 		return
@@ -511,31 +418,7 @@ func _hide_hitbox_visualization(hitbox: Node) -> void:
 	if debug_draw:
 		debug_draw.queue_free()
 
-func set_hitbox_visibility(visible: bool) -> void:
-	display_hitbox = visible
-	
-	if is_on_contact:
-		if hitbox:
-			if visible:
-				_show_hitbox_visualization(hitbox)
-			else:
-				_hide_hitbox_visualization(hitbox)
-
-func spawn_projectile() -> void:
-	var spawn_pos = owner_node.global_position
-	var projectile_offset = hitbox_offset.rotated(last_use_direction.angle())
-	spawn_pos += projectile_offset
-	
-	var projectile = Projectile.new(self, owner_node, spawn_pos, last_use_direction)
-	projectile.sprite.play("default")
-	projectile.update_orientation(last_use_direction)  # Update orientation when spawned
-	_activate_hitbox()
-	active_projectiles.append(projectile)
-	
-	emit_signal("projectile_created", projectile)
-
-# Projectile System
-class Projectile:
+class Attack:
 	var skill_owner: BaseSkill
 	var parent_node: Node
 	var direction: Vector2
@@ -549,70 +432,129 @@ class Projectile:
 	var traveled_distance: float = 0.0
 	var hitbox: Area2D
 	var sprite: AnimatedSprite2D
-
-	func _init(_skill_owner: BaseSkill, _parent_node: Node, _start_position: Vector2, _direction: Vector2):
-		skill_owner = _skill_owner
-		parent_node = _parent_node
-		start_position = _start_position
-		direction = _direction.normalized()
-		speed = skill_owner.projectile_speed
-		max_distance = skill_owner.projectile_distance
-		damage = skill_owner.get_current_damage()
-		knockback_force = skill_owner.knockback_force
-		pierce_count = skill_owner.projectile_pierce_count
-		hitbox = skill_owner.hitbox
-		sprite = skill_owner.sprite
-		
-		# Set initial position
-		if is_instance_valid(hitbox):
-			hitbox.global_position = start_position
-		if is_instance_valid(sprite):
-			sprite.global_position = start_position
-			
-		# Initial orientation
-		update_orientation(direction)
-
-	func update(delta):
-		var movement = direction * speed * delta
-		hitbox.global_position += movement
-		sprite.global_position = hitbox.global_position
-		traveled_distance += movement.length()
-		if max_distance > 0 and traveled_distance >= max_distance:
-			expire()
+	var is_projectile: bool
+	var hitbox_timer: Timer
 	
-	func update_orientation(facing_direction: Vector2):
-		# Update hitbox orientation - for collision detection
+	func _init(skill_owner: BaseSkill, parent_node: Node, start_position: Vector2,
+			   direction: Vector2, is_projectile: bool, hitbox_delay: int, hitbox_lifetime: int):
+		self.skill_owner = skill_owner
+		self.parent_node = parent_node
+		self.start_position = start_position
+		self.direction = direction.normalized()
+		self.speed = skill_owner.projectile_speed
+		self.max_distance = skill_owner.projectile_distance
+		self.damage = skill_owner.get_current_damage()
+		self.knockback_force = skill_owner.knockback_force
+		self.pierce_count = skill_owner.projectile_pierce_count
+		self.is_projectile = is_projectile
+		
+		# Create and setup hitbox
+		self.hitbox = skill_owner.hitbox.duplicate()
+		if is_instance_valid(self.hitbox):
+			self.hitbox.global_position = start_position
+			self.hitbox.body_entered.connect(_on_hitbox_body_entered)
+			self.hitbox.area_entered.connect(_on_hitbox_area_entered)
+			parent_node.add_child(self.hitbox)
+		
+		# Create and setup sprite
+		self.sprite = skill_owner.sprite.duplicate()
+		if is_instance_valid(self.sprite):
+			self.sprite.global_position = start_position
+			self.sprite.play("default")
+			parent_node.add_child(self.sprite)
+		
+		# Setup hitbox timer
+		self.hitbox_timer = Timer.new()
+		self.hitbox_timer.one_shot = true
+		self.hitbox_timer.connect("timeout", _on_hitbox_timeout)
+		parent_node.add_child(self.hitbox_timer)
+		
+		# Update orientation
+		update_orientation(self.direction)
+		
+		# Delayed hitbox activation
+		await parent_node.get_tree().create_timer(hitbox_delay).timeout
+		if is_instance_valid(self.hitbox):
+			self.hitbox.monitoring = true
+			self.hitbox.monitorable = true
+			self.hitbox.set_as_top_level(true)
+		
+		# Start lifetime timer
+		self.hitbox_timer.start(hitbox_lifetime)
+		
+		# Show hitbox visualization
+		skill_owner._show_hitbox_visualization(self.hitbox)
+
+	func update(delta: float) -> void:
+		# Early exit if no movement required
+		if speed == 0 or (max_distance > 0 and traveled_distance >= max_distance):
+			return
+		
+		# Calculate movement
+		var movement := direction * speed * delta
+		
+		# Update positions
+		if is_instance_valid(hitbox):
+			hitbox.global_position += movement
+		if is_instance_valid(sprite):
+			sprite.global_position = hitbox.global_position if is_instance_valid(hitbox) else start_position
+		
+		# Track traveled distance
+		traveled_distance += movement.length()
+
+	func update_orientation(facing_direction: Vector2) -> void:
+		# Update hitbox rotation
 		if is_instance_valid(hitbox):
 			hitbox.rotation = facing_direction.angle()
-			
+		
 		# Update sprite orientation
 		if is_instance_valid(sprite):
-			# Correctly handle sprite direction based on cardinal directions
+			# Reset transformations
+			sprite.rotation = 0
+			sprite.flip_h = false
+			sprite.flip_v = false
+			
+			# Handle sprite direction based on dominant axis
 			if abs(facing_direction.x) > abs(facing_direction.y):
-				# Horizontal movement is dominant
-				sprite.rotation = 0 # Reset rotation
+				# Horizontal movement
 				sprite.flip_h = facing_direction.x < 0
-				sprite.flip_v = false
 			else:
-				# Vertical movement is dominant
-				sprite.flip_h = false
-				
+				# Vertical movement
 				if facing_direction.y > 0:
 					# Down
-					sprite.rotation = PI/2 # 90 degrees
-					sprite.flip_v = false
+					sprite.rotation = PI/2
 				else:
 					# Up
-					sprite.rotation = -PI/2 # -90 degrees
-					sprite.flip_v = false
+					sprite.rotation = -PI/2
 			
-			# Apply scale from the skill
+			# Apply scale from skill
 			sprite.scale = skill_owner.projectile_scale
-	
-	func expire():
-		skill_owner.emit_signal("projectile_expired", self)
+
+	func _on_hitbox_body_entered(body) -> void:
+		skill_owner._handle_hit(body)
+
+	func _on_hitbox_area_entered(area) -> void:
+		if area.get_parent() and area.name.begins_with("Hurtbox"):
+			skill_owner._handle_hit(area.get_parent())
+
+	func _on_hitbox_timeout() -> void:
+		expire()
+
+	func expire() -> void:
+		# Clear hitbox visualization
+		if is_instance_valid(skill_owner):
+			skill_owner._hide_hitbox_visualization(hitbox)
 		
-		# Find index in the active projectiles list and remove it
-		var index = skill_owner.active_projectiles.find(self)
-		if index != -1:
-			skill_owner.active_projectiles.remove_at(index)
+		# Remove from active attacks
+		if is_instance_valid(skill_owner):
+			var index = skill_owner.active_attacks.find(self)
+			if index != -1:
+				skill_owner.active_attacks.remove_at(index)
+		
+		# Free resources
+		if is_instance_valid(hitbox):
+			hitbox.queue_free()
+		if is_instance_valid(sprite):
+			sprite.queue_free()
+		if is_instance_valid(hitbox_timer):
+			hitbox_timer.queue_free()

@@ -10,9 +10,10 @@ cooldown_time = 0.1
 anticipation_time = 0.01
 contact_time = 0.1
 recovery_time = 0.01
-hitbox_duration = 1.0
 contact_impulse = Vector2(700, 0)
 movement_control_mode = 1
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
 [node name="Hitbox" type="Area2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
