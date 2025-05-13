@@ -127,6 +127,7 @@ func initialize(skill_owner: Node) -> void:
 		
 	hitbox.monitoring = false
 	hitbox.monitorable = false
+	hitbox.collision_mask = 0b00000000000011
 	
 func _physics_process(delta):
 	if !is_skill_active():
@@ -202,11 +203,11 @@ func interrupt() -> void:
 	if !is_skill_active():
 		return
 
-	if anticipation_timer and anticipation_timer.is_active():
+	if anticipation_timer:
 		anticipation_timer.stop()
-	if contact_timer and contact_timer.is_active():
+	if contact_timer:
 		contact_timer.stop()
-	if recovery_timer and recovery_timer.is_active():
+	if recovery_timer:
 		recovery_timer.stop()
 
 	is_on_anticipation = false

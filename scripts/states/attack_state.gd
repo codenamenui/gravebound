@@ -15,7 +15,7 @@ func _ready() -> void:
 		attack_range_area.body_exited.connect(_on_attack_range_area_body_exited)
 
 func enter(msg: Dictionary = {}) -> void:
-	enemy.CharacterSprite.play_idle()
+	enemy.character_sprite.play_idle()
 	
 	# Set initial range state based on current positions if we have a target
 	if enemy.target and attack_range_area:
@@ -51,12 +51,6 @@ func physics_update(_delta: float) -> void:
 	if enemy.id in enemy.container.enemy_queue:
 		_attack()
 
-func update(_delta: float) -> void:
-	# Try to get a slot in the attack queue if not already in it
-	if enemy.id not in enemy.container.enemy_queue:
-		if enemy.container.enemy_queue.size() < 5:
-			enemy.container.enemy_queue.push_back(enemy.id)
-
 func _attack() -> void:
 	if !enemy.target:
 		return
@@ -75,6 +69,7 @@ func _on_attack_range_area_body_exited(body: Node2D) -> void:
 # Handle skill completion signal
 func _on_skill_finished() -> void:
 	enemy.container.enemy_queue.erase(enemy.id)
+	transition_requested.emit("ChaseState")
 
 # Handle skill interruption signal
 func _on_skill_interrupted() -> void:

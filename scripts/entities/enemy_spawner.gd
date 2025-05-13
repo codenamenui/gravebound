@@ -44,7 +44,6 @@ func _ready():
 	
 	# Create a container for the enemies
 	enemy_container = EnemyContainer.new()
-	#enemy_container = Node.new()
 	add_child(enemy_container)
 	
 	# Find player if not set

@@ -603,7 +603,7 @@ radius = 6.0
 height = 16.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
-collision_mask = 2
+collision_mask = 8
 script = ExtResource("1_3vyb7")
 deceleration_factor = 15.0
 
@@ -616,7 +616,6 @@ deceleration_factor = 15.0
 [node name="BA3" parent="Skills" instance=ExtResource("2_ur7pv")]
 
 [node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
-projectile_speed = 500.0
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 
@@ -627,7 +626,7 @@ max_skill_slots = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
 sprite_frames = SubResource("SpriteFrames_fjrip")
-animation = &"b_hit"
+animation = &"b_walk"
 
 [node name="HitboxComponent" parent="." instance=ExtResource("5_smehm")]
 

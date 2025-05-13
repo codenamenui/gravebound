@@ -7,13 +7,12 @@ extends State
 @export var invincibility_duration: float = 0.5
 
 var knockback_velocity: Vector2 = Vector2.ZERO
-var original_modulate: Color
+var original_modulate: Color = Color(1, 1, 1, 1)
 
 func enter(msg: Dictionary = {}):
 	if msg.has("knockback"):
 		knockback_velocity = msg["knockback"]
 	
-	original_modulate = enemy.modulate
 	play_hit_effects()
 	
 	if enemy.health_component:

@@ -94,6 +94,7 @@ navigation_region = NodePath("../NavigationRegion2D")
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 scale = Vector2(0.997859, 0.995334)
 navigation_polygon = SubResource("NavigationPolygon_i7141")
+navigation_layers = 10
 
 [node name="Player" parent="." instance=ExtResource("1_kqs1s")]
 position = Vector2(66, 449)

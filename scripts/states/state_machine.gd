@@ -12,10 +12,7 @@ func _ready() -> void:
 		if child is State:
 			states[child.name] = child
 			child.transition_requested.connect(_on_state_transition_requested)
-	
-	if initial_state:
-		change_state(initial_state, {})
-
+			
 func change_state(new_state: State, msg: Dictionary) -> void:
 	if not new_state:
 		push_error("Tried to transition to a null state!")

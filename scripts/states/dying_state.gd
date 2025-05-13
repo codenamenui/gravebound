@@ -1,7 +1,7 @@
 extends State
 
 func enter(msg : Dictionary = {}) -> void:
-	enemy.CharacterSprite.play_death()
+	enemy.character_sprite.play_death()
 	
 	# Create a timer to remove the enemy after the death animation
 	var timer = Timer.new()
