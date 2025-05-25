@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0mmv26vnqtdk"
-path="res://.godot/imported/Sprite-0001-Sheet.png-4725d3e0ecb0b5ec74e7968a32e3480c.ctex"
+uid="uid://bidgeh4c40qtx"
+path="res://.godot/imported/Run.png-e9451f5f35d9361e7be505c389dfc1de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/aesprites/Sprite-0001-Sheet.png"
-dest_files=["res://.godot/imported/Sprite-0001-Sheet.png-4725d3e0ecb0b5ec74e7968a32e3480c.ctex"]
+source_file="res://assets/Hero Knight/Sprites/Run.png"
+dest_files=["res://.godot/imported/Run.png-e9451f5f35d9361e7be505c389dfc1de.ctex"]
 
 [params]
 

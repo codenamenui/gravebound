@@ -14,6 +14,7 @@ func enter(msg : Dictionary = {}) -> void:
 # Called when the death timer completes
 func _on_death_timer_timeout() -> void:
 	# Remove the enemy from the scene
+	enemy.container.enemy_queue.erase(enemy.id)
 	enemy.queue_free()
 
 # Called every physics frame

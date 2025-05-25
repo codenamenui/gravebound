@@ -27,9 +27,7 @@ func _ready():
 	# Wait until NavigationAgent is fully initialized
 	await get_tree().physics_frame
 	if navigation_agent:
-		navigation_agent.avoidance_enabled = true
-		navigation_agent.radius = 12.0
-		navigation_agent.path_max_distance = 50.0
+		navigation_agent.radius = 16
 	
 	state_machine.change_state(state_machine.initial_state, {})
 

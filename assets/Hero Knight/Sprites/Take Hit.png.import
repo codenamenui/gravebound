@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uu04fivaul3y"
-path="res://.godot/imported/ashen.png-565cb05d2d9d3fb1c9f8a8d02295f8f3.ctex"
+uid="uid://cgnhjxr7eqklt"
+path="res://.godot/imported/Take Hit.png-54b8f319ec31f9141823ace9861e4b93.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/aesprites/ashen.png"
-dest_files=["res://.godot/imported/ashen.png-565cb05d2d9d3fb1c9f8a8d02295f8f3.ctex"]
+source_file="res://assets/Hero Knight/Sprites/Take Hit.png"
+dest_files=["res://.godot/imported/Take Hit.png-54b8f319ec31f9141823ace9861e4b93.ctex"]
 
 [params]
 

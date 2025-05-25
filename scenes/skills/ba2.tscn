@@ -1,83 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://ds0luiwx0s3vd"]
+[gd_scene load_steps=4 format=3 uid="uid://ds0luiwx0s3vd"]
 
 [ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="1_flxn4"]
-[ext_resource type="Texture2D" uid="uid://crlvtpwvhfi0a" path="res://assets/Pixel Art Animations - Slashes/Slash 3/color2/sprite-sheet.png" id="2_flxn4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cwpw3"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gp7hi"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tjy3j"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2x8ru"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_u1ten"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kxoaq"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(512, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ygk86"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(0, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_up1mt"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(128, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cqjl6"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(256, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rb0v0"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(384, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ft84t"]
-atlas = ExtResource("2_flxn4")
-region = Rect2(512, 128, 128, 128)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_xygsd"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gp7hi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tjy3j")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2x8ru")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_u1ten")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kxoaq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ygk86")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_up1mt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cqjl6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rb0v0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ft84t")
-}],
+"frames": [],
 "loop": false,
 "name": &"default",
 "speed": 20.0
@@ -87,9 +16,9 @@ animations = [{
 script = ExtResource("1_flxn4")
 skill_name = "bs1"
 animation_name = "attack"
-animation_speed = 3.0
+animation_speed = 1.0
 anticipation_time = 0.02
-contact_time = 0.07
+contact_time = 0.1
 recovery_time = 0.02
 speed_multiplier = 0.0
 contact_impulse = Vector2(200, 0)
@@ -97,7 +26,6 @@ movement_control_mode = 2
 base_damage = 10.0
 knockback_force = 5.0
 hit_stop_time = 0.2
-display_hitbox = true
 is_projectile = true
 projectile_speed = 200.0
 projectile_distance = 200.0
@@ -113,5 +41,4 @@ shape = SubResource("RectangleShape2D_cwpw3")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 3.14159
 sprite_frames = SubResource("SpriteFrames_xygsd")
-frame = 9
 frame_progress = 1.0

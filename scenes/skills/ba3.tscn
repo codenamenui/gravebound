@@ -1,50 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1wxs7aphjf5e"]
+[gd_scene load_steps=5 format=3 uid="uid://b1wxs7aphjf5e"]
 
 [ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="1_mlgre"]
-[ext_resource type="Texture2D" uid="uid://c0uqx6smhenwk" path="res://assets/Pixel Art Animations - Slashes/Slash 1/color2/sprite-sheet.png" id="2_mlgre"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iuurw"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mlgre"]
-atlas = ExtResource("2_mlgre")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5e87d"]
-atlas = ExtResource("2_mlgre")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ydsrr"]
-atlas = ExtResource("2_mlgre")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_do0jr"]
-atlas = ExtResource("2_mlgre")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mvwbr"]
-atlas = ExtResource("2_mlgre")
-region = Rect2(512, 128, 128, 128)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_5umsi"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mlgre")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5e87d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ydsrr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_do0jr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mvwbr")
-}],
+"frames": [],
 "loop": false,
 "name": &"default",
 "speed": 20.0
@@ -53,11 +17,11 @@ animations = [{
 [node name="BA3" type="Node"]
 script = ExtResource("1_mlgre")
 skill_name = "bs1"
-animation_name = "attack"
-animation_speed = 3.0
+animation_name = "attack2"
+animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.07
-recovery_time = 0.02
+recovery_time = 0.3
 speed_multiplier = 0.0
 contact_impulse = Vector2(200, 0)
 movement_control_mode = 2
@@ -86,5 +50,4 @@ shape = SubResource("RectangleShape2D_iuurw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5umsi")
-frame = 4
 frame_progress = 1.0
