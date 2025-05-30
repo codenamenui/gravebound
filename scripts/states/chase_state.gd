@@ -22,7 +22,7 @@ func physics_update(delta: float):
 	# Calculate direction to the next path position
 	var next_path_position = enemy.navigation_agent.get_next_path_position()
 	var direction = (next_path_position - enemy.global_position).normalized()
-	
+	enemy.character_sprite.current_direction = direction
 	enemy.navigation_agent.set_velocity(direction * speed)
 	
 	# Attack transition check

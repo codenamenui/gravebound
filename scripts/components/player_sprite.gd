@@ -60,18 +60,19 @@ func get_direction_prefix(more: bool = false):
 	
 	if x > 0:
 		animated_sprite.flip_h = false  # Face right
-		return "s"  # Side animation
+		#return "s"  # Side animation
 	elif x < 0:
 		animated_sprite.flip_h = true   # Face left
-		return "s"  # Side animation
-	else:
+		#return "s"  # Side animation
+	#else:
 		# If no horizontal movement, keep current orientation
 		# but you might want to decide what animation to play when standing still
-		return "s"  # Default to side animation
+		#return "s"  # Default to side animation
 		
 func play_animation(anim_name: String, speed_scale: float = 1.0, force_restart: bool = false):
 	var dir_prefix = get_direction_prefix()
-	var full_anim_name = dir_prefix + "_" + anim_name
+	#var full_anim_name = dir_prefix + "_" + anim_name
+	var full_anim_name = anim_name
 	if current_animation == full_anim_name and !force_restart:
 		return
 		
