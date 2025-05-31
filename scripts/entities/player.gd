@@ -103,7 +103,7 @@ func _on_skill_ready(skill: BaseSkill) -> void:
 	pass
 	
 func handle_movement(direction: Vector2 = Vector2()):
-	# direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if is_attacking and current_skill and current_skill.movement_control_mode == 1:
 		if direction != Vector2.ZERO and current_skill.can_change_direction_during_skill:
