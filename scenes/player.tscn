@@ -317,6 +317,7 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+y_sort_enabled = true
 collision_mask = 8
 script = ExtResource("1_3vyb7")
 deceleration_factor = 15.0

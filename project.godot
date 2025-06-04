@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Gravebound"
-run/main_scene="uid://hm1bda2b2s4s"
+run/main_scene="uid://7p3caqed67be"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
