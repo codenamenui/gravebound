@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cvggagoyatlr8" path="res://scenes/skills/dash.tscn" id="5_d2wvv"]
 [ext_resource type="PackedScene" uid="uid://ryr8eir3qxrd" path="res://scenes/hitbox_component.tscn" id="5_smehm"]
 [ext_resource type="Texture2D" uid="uid://dkkqrhytt6xfd" path="res://assets/sheets/Attack1-Sheet.png" id="12_a8ls1"]
-[ext_resource type="Texture2D" uid="uid://ck1ha4jijfbvo" path="res://assets/Hero Knight/Sprites/Death.png" id="13_a8ls1"]
+[ext_resource type="Texture2D" uid="uid://ddx6ntgddtb7e" path="res://assets/Sprites/DEATH.png" id="13_a8ls1"]
 [ext_resource type="Texture2D" uid="uid://bxlghlgqxcvqg" path="res://assets/sheets/Attack2-Sheet.png" id="13_qfm1y"]
 [ext_resource type="Texture2D" uid="uid://cdnp8oxam41nx" path="res://assets/sheets/Take Hit-Sheet.png" id="14_fulsm"]
 [ext_resource type="Texture2D" uid="uid://dsueqgaejl8ib" path="res://assets/sheets/Idle-Sheet.png" id="15_4r5pv"]
@@ -83,47 +83,47 @@ region = Rect2(720, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qfm1y"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(0, 0, 180, 180)
+region = Rect2(0, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fulsm"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(180, 0, 180, 180)
+region = Rect2(120, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4r5pv"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(360, 0, 180, 180)
+region = Rect2(240, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60mlk"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(540, 0, 180, 180)
+region = Rect2(360, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(720, 0, 180, 180)
+region = Rect2(480, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a38lo"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(900, 0, 180, 180)
+region = Rect2(600, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ni07"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(1080, 0, 180, 180)
+region = Rect2(720, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l71n6"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(1260, 0, 180, 180)
+region = Rect2(840, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ke2ow"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(1440, 0, 180, 180)
+region = Rect2(960, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ujl30"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(1620, 0, 180, 180)
+region = Rect2(1080, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_31cv2"]
 atlas = ExtResource("13_a8ls1")
-region = Rect2(1800, 0, 180, 180)
+region = Rect2(1200, 0, 120, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qsb7e"]
 atlas = ExtResource("14_fulsm")
@@ -305,7 +305,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_31cv2")
 }],
-"loop": false,
+"loop": true,
 "name": &"death",
 "speed": 10.0
 }, {
@@ -446,7 +446,7 @@ health_component = NodePath("..")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
 sprite_frames = SubResource("SpriteFrames_fjrip")
-animation = &"idle"
+animation = &"death"
 
 [node name="death" type="Label" parent="."]
 visible = false
