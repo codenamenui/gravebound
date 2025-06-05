@@ -439,6 +439,7 @@ shape = SubResource("CapsuleShape2D_smehm")
 [node name="HealthComponent" parent="." groups=["Player"] instance=ExtResource("2_qlg0r")]
 
 [node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_tuyoq")]
+visible = false
 position = Vector2(0, -27)
 health_component = NodePath("..")
 
