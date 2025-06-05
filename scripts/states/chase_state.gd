@@ -23,9 +23,10 @@ func physics_update(delta: float):
 	var next_path_position = enemy.navigation_agent.get_next_path_position()
 	var direction = (next_path_position - enemy.global_position).normalized()
 	enemy.character_sprite.current_direction = direction
+	enemy.character_sprite.get_direction()
 	enemy.navigation_agent.set_velocity(direction * speed)
 	
-	# Attack transition check
+	 #Attack transition check
 	if target_in_attack_range:
 		if enemy.id not in enemy.container.enemy_queue:
 			if enemy.container.enemy_queue.size() < 5:
@@ -51,8 +52,7 @@ func recalc_path():
 		
 func _on_recalc_path_timer_timeout() -> void:
 	recalc_path()
-
-
+	
 func _on_navigation_agent_velocity_computed(safe_velocity: Vector2) -> void:
 	enemy.velocity = safe_velocity
 	pass # Replace with function body.

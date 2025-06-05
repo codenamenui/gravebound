@@ -21,87 +21,43 @@ func play_walk():
 
 func play_hit():
 	play_animation("hit", true)
-
+	
 func play_death():
 	play_animation("death", true)
 
-func get_direction_prefix(more: bool = false):
+func get_direction():
 	var x = current_direction.x
 	var y = current_direction.y
 	
-	#if abs(x) > 0.3 and abs(y) > 0.3:
-		#if x > 0:
-			#if y > 0:
-				#animated_sprite.flip_h = false
-				#return "bs"
-			#else:
-				#animated_sprite.flip_h = false
-				#return "ts"
-		#else:
-			#if y > 0:
-				#animated_sprite.flip_h = true
-				#return "bs"
-			#else:
-				#animated_sprite.flip_h = true
-				#return "ts"
-	#
-	#if abs(x) > abs(y):
-		#if x > 0:
-			#animated_sprite.flip_h = false
-			#return "s" 
-		#else:
-			#animated_sprite.flip_h = true
-			#return "s"
-	#else:
-		#if y > 0:
-			#return "f"
-		#else:
-			#return "b"
-	
 	if x > 0:
 		animated_sprite.flip_h = false  # Face right
-		#return "s"  # Side animation
 	elif x < 0:
 		animated_sprite.flip_h = true   # Face left
-		#return "s"  # Side animation
-	#else:
-		# If no horizontal movement, keep current orientation
-		# but you might want to decide what animation to play when standing still
-		#return "s"  # Default to side animation
 		
 func play_animation(anim_name: String, speed_scale: float = 1.0, force_restart: bool = false):
-	var dir_prefix = get_direction_prefix()
-	#var full_anim_name = dir_prefix + "_" + anim_name
+	get_direction()
 	var full_anim_name = anim_name
 	if current_animation == full_anim_name and !force_restart:
 		return
 		
 	animated_sprite.speed_scale = speed_scale
 	
-	if animated_sprite.sprite_frames.has_animation(full_anim_name):
-		current_animation = full_anim_name
-		animated_sprite.play(full_anim_name)
-		if anim_name == "attack":
-			animated_sprite.speed_scale = attack_speed_scale
-	else:
-		var fallback = dir_prefix + "_idle"
-		if animated_sprite.sprite_frames.has_animation(fallback):
-			current_animation = fallback
-			animated_sprite.play(fallback)
-		else:
-			current_animation = "f_idle"
-			animated_sprite.play("f_idle")
+	current_animation = full_anim_name
+	animated_sprite.play(full_anim_name)
 
-func play_animation_frames(anim_name: String, start_frame: int, end_frame: int, speed: float = 1.0) -> void:
-	var full_anim_name = get_direction_prefix() + "_" + anim_name
-	
-	if animated_sprite.sprite_frames.has_animation(full_anim_name):
-		current_animation = full_anim_name
-		animated_sprite.play(full_anim_name)
-		animated_sprite.speed_scale = speed
-		animated_sprite.frame = start_frame
-	else:
-		play_idle()
+	if anim_name == "attack":
+		animated_sprite.speed_scale = attack_speed_scale
+			
+#func play_animation_frames(anim_name: String, start_frame: int, end_frame: int, speed: float = 1.0) -> void:
+	#var full_anim_name = get_direction + "_" + anim_name
+	#
+	#if animated_sprite.sprite_frames.has_animation(full_anim_name):
+		#current_animation = full_anim_name
+		#animated_sprite.play(full_anim_name)
+		#animated_sprite.speed_scale = speed
+		#animated_sprite.frame = start_frame
+	#else:
+		#play_idle()
 
 func update_animation_based_on_state():
 	if player.is_attacking:

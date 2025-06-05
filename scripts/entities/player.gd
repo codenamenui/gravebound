@@ -16,6 +16,7 @@ var current_ba = -1
 var current_dash = 0
 
 @onready var character_sprite_component: CharacterSpriteComponent = $CharacterSpriteComponent
+@onready var health_component: HealthComponent = $HealthComponent
 @onready var hit_timer: Timer = $Timers/HitTimer
 @onready var ba_timer: Timer = $Timers/BATimer
 @onready var dash_timer: Timer = $Timers/DashTimer
@@ -43,14 +44,27 @@ func _ready():
 			skill_manager.add_skill(skill, 3)
 	
 	character_sprite_component.set_direction(last_direction)
-	character_sprite_component.play_idle()
 	hit_timer.wait_time = hit_timer_duration
+	
+	# Connect timers
+	if not ba_timer.timeout.is_connected(_on_ba_timer_timeout):
+		ba_timer.timeout.connect(_on_ba_timer_timeout)
+	if not dash_timer.timeout.is_connected(_on_dash_timer_timeout):
+		dash_timer.timeout.connect(_on_dash_timer_timeout)
+	if not health_component.health_depleted.is_connected(_on_health_component_health_depleted):
+		health_component.health_depleted.connect(_on_health_component_health_depleted)
 	
 	for child in get_children():
 		if child is BaseSkill:
 			child.initialize(self)
+	
+	# Play initial animation
+	_update_animation()
 
 func _physics_process(delta):
+	# Always update animation first, regardless of state
+	_update_animation()
+	
 	if is_dying:
 		return
 	
@@ -59,12 +73,12 @@ func _physics_process(delta):
 	else:
 		handle_movement()
 	
-	if not is_hit and not is_attacking:
-		character_sprite_component.update_animation_based_on_state()
-	
 	move_and_slide()
 
 func _process(delta: float) -> void:
+	if is_dying:
+		return
+		
 	var attack_index = -1  # Default to -1 (no attack)
 	
 	if Input.is_action_just_pressed("attack") and not is_attacking:
@@ -77,33 +91,68 @@ func _process(delta: float) -> void:
 			current_ba += 1
 			attack_index = current_ba  # Set the attack index to the current BA value
 	
-	var can_dash
+	var can_dash = true
 	if Input.is_action_just_pressed("dash"):
-		dash_timer.start(0.3)
+		if dash_timer.is_stopped():
+			dash_timer.start(0.3)
+			current_dash = 0
 		if dash_timer.time_left > 0:
 			current_dash += 1
 		if current_dash >= 3:
 			can_dash = false
-		else:
-			can_dash = true
 			
 	var action_pressed = {
 		"skill_1": Input.is_action_just_pressed("skill_1"),
 		"skill_2": Input.is_action_just_pressed("skill_2"),
 		"attack": attack_index,  # Pass the attack index or -1 if no attack
-		"dash": Input.is_action_just_pressed("dash")
+		"dash": Input.is_action_just_pressed("dash") and can_dash
 	}
 	
 	skill_manager.process_input(last_direction, action_pressed)
+
+func _update_animation():
+	# Priority-based animation system
+	if is_dying:
+		character_sprite_component.play_death()
+		return
+	
+	if is_hit:
+		character_sprite_component.play_hit()
+		return
+	
+	if is_attacking:
+		# Let the skill handle its own animation
+		return
+	
+	# Only update idle/walk animations if we're not in a special state
+	if velocity.length() > 10.0:  # Moving
+		character_sprite_component.play_walk()
+	else:  # Idle
+		character_sprite_component.play_idle()
 	
 func _on_skill_executed(skill: BaseSkill) -> void:
-	pass
+	is_attacking = true
+	current_skill = skill
+	
+	# Connect to skill finished signal if available
+	if skill.has_signal("skill_finished") and not skill.skill_finished.is_connected(_on_skill_finished):
+		skill.skill_finished.connect(_on_skill_finished)
 
 func _on_skill_ready(skill: BaseSkill) -> void:
 	pass
+
+func _on_skill_finished():
+	is_attacking = false
+	current_skill = null
+	# Animation will be updated in the next frame via _update_animation()
 	
 func handle_movement(direction: Vector2 = Vector2()):
 	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+
+	# Don't allow any movement or direction changes when dead
+	if is_dying:
+		velocity = velocity.move_toward(Vector2.ZERO, speed * deceleration_factor * get_physics_process_delta_time())
+		return
 
 	if is_attacking and current_skill and current_skill.movement_control_mode == 1:
 		if direction != Vector2.ZERO and current_skill.can_change_direction_during_skill:
@@ -132,31 +181,47 @@ func set_last_direction(direction: Vector2):
 	last_direction = direction
 	character_sprite_component.set_direction(last_direction)
 
-func take_damage():
+func take_damage(damage: int):
 	if is_dying:
 		return
 	
-	emit_signal("took_damage")
-	is_hit = true
-	hit_timer.start()
+	# Check if player is invincible (health_component returns true)
+	var is_invincible = health_component.take_damage(damage)
 	
-	if not hit_timer.timeout.is_connected(_on_hit_timer_timeout):
-		hit_timer.timeout.connect(_on_hit_timer_timeout)
-	
-	if is_attacking:
+	if is_invincible:
+		# Player is invincible, just return to normal animation
 		return
 	
+	emit_signal("took_damage")
+	
+	# Always refresh hit animation - stop current hit timer and restart
+	if hit_timer.timeout.is_connected(_on_hit_timer_timeout):
+		hit_timer.timeout.disconnect(_on_hit_timer_timeout)
+	
+	is_hit = true
+	hit_timer.wait_time = hit_timer_duration
+	hit_timer.start()
+	
+	# Reconnect the timer
+	hit_timer.timeout.connect(_on_hit_timer_timeout)
+	
+	# Force immediate hit animation
 	character_sprite_component.play_hit()
 
 func _on_hit_timer_timeout():
 	is_hit = false
-
-func die():
-	is_dying = true
-	character_sprite_component.play_death()
+	# Force return to idle animation when hit ends
+	if not is_dying and not is_attacking:
+		character_sprite_component.play_idle()
 
 func _on_ba_timer_timeout() -> void:
 	current_ba = -1
 
 func _on_dash_timer_timeout() -> void:
 	current_dash = 0
+
+func _on_health_component_health_depleted() -> void:
+	is_dying = true
+	$death.show()
+	# Force immediate animation update for death
+	character_sprite_component.play_death()

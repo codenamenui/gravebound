@@ -21,8 +21,8 @@ enemy_manager="*res://scripts/enemy_manager.gd"
 
 [global_group]
 
-player=""
 Enemy=""
+Player=""
 
 [input]
 
@@ -87,4 +87,3 @@ dash={
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"

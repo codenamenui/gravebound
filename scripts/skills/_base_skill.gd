@@ -331,10 +331,8 @@ func _handle_hit(target) -> void:
 	else:
 		if target.has_method("take_damage") and target.is_in_group("Player"):
 			var damage = get_current_damage()
-			var knockback_direction = (target.global_position - owner_node.global_position).normalized()
-			var knockback = knockback_direction * knockback_force
 			
-			target.take_damage(damage, knockback)
+			target.take_damage(damage)
 
 func _show_hitbox_visualization(hitbox: Node) -> void:
 	if not display_hitbox:

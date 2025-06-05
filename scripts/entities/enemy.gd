@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Enemy
 
+@export var points: int = 10
+
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var health_bar: HealthBar = $HealthBar
@@ -85,12 +87,6 @@ func show_damage_number(damage_amount: int) -> void:
 	# Queue free the label after the animation
 	await tween.finished
 	damage_label.queue_free()
-	
-func _on_skill_executed(skill: BaseSkill) -> void:
-	pass
-	
-func _on_skill_ready(skill: BaseSkill) -> void:
-	pass
 	
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:

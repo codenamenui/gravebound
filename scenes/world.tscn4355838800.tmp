@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://7p3caqed67be"]
+[gd_scene load_steps=8 format=4 uid="uid://7p3caqed67be"]
 
 [ext_resource type="PackedScene" uid="uid://c84k2nic04m2f" path="res://scenes/player.tscn" id="1_kqs1s"]
 [ext_resource type="Script" uid="uid://5rrcli73cy4" path="res://scripts/ui/camera_2d.gd" id="2_71j4m"]
@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/joystick.tscn" id="3_qfnet"]
 [ext_resource type="TileSet" uid="uid://cv4ud6kohhc7h" path="res://assets/world.tres" id="4_i7141"]
 [ext_resource type="PackedScene" uid="uid://dkcvu17xaytl3" path="res://scenes/container.tscn" id="5_4mrxx"]
-[ext_resource type="Script" uid="uid://cagcxlmru24ub" path="res://scripts/entities/enemy_spawner.gd" id="6_i7141"]
-[ext_resource type="PackedScene" uid="uid://ciflnhdm2rhx1" path="res://scenes/enemy.tscn" id="7_4mrxx"]
+
+[sub_resource type="GDScript" id="GDScript_i7141"]
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -66,17 +66,10 @@ text = "Wave "
 
 [node name="EnemyContainer" parent="." instance=ExtResource("5_4mrxx")]
 
-[node name="EnemySpawn" type="Node2D" parent="." node_paths=PackedStringArray("enemy_container", "camera", "score_label", "wave_label")]
-script = ExtResource("6_i7141")
-enemy_scenes = Array[PackedScene]([ExtResource("7_4mrxx")])
-enemy_weights = Array[float]([1.0])
-enemy_container = NodePath("../EnemyContainer")
-camera = NodePath("../Camera2D")
-score_label = NodePath("../Camera2D/ScoreLabel")
-wave_label = NodePath("../Camera2D/WaveLabel")
-time_between_waves = 1.0
-max_enemies_alive = 20
-spawn_interval = 0.0
+[node name="EnemySpawn" type="Node2D" parent="."]
+script = SubResource("GDScript_i7141")
 
-[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_kqs1s")]
-position = Vector2(1174, 416)
+[node name="Player" parent="." instance=ExtResource("1_kqs1s")]
+position = Vector2(1247, 406)
+collision_mask = 0
+speed = 600.0

@@ -13,7 +13,8 @@ var is_invincible: bool = false
 
 func take_damage(damage: int):
 	if is_invincible:
-		return
+		return true
+		
 	current_health = max(current_health - damage, 0)
 	health_changed.emit(current_health)
 	
@@ -25,6 +26,8 @@ func take_damage(damage: int):
 		health_depleted.emit()
 	else:
 		_temp_invincibility()
+		
+	return false
 
 func set_invincible(value: bool):
 	is_invincible = value

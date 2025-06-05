@@ -1,4 +1,4 @@
-[gd_scene load_steps=116 format=3 uid="uid://ciflnhdm2rhx1"]
+[gd_scene load_steps=115 format=3 uid="uid://ciflnhdm2rhx1"]
 
 [ext_resource type="Script" uid="uid://dfr362y3h1td5" path="res://scripts/entities/enemy.gd" id="1_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_5uy6h"]
@@ -14,7 +14,6 @@
 [ext_resource type="FontFile" uid="uid://3cql67h12cs4" path="res://assets/Minecraft.ttf" id="12_otmr2"]
 [ext_resource type="Texture2D" uid="uid://2kh8353dalu1" path="res://assets/AllCharacters/Warrior/Death/spr_WarriorDeath_strip36.png" id="12_s1ycm"]
 [ext_resource type="Texture2D" uid="uid://r0dxbcmfwdk2" path="res://assets/AllCharacters/Warrior/GetHit/spr_WarriorGethit_strip9.png" id="13_s1ycm"]
-[ext_resource type="Script" uid="uid://urw1ikirvcmc" path="res://scripts/components/soft_collision_component.gd" id="13_wtq4b"]
 [ext_resource type="Texture2D" uid="uid://h64cri1otdu" path="res://assets/AllCharacters/Warrior/Idle/spr_WarriorIdle_strip21.png" id="14_shcg2"]
 [ext_resource type="Texture2D" uid="uid://cx37q2q6j1qby" path="res://assets/AllCharacters/Warrior/Walk/spr_WarriorWalk_strip11.png" id="17_shcg2"]
 
@@ -460,7 +459,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack",
-"speed": 20.0
+"speed": 50.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -711,11 +710,10 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
-"speed": 20.0
+"speed": 30.0
 }]
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
-visible = false
 collision_layer = 2
 collision_mask = 9
 motion_mode = 1
@@ -724,6 +722,8 @@ script = ExtResource("1_c4w8v")
 
 [node name="Skill" parent="." instance=ExtResource("2_w8i8w")]
 
+[node name="BA1" parent="Skill" instance=ExtResource("2_w8i8w")]
+
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
 initial_state = NodePath("ChaseState")
 
@@ -731,7 +731,7 @@ initial_state = NodePath("ChaseState")
 attack_range_area_path = NodePath("../../Area2D")
 
 [node name="ChaseState" parent="StateMachine" instance=ExtResource("4_md484")]
-speed = 200
+speed = 100
 
 [node name="DamageState" parent="StateMachine" instance=ExtResource("5_md484")]
 
@@ -755,7 +755,6 @@ avoidance_enabled = true
 neighbor_distance = 10.0
 max_speed = 200.0
 avoidance_priority = 0.45
-debug_enabled = true
 debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
 
 [node name="RecalcPathTimer" type="Timer" parent="."]
@@ -785,17 +784,14 @@ text = "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SoftCollisionComponent" type="Node2D" parent="."]
-script = ExtResource("13_wtq4b")
-enabled = false
-avoidance_strength = 0.0
-
 [node name="CharacterSpriteComponent" type="Node2D" parent="."]
 script = ExtResource("9_8qclf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
 sprite_frames = SubResource("SpriteFrames_ya47j")
-animation = &"walk"
+animation = &"attack"
+frame = 16
+frame_progress = 1.0
 
 [connection signal="velocity_computed" from="NavigationAgent" to="StateMachine/ChaseState" method="_on_navigation_agent_velocity_computed"]
 [connection signal="timeout" from="RecalcPathTimer" to="StateMachine/ChaseState" method="_on_recalc_path_timer_timeout"]
