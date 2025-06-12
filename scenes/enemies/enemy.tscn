@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://csq4m1cv87kf2" path="res://scripts/components/player_sprite.gd" id="9_8qclf"]
 [ext_resource type="FontFile" uid="uid://3cql67h12cs4" path="res://assets/Minecraft.ttf" id="12_otmr2"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_nbuw0"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_tihwb"]
 animations = [{
 "frames": [],
 "loop": false,
@@ -78,7 +78,6 @@ shader_parameter/red_intensity = 0.7
 shader_parameter/red_color = Color(1, 0.3, 0.3, 1)
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
-y_sort_enabled = true
 collision_layer = 2
 collision_mask = 9
 motion_mode = 1
@@ -90,8 +89,7 @@ script = ExtResource("2_pe3k2")
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Skill"]
-sprite_frames = SubResource("SpriteFrames_nbuw0")
-frame_progress = 1.0
+sprite_frames = SubResource("SpriteFrames_tihwb")
 
 [node name="Hitbox" type="Area2D" parent="Skill"]
 collision_layer = 0
@@ -99,6 +97,61 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Skill/Hitbox"]
 position = Vector2(2.5, -14)
 debug_color = Color(0.995272, 0, 0.208146, 0.42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+debug_color = Color(0.276047, 0.650852, 0.327111, 0.42)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+
+[node name="CharacterSpriteComponent" type="Node2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("9_8qclf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
+material = SubResource("ShaderMaterial_ile5s")
+animation = &""
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
+max_health = 100
+invincibility_duration = 0.0
+
+[node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_c4w8v")]
+position = Vector2(-5, -22)
+scale = Vector2(0.511182, 0.56)
+health_component = NodePath("..")
+
+[node name="DamageNumber" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -29.0
+offset_right = 38.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("12_otmr2")
+theme_override_font_sizes/font_size = 10
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RecalcPathTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+ignore_time_scale = true
+
+[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+navigation_layers = 8
+avoidance_enabled = true
+neighbor_distance = 40.0
+max_speed = 200.0
+avoidance_priority = 0.45
+debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
 initial_state = NodePath("ChaseState")
@@ -114,60 +167,7 @@ speed = 100
 
 [node name="DyingState" parent="StateMachine" instance=ExtResource("6_8qclf")]
 
-[node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
-max_health = 100
-invincibility_duration = 0.0
-
-[node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_c4w8v")]
-position = Vector2(-5, -22)
-scale = Vector2(0.511182, 0.56)
-health_component = NodePath("..")
-
-[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
-navigation_layers = 8
-avoidance_enabled = true
-neighbor_distance = 40.0
-max_speed = 200.0
-avoidance_priority = 0.45
-debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
-
-[node name="RecalcPathTimer" type="Timer" parent="."]
-wait_time = 0.3
-autostart = true
-ignore_time_scale = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
-
-[node name="AttackArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-
-[node name="Hitbox" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-
-[node name="DamageNumber" type="Label" parent="."]
-offset_left = -10.0
-offset_top = -29.0
-offset_right = 38.0
-offset_bottom = 20.0
-theme_override_fonts/font = ExtResource("12_otmr2")
-theme_override_font_sizes/font_size = 10
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CharacterSpriteComponent" type="Node2D" parent="."]
-y_sort_enabled = true
-script = ExtResource("9_8qclf")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
-material = SubResource("ShaderMaterial_ile5s")
-animation = &""
-
-[connection signal="velocity_computed" from="NavigationAgent" to="StateMachine/ChaseState" method="_on_navigation_agent_velocity_computed"]
-[connection signal="timeout" from="RecalcPathTimer" to="StateMachine/ChaseState" method="_on_recalc_path_timer_timeout"]
 [connection signal="body_entered" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_entered"]
 [connection signal="body_exited" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_exited"]
+[connection signal="timeout" from="RecalcPathTimer" to="StateMachine/ChaseState" method="_on_recalc_path_timer_timeout"]
+[connection signal="velocity_computed" from="NavigationAgent" to="StateMachine/ChaseState" method="_on_navigation_agent_velocity_computed"]

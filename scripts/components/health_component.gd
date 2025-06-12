@@ -16,7 +16,6 @@ func take_damage(damage: int):
 		return true
 
 	current_health = current_health - damage
-	current_health = 1
 	health_changed.emit(current_health)
 	
 	## Calculate knockback direction

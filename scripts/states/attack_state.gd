@@ -157,8 +157,9 @@ func _on_attack_range_area_body_exited(body: Node2D) -> void:
 
 func _on_skill_finished() -> void:
 	enemy.container.enemy_queue.erase(enemy.id)
-	#transition_requested.emit("ChaseState")
+	transition_requested.emit("ChaseState")
 
 func _on_skill_interrupted() -> void:
 	enemy.container.enemy_queue.erase(enemy.id)
-	#transition_requested.emit("ChaseState")
+	print('dss')
+	transition_requested.emit("ChaseState")

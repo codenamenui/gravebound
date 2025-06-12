@@ -434,7 +434,7 @@ scale = Vector2(-1.00928, 1.30035)
 shape = SubResource("CapsuleShape2D_smehm")
 
 [node name="HealthComponent" parent="." groups=["Player", "player"] instance=ExtResource("2_qlg0r")]
-max_health = 100
+max_health = 10000
 
 [node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_tuyoq")]
 visible = false

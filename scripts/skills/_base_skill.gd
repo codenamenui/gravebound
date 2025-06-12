@@ -1,7 +1,6 @@
 extends Node
 class_name BaseSkill
 
-# Core Properties
 @export_group("Core Properties")
 @export var skill_name: String
 @export var icon: Texture2D
@@ -9,7 +8,6 @@ class_name BaseSkill
 @export var animation_name: String
 @export var animation_speed: float
 
-# Timing Properties
 @export_group("Timing")
 @export var cooldown_time: float
 @export var anticipation_time: float
@@ -18,7 +16,6 @@ class_name BaseSkill
 @export var hitbox_lifetime: float
 @export var hitbox_delay: float
 
-# Movement Properties
 @export_group("Movement")
 @export var speed_multiplier: float = 1.0
 @export var anticipation_impulse: Vector2 = Vector2.ZERO
@@ -26,7 +23,6 @@ class_name BaseSkill
 @export_enum("Override", "Add To Input", "Player Control") var movement_control_mode: int = 0
 @export var can_change_direction_during_skill: bool = false
 
-# Combat Properties
 @export_group("Combat")
 @export var base_damage: float
 @export var knockback_force: float = 300
@@ -34,33 +30,32 @@ class_name BaseSkill
 @export var zoom_amount: float = 1.0
 @export var zoom_duration: float = 0.0
 
-# Hitbox Properties
 @export_group("Hitbox")
 @export var hitbox_offset: Vector2 = Vector2(15, 0)
 @export var hitbox_scale: Vector2 = Vector2(1, 1)
 
-# Effect Properties
+@export_group("Sprite")
+@export var sprite_offset: Vector2 = Vector2.ZERO
+@export var sprite_scale: Vector2 = Vector2(1, 1)
+
 @export_group("Effects")
 @export var skill_sfx: AudioStream
 @export var camera: PlayerCamera
 
-# Debug Properties
 @export_group("Debug")
 @export var display_hitbox: bool = false
 @export var hitbox_color: Color = Color(1, 0, 0, 0.5)
 
-# Projectile Properties
 @export_group("Projectile")
 @export var is_projectile: bool = false
 @export var projectile_speed: float = 500.0
-@export var projectile_distance: float = 0.0  # 0 means unlimited by distance
+@export var projectile_distance: float = 0.0
 @export var projectile_scale: Vector2 = Vector2(1, 1)
-@export var projectile_pierce_count: int = 0  # 0 means no piercing
+@export var projectile_pierce_count: int = 0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $Hitbox
 
-# State Variables
 var is_on_cooldown: bool = false
 var is_on_anticipation: bool = false
 var is_on_contact: bool = false
@@ -72,13 +67,11 @@ var applied_contact_impulse: bool = false
 var original_input_state: bool = false
 var active_attacks: Array = []
 
-# Timers
 var cooldown_timer: Timer
 var anticipation_timer: Timer
 var contact_timer: Timer
 var recovery_timer: Timer
 
-# Signals
 signal skill_ready
 signal skill_started
 signal skill_contact_phase
@@ -189,7 +182,6 @@ func execute(direction: Vector2) -> bool:
 	if skill_sfx != null:
 		var audio_player = AudioStreamPlayer.new()
 		audio_player.stream = skill_sfx
-		audio_player.one_shot = true
 		owner_node.add_child(audio_player)
 		audio_player.play()
 		audio_player.finished.connect(func(): audio_player.queue_free())
@@ -447,7 +439,6 @@ class Attack:
 		self.pierce_count = skill_owner.projectile_pierce_count
 		self.is_projectile = is_projectile
 		
-		# Create and setup hitbox
 		self.hitbox = skill_owner.hitbox.duplicate()
 		if is_instance_valid(self.hitbox):
 			self.hitbox.global_position = start_position
@@ -455,78 +446,57 @@ class Attack:
 			self.hitbox.area_entered.connect(_on_hitbox_area_entered)
 			parent_node.add_child(self.hitbox)
 		
-		# Create and setup sprite
 		self.sprite = skill_owner.sprite.duplicate()
 		if is_instance_valid(self.sprite):
-			self.sprite.global_position = start_position
+			# Apply sprite offset and scale
+			var sprite_offset_rotated = skill_owner.sprite_offset.rotated(direction.angle())
+			self.sprite.global_position = start_position + sprite_offset_rotated
+			self.sprite.scale = skill_owner.sprite_scale
 			self.sprite.play("default")
 			parent_node.add_child(self.sprite)
 		
-		# Setup hitbox timer
 		self.hitbox_timer = Timer.new()
 		self.hitbox_timer.one_shot = true
 		self.hitbox_timer.connect("timeout", _on_hitbox_timeout)
 		parent_node.add_child(self.hitbox_timer)
 		
-		# Update orientation
 		update_orientation(self.direction)
 		
-		# Delayed hitbox activation
 		await parent_node.get_tree().create_timer(hitbox_delay).timeout
 		if is_instance_valid(self.hitbox):
 			self.hitbox.monitoring = true
 			self.hitbox.monitorable = true
 			self.hitbox.set_as_top_level(true)
 		
-		# Start lifetime timer
 		self.hitbox_timer.start(hitbox_lifetime)
-		# Show hitbox visualization
 		skill_owner._show_hitbox_visualization(self.hitbox)
 
 	func update(delta: float) -> void:
-		# Early exit if no movement required
-		if speed == 0 or (max_distance > 0 and traveled_distance >= max_distance):
+		if (max_distance > 0 and traveled_distance >= max_distance):
 			return
 		
-		# Calculate movement
 		var movement := direction * speed * delta
 		
-		# Update positions
 		if is_instance_valid(hitbox):
 			hitbox.global_position += movement
-		if is_instance_valid(sprite):
-			sprite.global_position = hitbox.global_position if is_instance_valid(hitbox) else start_position
 		
-		# Track traveled distance
+		if is_instance_valid(sprite):
+			# Update sprite position with offset
+			var sprite_offset_rotated = skill_owner.sprite_offset.rotated(direction.angle())
+			sprite.global_position = (hitbox.global_position if is_instance_valid(hitbox) else start_position) + sprite_offset_rotated
+		
 		traveled_distance += movement.length()
 
 	func update_orientation(facing_direction: Vector2) -> void:
-		# Update hitbox rotation
 		if is_instance_valid(hitbox):
 			hitbox.rotation = facing_direction.angle()
 		
-		# Update sprite orientation
 		if is_instance_valid(sprite):
-			# Reset transformations
-			sprite.rotation = 0
+			sprite.rotation = facing_direction.angle()
 			sprite.flip_h = false
 			sprite.flip_v = false
-			
-			# Handle sprite direction based on dominant axis
-			if abs(facing_direction.x) > abs(facing_direction.y):
-				# Horizontal movement
-				sprite.flip_h = facing_direction.x < 0
-			else:
-				# Vertical movement
-				if facing_direction.y > 0:
-					# Down
-					sprite.rotation = PI/2
-				else:
-					# Up
-					sprite.rotation = -PI/2
-			
-			# Apply scale from skill
-			sprite.scale = skill_owner.projectile_scale
+			# Use the sprite scale from the skill owner instead of projectile scale
+			sprite.scale = skill_owner.sprite_scale
 
 	func _on_hitbox_body_entered(body) -> void:
 		skill_owner._handle_hit(body)
@@ -539,17 +509,14 @@ class Attack:
 		expire()
 
 	func expire() -> void:
-		# Clear hitbox visualization
 		if is_instance_valid(skill_owner):
 			skill_owner._hide_hitbox_visualization(hitbox)
 		
-		# Remove from active attacks
 		if is_instance_valid(skill_owner):
 			var index = skill_owner.active_attacks.find(self)
 			if index != -1:
 				skill_owner.active_attacks.remove_at(index)
 		
-		# Free resources
 		if is_instance_valid(hitbox):
 			hitbox.queue_free()
 		if is_instance_valid(sprite):
