@@ -58,11 +58,3 @@ func play_animation(anim_name: String, speed_scale: float = 1.0, force_restart: 
 		#animated_sprite.frame = start_frame
 	#else:
 		#play_idle()
-
-func update_animation_based_on_state():
-	if player.is_attacking:
-		return
-	elif player.velocity.length() > 10:
-		play_walk()
-	else:
-		play_idle()

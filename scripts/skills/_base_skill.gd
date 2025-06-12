@@ -304,7 +304,7 @@ func _create_attack_hitbox() -> void:
 	var spawn_pos = owner_node.global_position
 	var offset = hitbox_offset.rotated(last_use_direction.angle())
 	spawn_pos += offset
-	
+
 	var attack = await Attack.new(self, owner_node, spawn_pos, last_use_direction, is_projectile, hitbox_delay, hitbox_lifetime)
 	active_attacks.append(attack)
 
@@ -435,7 +435,7 @@ class Attack:
 	var hitbox_timer: Timer
 	
 	func _init(skill_owner: BaseSkill, parent_node: Node, start_position: Vector2,
-			   direction: Vector2, is_projectile: bool, hitbox_delay: int, hitbox_lifetime: int):
+			   direction: Vector2, is_projectile: bool, hitbox_delay: float, hitbox_lifetime: float):
 		self.skill_owner = skill_owner
 		self.parent_node = parent_node
 		self.start_position = start_position
@@ -480,7 +480,6 @@ class Attack:
 		
 		# Start lifetime timer
 		self.hitbox_timer.start(hitbox_lifetime)
-		
 		# Show hitbox visualization
 		skill_owner._show_hitbox_visualization(self.hitbox)
 

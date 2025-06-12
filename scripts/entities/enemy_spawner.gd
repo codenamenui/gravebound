@@ -134,7 +134,7 @@ func update_wave_display():
 
 func update_score_display():
 	if score_label:
-		score_label.text = "Score: " + str(current_score)
+		score_label.text = str(current_score)
 
 func start_waves():
 	if waves.is_empty() or enemy_scenes.is_empty():

@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 enemy_manager="*res://scripts/enemy_manager.gd"
 
+[display]
+
+window/size/resizable=false
+window/stretch/mode="canvas_items"
+
 [global_group]
 
 Enemy=""
