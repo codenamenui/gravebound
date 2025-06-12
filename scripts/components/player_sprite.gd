@@ -47,14 +47,3 @@ func play_animation(anim_name: String, speed_scale: float = 1.0, force_restart: 
 
 	if anim_name == "attack":
 		animated_sprite.speed_scale = attack_speed_scale
-			
-#func play_animation_frames(anim_name: String, start_frame: int, end_frame: int, speed: float = 1.0) -> void:
-	#var full_anim_name = get_direction + "_" + anim_name
-	#
-	#if animated_sprite.sprite_frames.has_animation(full_anim_name):
-		#current_animation = full_anim_name
-		#animated_sprite.play(full_anim_name)
-		#animated_sprite.speed_scale = speed
-		#animated_sprite.frame = start_frame
-	#else:
-		#play_idle()

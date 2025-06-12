@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ba6jo7xbq72sm"]
 
 [ext_resource type="Script" uid="uid://m00dqeysneap" path="res://scripts/skills/button.gd" id="1_3mwa4"]
-[ext_resource type="Texture2D" uid="uid://fhlp4q0pfhqf" path="res://assets/joyknobpng.png" id="1_7o3ts"]
+[ext_resource type="Texture2D" uid="uid://fhlp4q0pfhqf" path="res://assets/dump/joyknobpng.png" id="1_7o3ts"]
 
 [node name="SkillButton" type="Node2D"]
 script = ExtResource("1_3mwa4")

@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dm6q0abakck7u"]
 
 [ext_resource type="Script" uid="uid://bnjxvciojxf7o" path="res://scripts/ui/joystick.gd" id="1_ii2vn"]
-[ext_resource type="Texture2D" uid="uid://bkdnr3klmargs" path="res://assets/joystick_1.png" id="2_luu5j"]
-[ext_resource type="Texture2D" uid="uid://cusn4qub3grao" path="res://assets/joystick_2.png" id="3_g1lyw"]
+[ext_resource type="Texture2D" uid="uid://bkdnr3klmargs" path="res://assets/ui/joystick_1.png" id="2_luu5j"]
+[ext_resource type="Texture2D" uid="uid://cusn4qub3grao" path="res://assets/ui/joystick_2.png" id="3_g1lyw"]
 [ext_resource type="Script" uid="uid://ctyk2yw8qnbhr" path="res://scripts/ui/Knob.gd" id="4_g4kk1"]
 
 [node name="Joystick" type="Node2D"]

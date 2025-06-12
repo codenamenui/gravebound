@@ -37,6 +37,7 @@ metadata/_custom_type_script = "uid://btielatq3l0jg"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 scale = Vector2(0.501683, 1.81096)
 shape = SubResource("RectangleShape2D_cwpw3")
+debug_color = Color(0.996078, 0, 0.207843, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 rotation = 3.14159

@@ -32,8 +32,6 @@ func physics_update(delta: float):
 			if enemy.container.enemy_queue.size() < 5:
 				enemy.container.enemy_queue.push_back(enemy.id)
 				transition_requested.emit("AttackState")
-				await get_tree().create_timer(3).timeout
-				enemy.container.enemy_queue.erase(enemy.id)
 				
 func exit():
 	enemy.velocity = Vector2.ZERO
@@ -54,5 +52,5 @@ func _on_recalc_path_timer_timeout() -> void:
 	recalc_path()
 	
 func _on_navigation_agent_velocity_computed(safe_velocity: Vector2) -> void:
-	enemy.velocity = safe_velocity
-	pass # Replace with function body.
+	if enemy.state_machine.current_state.name == "ChaseState":
+		enemy.velocity = safe_velocity

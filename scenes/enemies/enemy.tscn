@@ -1,0 +1,173 @@
+[gd_scene load_steps=15 format=3 uid="uid://ciflnhdm2rhx1"]
+
+[ext_resource type="Script" uid="uid://dfr362y3h1td5" path="res://scripts/entities/enemy.gd" id="1_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_5uy6h"]
+[ext_resource type="PackedScene" uid="uid://bw5hi1dl7w3bt" path="res://scenes/states/state_machine.tscn" id="2_c4w8v"]
+[ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="2_pe3k2"]
+[ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/health_bar.tscn" id="3_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://ccxkvcnybd8no" path="res://scenes/states/attack_state.tscn" id="3_nenq2"]
+[ext_resource type="PackedScene" uid="uid://dve1das7ufwj6" path="res://scenes/states/chase_state.tscn" id="4_md484"]
+[ext_resource type="PackedScene" uid="uid://dgmme83vhk7ti" path="res://scenes/states/damage_state.tscn" id="5_md484"]
+[ext_resource type="PackedScene" uid="uid://kcfs6xlmbggx" path="res://scenes/states/dying_state.tscn" id="6_8qclf"]
+[ext_resource type="Script" uid="uid://csq4m1cv87kf2" path="res://scripts/components/player_sprite.gd" id="9_8qclf"]
+[ext_resource type="FontFile" uid="uid://3cql67h12cs4" path="res://assets/Minecraft.ttf" id="12_otmr2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nbuw0"]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[sub_resource type="Shader" id="Shader_tihwb"]
+code = "shader_type canvas_item;
+
+// Drop shadow properties
+uniform float shadow_offset_x : hint_range(-5.0, 5.0, 0.0001) = 0.003;
+uniform float shadow_offset_y : hint_range(-5.0, 5.0, 0.0001) = 0.003;
+uniform vec4 shadow_color : source_color = vec4(0.0, 0.0, 0.0, 0.6);
+uniform float shadow_scale_x : hint_range(0.1, 2.0, 0.001) = 1.0;
+uniform float shadow_scale_y : hint_range(0.1, 2.0, 0.001) = 0.5;
+uniform bool use_original_alpha = true;
+
+// Red tint properties
+uniform bool enable_red_tint = false;
+uniform float red_intensity : hint_range(0.0, 1.0, 0.01) = 0.7;
+uniform vec4 red_color : source_color = vec4(1.0, 0.3, 0.3, 1.0);
+
+void fragment() {
+    vec2 center = vec2(0.5, 0.5);
+    vec2 shadow_uv = (UV - center) / vec2(shadow_scale_x, shadow_scale_y) + center;
+    shadow_uv += vec2(shadow_offset_x, shadow_offset_y);
+    
+    vec4 shadow = texture(TEXTURE, shadow_uv);
+    vec4 sprite = texture(TEXTURE, UV);
+    
+    // Use original sprite's alpha shape for consistent shadow
+    if (use_original_alpha) {
+        shadow.a = sprite.a * shadow_color.a;
+    } else {
+        shadow.a *= shadow_color.a;
+    }
+    shadow.rgb = shadow_color.rgb;
+    
+    // Combine shadow with sprite
+    vec4 final_color = mix(shadow, sprite, sprite.a);
+    
+    // Apply red tint if enabled
+    if (enable_red_tint) {
+        // Mix the sprite color with red, preserving alpha
+        final_color.rgb = mix(final_color.rgb, red_color.rgb, red_intensity * sprite.a);
+    }
+    
+    COLOR = final_color;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ile5s"]
+resource_local_to_scene = true
+shader = SubResource("Shader_tihwb")
+shader_parameter/shadow_offset_x = -1.265e-07
+shader_parameter/shadow_offset_y = -0.1644
+shader_parameter/shadow_color = Color(0, 0, 0, 0.627451)
+shader_parameter/shadow_scale_x = 1.0
+shader_parameter/shadow_scale_y = 0.5
+shader_parameter/use_original_alpha = false
+shader_parameter/enable_red_tint = false
+shader_parameter/red_intensity = 0.7
+shader_parameter/red_color = Color(1, 0.3, 0.3, 1)
+
+[node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 9
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_c4w8v")
+
+[node name="Skill" type="Node" parent="."]
+script = ExtResource("2_pe3k2")
+metadata/_custom_type_script = "uid://btielatq3l0jg"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Skill"]
+sprite_frames = SubResource("SpriteFrames_nbuw0")
+frame_progress = 1.0
+
+[node name="Hitbox" type="Area2D" parent="Skill"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Skill/Hitbox"]
+position = Vector2(2.5, -14)
+debug_color = Color(0.995272, 0, 0.208146, 0.42)
+
+[node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
+initial_state = NodePath("ChaseState")
+
+[node name="AttackState" parent="StateMachine" instance=ExtResource("3_nenq2")]
+attack_range_area_path = NodePath("../../AttackArea")
+wind_up_duration = 0.2
+
+[node name="ChaseState" parent="StateMachine" instance=ExtResource("4_md484")]
+speed = 100
+
+[node name="DamageState" parent="StateMachine" instance=ExtResource("5_md484")]
+
+[node name="DyingState" parent="StateMachine" instance=ExtResource("6_8qclf")]
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
+max_health = 100
+invincibility_duration = 0.0
+
+[node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_c4w8v")]
+position = Vector2(-5, -22)
+scale = Vector2(0.511182, 0.56)
+health_component = NodePath("..")
+
+[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+navigation_layers = 8
+avoidance_enabled = true
+neighbor_distance = 40.0
+max_speed = 200.0
+avoidance_priority = 0.45
+debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
+
+[node name="RecalcPathTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+ignore_time_scale = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+
+[node name="DamageNumber" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -29.0
+offset_right = 38.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("12_otmr2")
+theme_override_font_sizes/font_size = 10
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CharacterSpriteComponent" type="Node2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("9_8qclf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
+material = SubResource("ShaderMaterial_ile5s")
+animation = &""
+
+[connection signal="velocity_computed" from="NavigationAgent" to="StateMachine/ChaseState" method="_on_navigation_agent_velocity_computed"]
+[connection signal="timeout" from="RecalcPathTimer" to="StateMachine/ChaseState" method="_on_recalc_path_timer_timeout"]
+[connection signal="body_entered" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="StateMachine/ChaseState" method="_on_attack_area_body_exited"]

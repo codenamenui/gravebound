@@ -11,7 +11,7 @@ func _ready():
 	enemy_grid.clear()
 	registered_enemies.clear()
 
-func register_enemy(enemy: Enemy):
+func register_enemy(enemy):
 	if enemy in registered_enemies:
 		return
 		
@@ -20,7 +20,7 @@ func register_enemy(enemy: Enemy):
 	_add_enemy_to_cell(enemy, cell)
 	enemy.set_meta("grid_cell", cell)
 
-func unregister_enemy(enemy: Enemy):
+func unregister_enemy(enemy):
 	if !registered_enemies.has(enemy):
 		return
 		
@@ -28,7 +28,7 @@ func unregister_enemy(enemy: Enemy):
 	var cell = enemy.get_meta("grid_cell", Vector2i(0, 0))
 	_remove_enemy_from_cell(enemy, cell)
 
-func update_enemy_position(enemy: Enemy):
+func update_enemy_position(enemy):
 	if !registered_enemies.has(enemy):
 		return
 	
@@ -73,14 +73,14 @@ func _get_cell_for_position(position: Vector2) -> Vector2i:
 		floor(position.y / grid_cell_size)
 	)
 
-func _add_enemy_to_cell(enemy: Enemy, cell: Vector2i) -> void:
+func _add_enemy_to_cell(enemy, cell: Vector2i) -> void:
 	if !enemy_grid.has(cell):
 		enemy_grid[cell] = []
 	
 	if !enemy_grid[cell].has(enemy):
 		enemy_grid[cell].append(enemy)
 
-func _remove_enemy_from_cell(enemy: Enemy, cell: Vector2i) -> void:
+func _remove_enemy_from_cell(enemy, cell: Vector2i) -> void:
 	if enemy_grid.has(cell):
 		enemy_grid[cell].erase(enemy)
 		

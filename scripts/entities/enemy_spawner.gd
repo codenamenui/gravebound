@@ -33,6 +33,7 @@ var current_wave_enemies_spawned: int = 0
 var current_enemies_alive: int = 0
 var wave_active: bool = false
 var current_score: int = 0
+var id = 0
 
 var spawn_timer: Timer
 var wave_break_timer: Timer
@@ -215,6 +216,9 @@ func _spawn_enemy():
 		return
 
 	var enemy = _create_enemy_at_position(spawn_pos, enemy_scene)
+	enemy.id = id
+	id += 1
+	
 	if enemy:
 		current_wave_enemies_spawned += 1
 		current_enemies_alive += 1

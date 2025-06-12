@@ -22,8 +22,10 @@ BgAudio="*res://scenes/bg_audio.tscn"
 
 [display]
 
-window/size/resizable=false
-window/stretch/mode="canvas_items"
+window/size/viewport_width=800
+window/size/viewport_height=600
+window/size/initial_position_type=0
+window/stretch/mode="viewport"
 
 [global_group]
 

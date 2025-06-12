@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://c84k2nic04m2f"]
+[gd_scene load_steps=72 format=3 uid="uid://c84k2nic04m2f"]
 
 [ext_resource type="Script" uid="uid://6fhyrr88sb2c" path="res://scripts/entities/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_qlg0r"]
@@ -11,20 +11,34 @@
 [ext_resource type="PackedScene" uid="uid://cvggagoyatlr8" path="res://scenes/skills/dash.tscn" id="5_d2wvv"]
 [ext_resource type="PackedScene" uid="uid://coom8awj1dwyf" path="res://scenes/skills/ba4.tscn" id="5_fulsm"]
 [ext_resource type="PackedScene" uid="uid://ryr8eir3qxrd" path="res://scenes/hitbox_component.tscn" id="5_smehm"]
-[ext_resource type="Texture2D" uid="uid://dkkqrhytt6xfd" path="res://assets/sheets/Attack1-Sheet.png" id="12_a8ls1"]
-[ext_resource type="Texture2D" uid="uid://ddx6ntgddtb7e" path="res://assets/Sprites/DEATH.png" id="13_a8ls1"]
-[ext_resource type="Texture2D" uid="uid://bxlghlgqxcvqg" path="res://assets/sheets/Attack2-Sheet.png" id="13_qfm1y"]
-[ext_resource type="Texture2D" uid="uid://cdnp8oxam41nx" path="res://assets/sheets/Take Hit-Sheet.png" id="14_fulsm"]
-[ext_resource type="Texture2D" uid="uid://dsueqgaejl8ib" path="res://assets/sheets/Idle-Sheet.png" id="15_4r5pv"]
-[ext_resource type="Texture2D" uid="uid://w0sejexvuk8f" path="res://assets/sheets/Run-Sheet.png" id="16_60mlk"]
+[ext_resource type="Texture2D" uid="uid://dkkqrhytt6xfd" path="res://assets/dump/sheets/Attack1-Sheet.png" id="12_a8ls1"]
+[ext_resource type="Shader" uid="uid://hp5118kwec2a" path="res://assets/shaders/drop_shadow.gdshader" id="12_fulsm"]
+[ext_resource type="Texture2D" uid="uid://ddx6ntgddtb7e" path="res://assets/dump/Sprites/DEATH.png" id="13_a8ls1"]
+[ext_resource type="Texture2D" uid="uid://bxlghlgqxcvqg" path="res://assets/dump/sheets/Attack2-Sheet.png" id="13_qfm1y"]
+[ext_resource type="Texture2D" uid="uid://cdnp8oxam41nx" path="res://assets/dump/sheets/Take Hit-Sheet.png" id="14_fulsm"]
+[ext_resource type="Texture2D" uid="uid://dsueqgaejl8ib" path="res://assets/dump/sheets/Idle-Sheet.png" id="15_4r5pv"]
+[ext_resource type="Texture2D" uid="uid://w0sejexvuk8f" path="res://assets/dump/sheets/Run-Sheet.png" id="16_60mlk"]
+[ext_resource type="Texture2D" uid="uid://qx6r6qcd8paw" path="res://assets/shaders/light.png" id="19_4r5pv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fjrip"]
-radius = 16.0
+radius = 14.6903
 height = 32.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_smehm"]
 radius = 6.0
 height = 16.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4r5pv"]
+shader = ExtResource("12_fulsm")
+shader_parameter/shadow_offset_x = 0.000499873
+shader_parameter/shadow_offset_y = -0.3405
+shader_parameter/shadow_color = Color(0, 0, 0, 0.6)
+shader_parameter/shadow_scale_x = 1.0
+shader_parameter/shadow_scale_y = 0.5
+shader_parameter/use_original_alpha = false
+shader_parameter/enable_red_tint = false
+shader_parameter/red_intensity = 0.7
+shader_parameter/red_color = Color(1, 0.3, 0.3, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_487ah"]
 atlas = ExtResource("12_a8ls1")
@@ -244,7 +258,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack",
-"speed": 15.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -270,7 +284,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack2",
-"speed": 15.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -395,35 +409,56 @@ animations = [{
 "speed": 15.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["player"]]
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_3vyb7")
 deceleration_factor = 15.0
 
-[node name="Skills" type="Node" parent="."]
-
-[node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
-anticipation_impulse = Vector2(50, 0)
-
-[node name="BA2" parent="Skills" instance=ExtResource("3_oprun")]
-
-[node name="BA3" parent="Skills" instance=ExtResource("4_qfm1y")]
-
-[node name="BA4" parent="Skills" instance=ExtResource("5_fulsm")]
-
-[node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
-
 [node name="SkillManagerComponent" parent="." instance=ExtResource("2_smehm")]
 max_skill_slots = 2
 
 [node name="HitboxComponent" parent="." instance=ExtResource("5_smehm")]
-position = Vector2(2, 8)
+z_index = 1
+position = Vector2(4, -6)
 scale = Vector2(0.476505, 0.921321)
-metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(-2.09861, -2.1708)
 shape = SubResource("CapsuleShape2D_fjrip")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+position = Vector2(3, -6)
+scale = Vector2(-1.00928, 1.30035)
+shape = SubResource("CapsuleShape2D_smehm")
+
+[node name="HealthComponent" parent="." groups=["Player", "player"] instance=ExtResource("2_qlg0r")]
+max_health = 100
+
+[node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_tuyoq")]
+visible = false
+position = Vector2(0, -27)
+health_component = NodePath("..")
+
+[node name="CharacterSpriteComponent" parent="." instance=ExtResource("3_fjrip")]
+z_index = 1
+position = Vector2(11, -16)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
+material = SubResource("ShaderMaterial_4r5pv")
+position = Vector2(-11, -1)
+scale = Vector2(0.85, 1)
+sprite_frames = SubResource("SpriteFrames_fjrip")
+animation = &"attack2"
+
+[node name="death" type="Label" parent="."]
+visible = false
+offset_left = -15.0
+offset_top = -18.0
+offset_right = 44.0
+offset_bottom = 5.0
+text = "GGSSSS"
 
 [node name="Timers" type="Node" parent="."]
 
@@ -437,34 +472,37 @@ ignore_time_scale = true
 one_shot = true
 ignore_time_scale = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(4, 10)
-scale = Vector2(-1.00928, 1.30035)
-shape = SubResource("CapsuleShape2D_smehm")
+[node name="Skills" type="Node" parent="."]
 
-[node name="HealthComponent" parent="." groups=["Player"] instance=ExtResource("2_qlg0r")]
-max_health = 1000
+[node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
+anticipation_impulse = Vector2(50, 0)
 
-[node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_tuyoq")]
-visible = false
-position = Vector2(0, -27)
-health_component = NodePath("..")
+[node name="BA2" parent="Skills" instance=ExtResource("3_oprun")]
+animation_speed = 0.5
 
-[node name="CharacterSpriteComponent" parent="." instance=ExtResource("3_fjrip")]
+[node name="BA3" parent="Skills" instance=ExtResource("4_qfm1y")]
+animation_speed = 0.5
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
-sprite_frames = SubResource("SpriteFrames_fjrip")
-animation = &"walk"
+[node name="BA4" parent="Skills" instance=ExtResource("5_fulsm")]
 
-[node name="death" type="Label" parent="."]
-visible = false
-offset_left = -15.0
-offset_top = -18.0
-offset_right = 44.0
-offset_bottom = 5.0
-text = "GGSSSS"
+[node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 
-[connection signal="timeout" from="Timers/BATimer" to="." method="_on_ba_timer_timeout"]
-[connection signal="timeout" from="Timers/DashTimer" to="." method="_on_dash_timer_timeout"]
+[node name="PointLight2D" type="PointLight2D" parent="."]
+z_index = 1
+position = Vector2(1, -5)
+color = Color(0.8, 0.901961, 1, 1)
+energy = 0.29
+shadow_enabled = true
+texture = ExtResource("19_4r5pv")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+z_index = 1
+position = Vector2(0, -5)
+color = Color(0.8, 0.901961, 1, 1)
+energy = 0.29
+texture = ExtResource("19_4r5pv")
+
 [connection signal="health_depleted" from="HealthComponent" to="." method="_on_health_component_health_depleted"]
 [connection signal="animation_finished" from="CharacterSpriteComponent/AnimatedSprite2D" to="CharacterSpriteComponent" method="_on_animation_finished"]
+[connection signal="timeout" from="Timers/BATimer" to="." method="_on_ba_timer_timeout"]
+[connection signal="timeout" from="Timers/DashTimer" to="." method="_on_dash_timer_timeout"]

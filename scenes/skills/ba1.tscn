@@ -11,7 +11,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
-size = Vector2(54.8322, 22.6399)
+size = Vector2(54.8322, 54.1891)
 
 [node name="BA1" type="Node"]
 script = ExtResource("1_ib5y3")
@@ -44,3 +44,4 @@ collision_layer = 0
 position = Vector2(24.2458, 2.5)
 scale = Vector2(0.329068, 1.56858)
 shape = SubResource("RectangleShape2D_h1i5x")
+debug_color = Color(0.995272, 0, 0.208146, 0.42)

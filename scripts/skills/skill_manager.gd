@@ -69,7 +69,7 @@ func add_skill(skill: BaseSkill, category: int) -> void:
 
 func _initialize_skill(skill: BaseSkill) -> void:
 	skill.initialize(character)
-	add_child(skill)
+	#add_child(skill)
 
 	if !skill.is_connected("skill_ready", _on_skill_ready):
 		skill.skill_ready.connect(_on_skill_ready.bind(skill))
