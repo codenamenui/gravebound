@@ -11,7 +11,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
-size = Vector2(107.671, 48.0408)
+size = Vector2(54.8322, 22.6399)
 
 [node name="BA1" type="Node"]
 script = ExtResource("1_ib5y3")
@@ -21,15 +21,16 @@ animation_speed = 0.5
 anticipation_time = 0.02
 contact_time = 0.1
 recovery_time = 0.02
+hitbox_lifetime = 0.1
 speed_multiplier = 0.0
-movement_control_mode = 2
-base_damage = 10.0
+contact_impulse = Vector2(50, 0)
+movement_control_mode = 1
+base_damage = 100.0
 knockback_force = 5.0
-hit_stop_time = 0.2
-is_projectile = true
-projectile_speed = 200.0
-projectile_distance = 100.0
-projectile_scale = Vector2(0.5, 0.5)
+hit_stop_time = 0.4
+zoom_amount = 1.1
+zoom_duration = 0.2
+projectile_speed = 0.0
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -40,6 +41,6 @@ frame_progress = 1.0
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(21.9916, -2.5)
-scale = Vector2(0.501683, 1.81096)
+position = Vector2(24.2458, 2.5)
+scale = Vector2(0.329068, 1.56858)
 shape = SubResource("RectangleShape2D_h1i5x")

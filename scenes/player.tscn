@@ -1,14 +1,15 @@
-[gd_scene load_steps=68 format=3 uid="uid://c84k2nic04m2f"]
+[gd_scene load_steps=69 format=3 uid="uid://c84k2nic04m2f"]
 
 [ext_resource type="Script" uid="uid://6fhyrr88sb2c" path="res://scripts/entities/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://ca33ngy3yd4jg" path="res://scenes/skills/skill_manager.tscn" id="2_smehm"]
 [ext_resource type="PackedScene" uid="uid://bsgusnwvl6w5n" path="res://scenes/skills/ba1.tscn" id="2_ur7pv"]
 [ext_resource type="PackedScene" uid="uid://cs56ppoyoum5u" path="res://scenes/animated_sprite.tscn" id="3_fjrip"]
-[ext_resource type="PackedScene" uid="uid://ds0luiwx0s3vd" path="res://scenes/skills/ba2.tscn" id="3_qfm1y"]
+[ext_resource type="PackedScene" uid="uid://ds0luiwx0s3vd" path="res://scenes/skills/ba2.tscn" id="3_oprun"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/health_bar.tscn" id="3_tuyoq"]
-[ext_resource type="PackedScene" uid="uid://b1wxs7aphjf5e" path="res://scenes/skills/ba3.tscn" id="4_d2wvv"]
+[ext_resource type="PackedScene" uid="uid://b1wxs7aphjf5e" path="res://scenes/skills/ba3.tscn" id="4_qfm1y"]
 [ext_resource type="PackedScene" uid="uid://cvggagoyatlr8" path="res://scenes/skills/dash.tscn" id="5_d2wvv"]
+[ext_resource type="PackedScene" uid="uid://coom8awj1dwyf" path="res://scenes/skills/ba4.tscn" id="5_fulsm"]
 [ext_resource type="PackedScene" uid="uid://ryr8eir3qxrd" path="res://scenes/hitbox_component.tscn" id="5_smehm"]
 [ext_resource type="Texture2D" uid="uid://dkkqrhytt6xfd" path="res://assets/sheets/Attack1-Sheet.png" id="12_a8ls1"]
 [ext_resource type="Texture2D" uid="uid://ck1ha4jijfbvo" path="res://assets/Hero Knight/Sprites/Death.png" id="13_a8ls1"]
@@ -267,7 +268,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vau08")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack2",
 "speed": 15.0
 }, {
@@ -396,20 +397,20 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 y_sort_enabled = true
-collision_mask = 8
+collision_mask = 0
 script = ExtResource("1_3vyb7")
 deceleration_factor = 15.0
 
 [node name="Skills" type="Node" parent="."]
 
 [node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
-base_damage = 100.0
+anticipation_impulse = Vector2(50, 0)
 
-[node name="BA2" parent="Skills" instance=ExtResource("3_qfm1y")]
+[node name="BA2" parent="Skills" instance=ExtResource("3_oprun")]
 
-[node name="BA3" parent="Skills" instance=ExtResource("2_ur7pv")]
+[node name="BA3" parent="Skills" instance=ExtResource("4_qfm1y")]
 
-[node name="BA4" parent="Skills" instance=ExtResource("4_d2wvv")]
+[node name="BA4" parent="Skills" instance=ExtResource("5_fulsm")]
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 
@@ -417,6 +418,9 @@ base_damage = 100.0
 max_skill_slots = 2
 
 [node name="HitboxComponent" parent="." instance=ExtResource("5_smehm")]
+position = Vector2(2, 8)
+scale = Vector2(0.476505, 0.921321)
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 shape = SubResource("CapsuleShape2D_fjrip")
@@ -434,9 +438,12 @@ one_shot = true
 ignore_time_scale = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 10)
+scale = Vector2(-1.00928, 1.30035)
 shape = SubResource("CapsuleShape2D_smehm")
 
 [node name="HealthComponent" parent="." groups=["Player"] instance=ExtResource("2_qlg0r")]
+max_health = 1000
 
 [node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_tuyoq")]
 visible = false
@@ -447,7 +454,7 @@ health_component = NodePath("..")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterSpriteComponent"]
 sprite_frames = SubResource("SpriteFrames_fjrip")
-animation = &"idle"
+animation = &"walk"
 
 [node name="death" type="Label" parent="."]
 visible = false

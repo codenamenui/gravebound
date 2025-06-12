@@ -4,6 +4,7 @@ class_name Player
 @export var speed: float = 200.0
 @export var deceleration_factor: float = 7.0
 @export var hit_timer_duration: float = 0.2
+@export var ba_time: float = 1.5
 
 var last_direction: Vector2 = Vector2(0, 1)
 var current_direction: Vector2 = Vector2.ZERO
@@ -83,7 +84,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		if ba_timer.is_stopped():
-			ba_timer.start(1.2)
+			ba_timer.start(ba_time)
 		if current_ba == 4:
 			ba_timer.start(1.2)
 			current_ba = -1
@@ -118,7 +119,7 @@ func _update_animation():
 	
 	if is_hit:
 		character_sprite_component.play_hit()
-		return
+		return  # Don't process any other animations while hit
 	
 	if is_attacking:
 		# Let the skill handle its own animation
@@ -127,9 +128,10 @@ func _update_animation():
 	# Only update idle/walk animations if we're not in a special state
 	if velocity.length() > 10.0:  # Moving
 		character_sprite_component.play_walk()
+		pass
 	else:  # Idle
 		character_sprite_component.play_idle()
-	
+		
 func _on_skill_executed(skill: BaseSkill) -> void:
 	is_attacking = true
 	current_skill = skill
@@ -210,9 +212,6 @@ func take_damage(damage: int):
 
 func _on_hit_timer_timeout():
 	is_hit = false
-	# Force return to idle animation when hit ends
-	if not is_dying and not is_attacking:
-		character_sprite_component.play_idle()
 
 func _on_ba_timer_timeout() -> void:
 	current_ba = -1

@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1wxs7aphjf5e"]
+[gd_scene load_steps=4 format=3 uid="uid://coom8awj1dwyf"]
 
-[ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="1_mlgre"]
+[ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="1_wu33k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
 
@@ -12,21 +12,19 @@ animations = [{
 "speed": 20.0
 }]
 
-[node name="BA3" type="Node"]
-script = ExtResource("1_mlgre")
+[node name="BA4" type="Node"]
+script = ExtResource("1_wu33k")
 skill_name = "bs1"
-animation_name = "attack"
+animation_name = "attack2"
 animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.07
-recovery_time = 0.3
+recovery_time = 1.0
 speed_multiplier = 0.0
-contact_impulse = Vector2(20, 0)
 movement_control_mode = 1
 base_damage = 50.0
-knockback_force = 5.0
+knockback_force = 50.0
 hit_stop_time = 0.2
-is_projectile = true
 projectile_speed = 0.0
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 

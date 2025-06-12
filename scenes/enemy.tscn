@@ -721,8 +721,7 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_c4w8v")
 
 [node name="Skill" parent="." instance=ExtResource("2_w8i8w")]
-
-[node name="BA1" parent="Skill" instance=ExtResource("2_w8i8w")]
+base_damage = 0.0
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
 initial_state = NodePath("ChaseState")
@@ -738,6 +737,7 @@ speed = 100
 [node name="DyingState" parent="StateMachine" instance=ExtResource("6_8qclf")]
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_5uy6h")]
+max_health = 100
 invincibility_duration = 0.0
 
 [node name="HealthBar" parent="HealthComponent" node_paths=PackedStringArray("health_component") instance=ExtResource("3_c4w8v")]
