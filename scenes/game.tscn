@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=13 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -6,8 +6,11 @@
 [ext_resource type="Script" uid="uid://qwei4nq02xow" path="res://scenes/main_menu.gd" id="4_iywne"]
 [ext_resource type="PackedScene" uid="uid://7p3caqed67be" path="res://scenes/world.tscn" id="4_lbhrr"]
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="5_gee14"]
+[ext_resource type="Script" uid="uid://cq80vmh053868" path="res://scenes/settings.gd" id="5_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="6_0tnpc"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
+[ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
+[ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
 
 [sub_resource type="Theme" id="Theme_kvpfn"]
 default_base_scale = 1.0
@@ -63,6 +66,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("5_kvpfn")
 
 [node name="Title" type="Label" parent="UI/Settings"]
 layout_mode = 0
@@ -95,10 +99,11 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="PlayerInformation" type="NinePatchRect" parent="UI/GameHUD"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 258.0
-offset_bottom = 96.0
+layout_mode = 0
+offset_left = 17.0
+offset_top = 15.0
+offset_right = 251.0
+offset_bottom = 87.0
 texture = ExtResource("5_gee14")
 
 [node name="HealthBar" parent="UI/GameHUD/PlayerInformation" node_paths=PackedStringArray("health_component") instance=ExtResource("6_0tnpc")]
@@ -116,16 +121,23 @@ grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 theme = SubResource("Theme_kvpfn")
-text = "208"
+text = "0"
 horizontal_alignment = 2
 
 [node name="WaveLabel" type="Label" parent="UI/GameHUD/PlayerInformation"]
 layout_mode = 0
-offset_left = 583.0
-offset_top = 5.0
-offset_right = 630.0
-offset_bottom = 28.0
+offset_left = 691.0
+offset_top = 17.0
+offset_right = 738.0
+offset_bottom = 40.0
 text = "Wave "
+
+[node name="Joystick" parent="UI/GameHUD" node_paths=PackedStringArray("player") instance=ExtResource("8_vtaks")]
+position = Vector2(105, 492)
+player = NodePath("../../../GameWorld/Player")
+
+[node name="SkillButton" parent="UI/GameHUD" instance=ExtResource("9_kvpfn")]
+position = Vector2(687, 489)
 
 [node name="PerksPanel" type="Control" parent="UI"]
 visible = false
@@ -156,4 +168,3 @@ visible = false
 
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]
-[editable path="GameWorld/Player/PlayerUI"]

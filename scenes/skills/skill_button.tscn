@@ -6,14 +6,10 @@
 [node name="SkillButton" type="Node2D"]
 script = ExtResource("1_3mwa4")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_3mwa4")
+texture_normal = ExtResource("2_3mwa4")
+action = "attack"
 
-[node name="Button" type="Button" parent="."]
-modulate = Color(1, 1, 1, 0)
-offset_left = 46.0
-offset_top = -47.0
-offset_right = 63.0
-offset_bottom = -21.0
-scale = Vector2(-5.45983, 3.58365)
+[connection signal="pressed" from="TouchScreenButton" to="." method="_on_touch_screen_button_pressed"]
+[connection signal="released" from="TouchScreenButton" to="." method="_on_touch_screen_button_released"]

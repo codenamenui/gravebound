@@ -1,12 +1,8 @@
-[gd_scene load_steps=14 format=4 uid="uid://7p3caqed67be"]
+[gd_scene load_steps=10 format=4 uid="uid://7p3caqed67be"]
 
 [ext_resource type="PackedScene" uid="uid://c84k2nic04m2f" path="res://scenes/player.tscn" id="1_kqs1s"]
 [ext_resource type="Script" uid="uid://5rrcli73cy4" path="res://scripts/ui/camera_2d.gd" id="2_71j4m"]
-[ext_resource type="PackedScene" uid="uid://dl35xqkfd7lw7" path="res://scenes/components/user_interface.tscn" id="3_7r4gi"]
-[ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="3_i7141"]
-[ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="3_qfnet"]
 [ext_resource type="TileSet" uid="uid://cv4ud6kohhc7h" path="res://assets/dump/world.tres" id="4_i7141"]
-[ext_resource type="Script" uid="uid://ddrcm7mhvu8cr" path="res://scripts/components/user_interface.gd" id="4_w7kh3"]
 [ext_resource type="PackedScene" uid="uid://dkcvu17xaytl3" path="res://scenes/enemies/container.tscn" id="5_4mrxx"]
 [ext_resource type="Script" uid="uid://cagcxlmru24ub" path="res://scripts/entities/enemy_spawner.gd" id="6_i7141"]
 [ext_resource type="PackedScene" uid="uid://dw23k8qv0w7ru" path="res://scenes/enemies/warrior.tscn" id="9_w7kh3"]
@@ -30,39 +26,6 @@ limit_bottom = 829
 script = ExtResource("2_71j4m")
 target = NodePath("../Player")
 scale_mode = 2
-
-[node name="PlayerUI" parent="Camera2D" instance=ExtResource("3_7r4gi")]
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -200.0
-offset_top = -150.0
-offset_right = -200.0
-offset_bottom = -150.0
-grow_horizontal = 1
-grow_vertical = 1
-scale = Vector2(0.5, 0.5)
-script = ExtResource("4_w7kh3")
-metadata/_edit_use_anchors_ = true
-
-[node name="HealthBar" parent="Camera2D/PlayerUI/PlayerInformation" index="0" node_paths=PackedStringArray("health_component")]
-health_component = NodePath("../../../../Player/HealthComponent")
-
-[node name="WaveLabel" type="Label" parent="Camera2D/PlayerUI/PlayerInformation" index="2"]
-layout_mode = 0
-offset_left = 583.0
-offset_top = 5.0
-offset_right = 630.0
-offset_bottom = 28.0
-text = "Wave "
-
-[node name="Joystick" parent="Camera2D" node_paths=PackedStringArray("player") instance=ExtResource("3_qfnet")]
-position = Vector2(-150, 115)
-player = NodePath("../../Player")
-
-[node name="SkillButton" parent="Camera2D" instance=ExtResource("3_i7141")]
-position = Vector2(150, 115)
-action_name = "attack"
 
 [node name="World" type="TileMap" parent="."]
 y_sort_enabled = true
@@ -97,8 +60,8 @@ enemy_scenes = Array[PackedScene]([ExtResource("10_e3hyu"), ExtResource("9_w7kh3
 enemy_weights = Array[float]([1.0, 1.0, 1.0, 1.0])
 enemy_container = NodePath("../EnemyContainer")
 camera = NodePath("../Camera2D")
-score_label = NodePath("../Camera2D/PlayerUI/PlayerInformation/Score")
-wave_label = NodePath("../Camera2D/PlayerUI/PlayerInformation/WaveLabel")
+score_label = NodePath("")
+wave_label = NodePath("")
 spawn_distance_from_camera = 0.0
 time_between_waves = 0.0
 max_enemies_alive = 20
@@ -112,5 +75,4 @@ color = Color(0.101961, 0.14902, 0.25098, 1)
 position = Vector2(1370, 464)
 collision_mask = 8
 
-[editable path="Camera2D/PlayerUI"]
 [editable path="Player"]
