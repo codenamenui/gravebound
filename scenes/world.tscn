@@ -19,6 +19,51 @@ y_sort_enabled = true
 metadata/_edit_horizontal_guides_ = [1.0, 1.0, 829.0]
 metadata/_edit_vertical_guides_ = [218.0, 2527.0]
 
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+top_level = true
+position = Vector2(1401, 375)
+zoom = Vector2(1.66, 1.66)
+limit_left = 218
+limit_top = 0
+limit_right = 2527
+limit_bottom = 829
+script = ExtResource("2_71j4m")
+target = NodePath("../Player")
+scale_mode = 2
+
+[node name="PlayerUI" parent="Camera2D" instance=ExtResource("3_7r4gi")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -200.0
+offset_top = -150.0
+offset_right = -200.0
+offset_bottom = -150.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(0.5, 0.5)
+script = ExtResource("4_w7kh3")
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" parent="Camera2D/PlayerUI/PlayerInformation" index="0" node_paths=PackedStringArray("health_component")]
+health_component = NodePath("../../../../Player/HealthComponent")
+
+[node name="WaveLabel" type="Label" parent="Camera2D/PlayerUI/PlayerInformation" index="2"]
+layout_mode = 0
+offset_left = 583.0
+offset_top = 5.0
+offset_right = 630.0
+offset_bottom = 28.0
+text = "Wave "
+
+[node name="Joystick" parent="Camera2D" node_paths=PackedStringArray("player") instance=ExtResource("3_qfnet")]
+position = Vector2(-150, 115)
+player = NodePath("../../Player")
+
+[node name="SkillButton" parent="Camera2D" instance=ExtResource("3_i7141")]
+position = Vector2(150, 115)
+action_name = "attack"
+
 [node name="World" type="TileMap" parent="."]
 y_sort_enabled = true
 tile_set = ExtResource("4_i7141")
@@ -43,53 +88,6 @@ y_sort_origin = 1
 [node name="Obtacles" type="TileMapLayer" parent="World"]
 tile_map_data = PackedByteArray("AAAJAAEAAAAJAA0AAAAJAAAAAAAJAAwAAAAIAAIAAAALAAkAAAApAAkAAAAHAAwAAAAkAAkAAAAHAAwAAAA4AAkAAAAHAAwAAAA9AAkAAAAHAAwAAAAHAAMAAAAIAAgAAAA=")
 tile_set = ExtResource("4_i7141")
-
-[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
-top_level = true
-position = Vector2(1401, 375)
-zoom = Vector2(1.66, 1.66)
-limit_left = 218
-limit_top = 0
-limit_right = 2527
-limit_bottom = 829
-script = ExtResource("2_71j4m")
-target = NodePath("../Player")
-scale_mode = 2
-
-[node name="PlayerUI" parent="Camera2D" instance=ExtResource("3_7r4gi")]
-visible = false
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -348.0
-offset_top = -200.0
-offset_right = -348.0
-offset_bottom = -200.0
-grow_horizontal = 1
-grow_vertical = 1
-script = ExtResource("4_w7kh3")
-metadata/_edit_use_anchors_ = true
-
-[node name="HealthBar" parent="Camera2D/PlayerUI/PlayerInformation" index="0" node_paths=PackedStringArray("health_component")]
-health_component = NodePath("../../../../Player/HealthComponent")
-
-[node name="WaveLabel" type="Label" parent="Camera2D/PlayerUI/PlayerInformation" index="2"]
-layout_mode = 0
-offset_left = 583.0
-offset_top = 5.0
-offset_right = 630.0
-offset_bottom = 28.0
-text = "Wave "
-
-[node name="Joystick" parent="Camera2D" node_paths=PackedStringArray("player") instance=ExtResource("3_qfnet")]
-visible = false
-position = Vector2(-251, 115)
-player = NodePath("../../Player")
-
-[node name="SkillButton" parent="Camera2D" instance=ExtResource("3_i7141")]
-visible = false
-position = Vector2(256, 114)
-action_name = "attack"
 
 [node name="EnemyContainer" parent="." instance=ExtResource("5_4mrxx")]
 
