@@ -11,14 +11,16 @@ config_version=5
 [application]
 
 config/name="Gravebound"
-run/main_scene="uid://7p3caqed67be"
+run/main_scene="uid://dnoq6gw7imio3"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 enemy_manager="*res://scripts/enemy_manager.gd"
-BgAudio="*res://scenes/bg_audio.tscn"
+AudioManager="*res://scenes/managers/audio_manager.tscn"
+GameData="*res://scenes/managers/game_data.tscn"
+SceneManager="*res://scenes/managers/scene_manager.tscn"
 
 [display]
 

@@ -2,12 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://c84k2nic04m2f" path="res://scenes/player.tscn" id="1_kqs1s"]
 [ext_resource type="Script" uid="uid://5rrcli73cy4" path="res://scripts/ui/camera_2d.gd" id="2_71j4m"]
-[ext_resource type="PackedScene" uid="uid://dl35xqkfd7lw7" path="res://scenes/user_interface.tscn" id="3_7r4gi"]
+[ext_resource type="PackedScene" uid="uid://dl35xqkfd7lw7" path="res://scenes/components/user_interface.tscn" id="3_7r4gi"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="3_i7141"]
-[ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/joystick.tscn" id="3_qfnet"]
+[ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="3_qfnet"]
 [ext_resource type="TileSet" uid="uid://cv4ud6kohhc7h" path="res://assets/dump/world.tres" id="4_i7141"]
 [ext_resource type="Script" uid="uid://ddrcm7mhvu8cr" path="res://scripts/components/user_interface.gd" id="4_w7kh3"]
-[ext_resource type="PackedScene" uid="uid://dkcvu17xaytl3" path="res://scenes/container.tscn" id="5_4mrxx"]
+[ext_resource type="PackedScene" uid="uid://dkcvu17xaytl3" path="res://scenes/enemies/container.tscn" id="5_4mrxx"]
 [ext_resource type="Script" uid="uid://cagcxlmru24ub" path="res://scripts/entities/enemy_spawner.gd" id="6_i7141"]
 [ext_resource type="PackedScene" uid="uid://dw23k8qv0w7ru" path="res://scenes/enemies/warrior.tscn" id="9_w7kh3"]
 [ext_resource type="PackedScene" uid="uid://ce6uq2k2ykyix" path="res://scenes/enemies/cat.tscn" id="10_e3hyu"]
@@ -57,6 +57,7 @@ target = NodePath("../Player")
 scale_mode = 2
 
 [node name="PlayerUI" parent="Camera2D" instance=ExtResource("3_7r4gi")]
+visible = false
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0

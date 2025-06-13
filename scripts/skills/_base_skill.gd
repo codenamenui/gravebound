@@ -38,9 +38,8 @@ class_name BaseSkill
 @export var sprite_offset: Vector2 = Vector2.ZERO
 @export var sprite_scale: Vector2 = Vector2(1, 1)
 
-@export_group("Effects")
-@export var skill_sfx: AudioStream
-@export var camera: PlayerCamera
+@export_group("SFX")
+@export var sfx_name: String
 
 @export_group("Debug")
 @export var display_hitbox: bool = false
@@ -66,6 +65,7 @@ var applied_anticipation_impulse: bool = false
 var applied_contact_impulse: bool = false
 var original_input_state: bool = false
 var active_attacks: Array = []
+var camera: Camera2D
 
 var cooldown_timer: Timer
 var anticipation_timer: Timer
@@ -179,12 +179,8 @@ func execute(direction: Vector2) -> bool:
 	if owner_node.get_node("CharacterSpriteComponent").has_method("play_animation"):
 		owner_node.get_node("CharacterSpriteComponent").play_animation(animation_name, animation_speed)
 
-	if skill_sfx != null:
-		var audio_player = AudioStreamPlayer.new()
-		audio_player.stream = skill_sfx
-		owner_node.add_child(audio_player)
-		audio_player.play()
-		audio_player.finished.connect(func(): audio_player.queue_free())
+	#if sfx_name != null:
+		#AudioManager.play_sfx(sfx_name)
 
 	owner_node.speed_multiplier = speed_multiplier
 

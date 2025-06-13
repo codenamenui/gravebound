@@ -1,10 +1,10 @@
 [gd_scene load_steps=15 format=3 uid="uid://ciflnhdm2rhx1"]
 
 [ext_resource type="Script" uid="uid://dfr362y3h1td5" path="res://scripts/entities/enemy.gd" id="1_c4w8v"]
-[ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/health_component.tscn" id="2_5uy6h"]
+[ext_resource type="PackedScene" uid="uid://dta6yp5rqtpys" path="res://scenes/components/health_component.tscn" id="2_5uy6h"]
 [ext_resource type="PackedScene" uid="uid://bw5hi1dl7w3bt" path="res://scenes/states/state_machine.tscn" id="2_c4w8v"]
 [ext_resource type="Script" uid="uid://btielatq3l0jg" path="res://scripts/skills/_base_skill.gd" id="2_pe3k2"]
-[ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/health_bar.tscn" id="3_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="3_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://ccxkvcnybd8no" path="res://scenes/states/attack_state.tscn" id="3_nenq2"]
 [ext_resource type="PackedScene" uid="uid://dve1das7ufwj6" path="res://scenes/states/chase_state.tscn" id="4_md484"]
 [ext_resource type="PackedScene" uid="uid://dgmme83vhk7ti" path="res://scenes/states/damage_state.tscn" id="5_md484"]

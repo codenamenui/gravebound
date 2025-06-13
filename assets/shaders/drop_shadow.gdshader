@@ -17,10 +17,10 @@ void fragment() {
     vec2 center = vec2(0.5, 0.5);
     vec2 shadow_uv = (UV - center) / vec2(shadow_scale_x, shadow_scale_y) + center;
     shadow_uv += vec2(shadow_offset_x, shadow_offset_y);
-    
+
     vec4 shadow = texture(TEXTURE, shadow_uv);
     vec4 sprite = texture(TEXTURE, UV);
-    
+
     // Use original sprite's alpha shape for consistent shadow
     if (use_original_alpha) {
         shadow.a = sprite.a * shadow_color.a;
@@ -28,15 +28,15 @@ void fragment() {
         shadow.a *= shadow_color.a;
     }
     shadow.rgb = shadow_color.rgb;
-    
+
     // Combine shadow with sprite
     vec4 final_color = mix(shadow, sprite, sprite.a);
-    
+
     // Apply red tint if enabled
     if (enable_red_tint) {
         // Mix the sprite color with red, preserving alpha
         final_color.rgb = mix(final_color.rgb, red_color.rgb, red_intensity * sprite.a);
     }
-    
+
     COLOR = final_color;
 }

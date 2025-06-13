@@ -1,0 +1,94 @@
+[gd_scene load_steps=6 format=3 uid="uid://dnoq6gw7imio3"]
+
+[ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://cg6ofrnh6up5w" path="res://scenes/managers/game_data.tscn" id="3_iywne"]
+[ext_resource type="Script" uid="uid://qwei4nq02xow" path="res://scenes/main_menu.gd" id="4_iywne"]
+[ext_resource type="PackedScene" uid="uid://7p3caqed67be" path="res://scenes/world.tscn" id="4_lbhrr"]
+
+[node name="Game" type="Node2D"]
+
+[node name="SceneManager" parent="." instance=ExtResource("1_lnu2h")]
+
+[node name="AudioManager" parent="." instance=ExtResource("2_lbhrr")]
+
+[node name="GameData" parent="." instance=ExtResource("3_iywne")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 493.0
+offset_bottom = 236.0
+script = ExtResource("4_iywne")
+
+[node name="Title" type="Label" parent="UI/MainMenu"]
+layout_mode = 0
+offset_left = 353.0
+offset_top = 61.0
+offset_right = 393.0
+offset_bottom = 84.0
+text = "GRAVEBOUND"
+
+[node name="Play" type="Button" parent="UI/MainMenu"]
+layout_mode = 0
+offset_left = 279.0
+offset_top = 126.0
+offset_right = 547.0
+offset_bottom = 268.0
+text = "PLAY
+"
+
+[node name="Settings" type="Button" parent="UI/MainMenu"]
+layout_mode = 0
+offset_left = 277.0
+offset_top = 300.0
+offset_right = 545.0
+offset_bottom = 442.0
+text = "OPTIONS
+"
+
+[node name="Settings" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameHUD" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PerksPanel" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameOverScreen" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TransitionOverlay" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameWorld" parent="." instance=ExtResource("4_lbhrr")]
+visible = false
+
+[connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
+
+[editable path="GameWorld"]
+[editable path="GameWorld/Camera2D/PlayerUI"]
+[editable path="GameWorld/Player"]

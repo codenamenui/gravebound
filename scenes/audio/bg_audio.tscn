@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c3lqvoa8n4gf6"]
 
-[ext_resource type="AudioStream" uid="uid://h2aa1w8l6ue" path="res://assets/audio/main.mp3" id="1_b3lih"]
+[ext_resource type="AudioStream" uid="uid://h2aa1w8l6ue" path="res://audio/music/gameplay.mp3" id="1_b3lih"]
 
 [node name="BGAudio" type="AudioStreamPlayer2D"]
 stream = ExtResource("1_b3lih")

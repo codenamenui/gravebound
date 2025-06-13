@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dl35xqkfd7lw7"]
 
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="1_syvep"]
-[ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/health_bar.tscn" id="2_l2bgj"]
+[ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="2_l2bgj"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="3_y1h3b"]
 
 [sub_resource type="Theme" id="Theme_jbsfc"]
