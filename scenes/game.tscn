@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=14 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -11,6 +11,7 @@
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
+[ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
 
 [sub_resource type="Theme" id="Theme_kvpfn"]
 default_base_scale = 1.0
@@ -62,37 +63,142 @@ text = "OPTIONS
 "
 
 [node name="Settings" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("5_kvpfn")
 
-[node name="Title" type="Label" parent="UI/Settings"]
-layout_mode = 0
-offset_left = 358.0
-offset_top = 27.0
-offset_right = 420.0
-offset_bottom = 98.0
-text = "Settings
- "
+[node name="VBoxContainer" type="Control" parent="UI/Settings"]
+anchors_preset = 0
+offset_left = 362.0
+offset_top = 162.0
+offset_right = 554.0
+offset_bottom = 449.0
 
-[node name="Volume Control" type="HSlider" parent="UI/Settings"]
-layout_mode = 0
-offset_left = 161.0
-offset_top = 205.0
-offset_right = 629.0
-offset_bottom = 244.0
+[node name="AudioSection" type="Control" parent="UI/Settings/VBoxContainer"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = -41.0
+offset_top = -13.0
+offset_right = 509.0
+offset_bottom = 91.0
+
+[node name="MasterVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 2
+anchors_preset = 0
+offset_right = 550.0
+offset_bottom = 23.0
+
+[node name="MasterVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = -1.0
+offset_right = 153.0
+offset_bottom = 15.0
+
+[node name="MasterVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = -31.0
+offset_right = 66.0
+offset_bottom = -8.0
+text = "Master Volume"
+
+[node name="MusicVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 2
+anchors_preset = 0
+offset_top = 27.0
+offset_right = 550.0
+offset_bottom = 50.0
+
+[node name="MusicVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+offset_left = 6.0
+offset_top = 22.0
+offset_right = 158.0
+offset_bottom = 38.0
+
+[node name="MusicVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+offset_left = 4.0
+offset_top = -4.0
+offset_right = 113.0
+offset_bottom = 19.0
+text = "Music Volume"
+
+[node name="SFXVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 36.0
+offset_top = 95.0
+offset_right = 586.0
+offset_bottom = 118.0
+
+[node name="SFXVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+offset_left = -27.0
+offset_top = 1.0
+offset_right = 121.0
+offset_bottom = 17.0
+
+[node name="SFXVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+offset_left = -31.0
+offset_top = -24.0
+offset_right = 60.0
+offset_bottom = -1.0
+text = "SFX Volume"
+
+[node name="UIVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 2
+anchors_preset = 0
+offset_top = 81.0
+offset_right = 550.0
+offset_bottom = 104.0
+
+[node name="UIVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/UIVolumeContainer"]
+layout_mode = 2
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 155.0
+offset_bottom = 76.0
+
+[node name="UIVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/UIVolumeContainer"]
+layout_mode = 2
+offset_left = 8.0
+offset_top = 35.0
+offset_right = 88.0
+offset_bottom = 58.0
+text = "UI Volume"
+
+[node name="ButtonsContainer" type="Control" parent="UI/Settings/VBoxContainer"]
+layout_mode = 2
+anchors_preset = 0
+offset_top = 300.0
+offset_right = 550.0
+offset_bottom = 308.0
+
+[node name="BackButton" type="Button" parent="UI/Settings/VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+offset_left = -64.0
+offset_top = -108.0
+offset_right = 165.0
+offset_bottom = -63.0
+text = "Back
+"
 
 [node name="Label" type="Label" parent="UI/Settings"]
 layout_mode = 0
-offset_left = 359.0
-offset_top = 163.0
-offset_right = 418.0
-offset_bottom = 186.0
-text = "Volume"
+offset_left = 379.0
+offset_top = 8.0
+offset_right = 441.0
+offset_bottom = 31.0
+text = "Settings"
 
 [node name="GameHUD" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -139,6 +245,38 @@ player = NodePath("../../../GameWorld/Player")
 [node name="SkillButton" parent="UI/GameHUD" instance=ExtResource("9_kvpfn")]
 position = Vector2(687, 489)
 
+[node name="PauseMenu" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 493.0
+offset_bottom = 236.0
+script = ExtResource("11_dinhu")
+
+[node name="Title" type="Label" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 382.0
+offset_top = 63.0
+offset_right = 444.0
+offset_bottom = 86.0
+text = "PAUSED"
+
+[node name="Play" type="Button" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 279.0
+offset_top = 126.0
+offset_right = 547.0
+offset_bottom = 268.0
+text = "RESUME"
+
+[node name="Settings" type="Button" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 277.0
+offset_top = 300.0
+offset_right = 545.0
+offset_bottom = 442.0
+text = "OPTIONS
+"
+
 [node name="PerksPanel" type="Control" parent="UI"]
 visible = false
 layout_mode = 3
@@ -165,6 +303,8 @@ visible = false
 
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/Play" to="UI/PauseMenu" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
 
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]

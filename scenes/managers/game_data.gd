@@ -15,7 +15,9 @@ enum GameState {
 	WAVE_COMPLETE,
 	PERK_SELECTION,
 	GAME_OVER,
-	SETTINGS
+	SETTINGS,
+	PAUSED
 }
 
 var current_state: GameState = GameState.MAIN_MENU
+var from_game: bool = false

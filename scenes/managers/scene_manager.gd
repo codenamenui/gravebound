@@ -7,7 +7,6 @@ var ui_panels = {}
 var is_initialized = false
 
 func _ready():
-	print("SceneManager autoload initializing...")
 	call_deferred("initialize_scene_manager")
 
 func initialize_scene_manager():
@@ -17,8 +16,6 @@ func initialize_scene_manager():
 	if not game_scene:
 		push_error("SceneManager: No current scene found")
 		return
-	
-	print("Game scene found: ", game_scene.name)
 	
 	ui_layer = game_scene.get_node_or_null("UI")
 	game_world = game_scene.get_node_or_null("GameWorld")
@@ -31,7 +28,6 @@ func initialize_scene_manager():
 		push_error("SceneManager: Could not find GameWorld node in scene")
 		return
 	
-	print("UI and GameWorld found successfully")
 	cache_ui_panels()
 	is_initialized = true
 	
@@ -57,21 +53,17 @@ func cache_ui_panels():
 		var panel = ui_layer.get_node_or_null(panel_name)
 		if panel:
 			ui_panels[panel_name] = panel
-			print("Found panel: ", panel_name)
-		else:
-			print("Panel not found: ", panel_name)
 
 func transition_to_state(new_state: GameData.GameState):
 	if not is_initialized:
-		print("SceneManager not initialized, deferring state transition")
 		await get_tree().process_frame
 		if not is_initialized:
 			return
 	
-	print("SceneManager: Transitioning to state ", new_state)
-	
-	hide_all_panels()
-	await get_tree().process_frame
+	# Don't hide panels if transitioning to pause (to preserve game state)
+	if new_state != GameData.GameState.PAUSED:
+		hide_all_panels()
+		await get_tree().process_frame
 	
 	match new_state:
 		GameData.GameState.MAIN_MENU:
@@ -85,6 +77,8 @@ func transition_to_state(new_state: GameData.GameState):
 			show_game_over_screen()
 		GameData.GameState.SETTINGS:
 			show_settings()
+		GameData.GameState.PAUSED:
+			show_pause_menu()
 	
 	GameData.current_state = new_state
 
@@ -92,55 +86,62 @@ func hide_all_panels():
 	if not is_initialized:
 		return
 	
-	print("Hiding all panels...")
 	for panel_name in ui_panels.keys():
 		var panel = ui_panels[panel_name]
 		if is_instance_valid(panel):
 			panel.visible = false
 			panel.set_process_mode(Node.PROCESS_MODE_DISABLED)
-			print("Hidden: ", panel_name)
 	
-	if is_instance_valid(game_world):
+	# Only disable game world if we're not paused
+	if is_instance_valid(game_world) and GameData.current_state != GameData.GameState.PAUSED:
 		game_world.visible = false
 		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
-		print("Hidden: GameWorld")
 
 func show_main_menu():
-	print("Showing main menu")
 	var main_menu = ui_panels.get("MainMenu")
 	if is_instance_valid(main_menu):
 		main_menu.visible = true
 		main_menu.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	
+	# Ensure game world is disabled in main menu
+	if is_instance_valid(game_world):
+		game_world.visible = false
+		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
 
 func show_settings():
-	print("Showing settings")
 	var settings = ui_panels.get("Settings")
 	if is_instance_valid(settings):
 		settings.visible = true
 		settings.set_process_mode(Node.PROCESS_MODE_INHERIT)
 
 func show_game_hud():
-	print("Showing game HUD")
 	var game_hud = ui_panels.get("GameHUD")
 	if is_instance_valid(game_hud):
 		game_hud.visible = true
 		game_hud.set_process_mode(Node.PROCESS_MODE_INHERIT)
 	
+	# Ensure game world is enabled and visible
 	if is_instance_valid(game_world):
 		game_world.visible = true
 		game_world.set_process_mode(Node.PROCESS_MODE_INHERIT)
+		
+		# Re-enable all children nodes in game world
+		enable_game_world_recursively(game_world)
 
 func show_perks_panel():
-	print("Showing perks panel")
 	var perks_panel = ui_panels.get("PerksPanel")
 	if is_instance_valid(perks_panel):
 		if perks_panel.has_method("setup_perk_options"):
 			perks_panel.setup_perk_options(GameData.current_wave)
 		perks_panel.visible = true
 		perks_panel.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	
+	# Keep game world visible but paused during perk selection
+	if is_instance_valid(game_world):
+		game_world.visible = true
+		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
 
 func show_game_over_screen():
-	print("Showing game over screen")
 	var game_over = ui_panels.get("GameOverScreen")
 	if is_instance_valid(game_over):
 		if game_over.has_method("update_final_stats"):
@@ -152,37 +153,68 @@ func prepare_game_world():
 	if not is_instance_valid(game_world):
 		return
 	
+	AudioManager.play_music("gameplay")
+	
 	if GameData.current_wave == 1:
 		reset_game_world()
 	
+	# Ensure game world and all its children are properly enabled
 	game_world.visible = true
 	game_world.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	enable_game_world_recursively(game_world)
+	
+	# Ensure the tree is not paused
+	get_tree().paused = false
 	
 	if game_world.has_node("WaveManager"):
 		var wave_manager = game_world.get_node("WaveManager")
 		if wave_manager and wave_manager.has_method("start_wave"):
 			wave_manager.start_wave(GameData.current_wave)
 
+func enable_game_world_recursively(node: Node):
+	"""Recursively enable all nodes in the game world"""
+	if not is_instance_valid(node):
+		return
+	
+	# Enable the current node
+	node.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	
+	# Enable all children recursively
+	for child in node.get_children():
+		enable_game_world_recursively(child)
+
 func reset_game_world():
 	if not is_instance_valid(game_world):
 		return
 	
+	# Clear existing enemies
 	if game_world.has_node("EnemyContainer"):
 		var enemies_container = game_world.get_node("EnemyContainer")
 		for enemy in enemies_container.get_children():
 			if is_instance_valid(enemy):
 				enemy.queue_free()
+	
+	# Reset player position and state if needed
+	if game_world.has_node("Player"):
+		var player = game_world.get_node("Player")
+		if player and player.has_method("reset_player"):
+			player.reset_player()
 
 func _input(event):
 	if not is_initialized:
 		return
-	
 	if event.is_action_pressed("ui_cancel"):
+		print("Current state: ", GameData.current_state)
 		match GameData.current_state:
 			GameData.GameState.SETTINGS:
 				transition_to_state(GameData.GameState.MAIN_MENU)
+				return
 			GameData.GameState.PLAYING:
-				show_pause_menu()
+				transition_to_state(GameData.GameState.PAUSED)
+				return
+			GameData.GameState.PAUSED:
+				resume_game()
+				return
 
 func show_pause_menu():
 	var pause_menu = ui_panels.get("PauseMenu")
@@ -195,7 +227,9 @@ func resume_game():
 	var pause_menu = ui_panels.get("PauseMenu")
 	if is_instance_valid(pause_menu):
 		pause_menu.visible = false
+		pause_menu.set_process_mode(Node.PROCESS_MODE_DISABLED)
 		get_tree().paused = false
+		transition_to_state(GameData.GameState.PLAYING)
 
 func _on_wave_completed():
 	transition_to_state(GameData.GameState.PERK_SELECTION)
