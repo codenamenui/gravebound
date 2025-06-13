@@ -86,6 +86,7 @@ script = ExtResource("1_c4w8v")
 
 [node name="Skill" type="Node" parent="."]
 script = ExtResource("2_pe3k2")
+animation_name = "attack"
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Skill"]

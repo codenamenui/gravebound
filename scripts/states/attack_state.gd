@@ -161,5 +161,4 @@ func _on_skill_finished() -> void:
 
 func _on_skill_interrupted() -> void:
 	enemy.container.enemy_queue.erase(enemy.id)
-	print('dss')
 	transition_requested.emit("ChaseState")

@@ -12,6 +12,7 @@ class_name WaveEnemySpawner
 @export var score_label: Label
 @export var wave_label: Label
 @export var navigation_map_rid: RID
+@export var player: Player
 
 @export_group("Spawn Settings")
 @export var spawn_distance_from_camera: float = 150.0
@@ -177,7 +178,8 @@ func _start_wave(wave_index: int):
 			return
 		else:
 			return
-
+	
+	GameData.current_wave = wave_index + 1
 	var wave = waves[wave_index]
 	current_wave_enemies_spawned = 0
 	wave_active = true
@@ -273,6 +275,7 @@ func _create_enemy_at_position(pos: Vector2, scene: PackedScene) -> Node2D:
 
 	enemy.global_position = pos
 	enemy.container = enemy_container
+	enemy.target = player
 	enemy_container.add_child(enemy)
 	return enemy
 

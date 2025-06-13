@@ -22,7 +22,6 @@ var current_skill
 
 func _ready():
 	skill.initialize(self)
-	target = get_tree().current_scene.get_node("Player")
 	# Add to "enemies" group for easier management
 	add_to_group("enemies")
 		

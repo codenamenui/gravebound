@@ -124,7 +124,8 @@ func _on_ui_volume_changed(value: float):
 func _on_back_pressed():
 	if GameData.from_game:
 		GameData.from_game = false
-		SceneManager.transition_to_state(GameData.GameState.PLAYING)
+		#SceneManager.resume_game()
+		SceneManager.transition_to_state(GameData.GameState.PAUSED)
 	else:
 		SceneManager.transition_to_state(GameData.GameState.MAIN_MENU)
 

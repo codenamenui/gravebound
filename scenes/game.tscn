@@ -248,8 +248,10 @@ position = Vector2(687, 489)
 [node name="PauseMenu" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 493.0
-offset_bottom = 236.0
+offset_left = 16.0
+offset_top = -14.0
+offset_right = 509.0
+offset_bottom = 222.0
 script = ExtResource("11_dinhu")
 
 [node name="Title" type="Label" parent="UI/PauseMenu"]
@@ -262,19 +264,28 @@ text = "PAUSED"
 
 [node name="Play" type="Button" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 279.0
-offset_top = 126.0
-offset_right = 547.0
-offset_bottom = 268.0
+offset_left = 291.0
+offset_top = 93.0
+offset_right = 559.0
+offset_bottom = 235.0
 text = "RESUME"
 
 [node name="Settings" type="Button" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 277.0
-offset_top = 300.0
-offset_right = 545.0
-offset_bottom = 442.0
+offset_left = 279.0
+offset_top = 261.0
+offset_right = 547.0
+offset_bottom = 403.0
 text = "OPTIONS
+"
+
+[node name="MainMenu" type="Button" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 448.0
+offset_right = 557.0
+offset_bottom = 590.0
+text = "BACK TO MAIN MENU
 "
 
 [node name="PerksPanel" type="Control" parent="UI"]
@@ -301,10 +312,17 @@ offset_bottom = 40.0
 [node name="GameWorld" parent="." instance=ExtResource("4_lbhrr")]
 visible = false
 
+[node name="EnemySpawn" parent="GameWorld" index="3" node_paths=PackedStringArray("score_label", "wave_label", "player")]
+score_label = NodePath("../../UI/GameHUD/PlayerInformation/Score")
+wave_label = NodePath("../../UI/GameHUD/PlayerInformation/WaveLabel")
+player = NodePath("../Player")
+
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/Play" to="UI/PauseMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_settings_pressed"]
 
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]
