@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=20 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -18,6 +18,10 @@
 [ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
 [ext_resource type="Script" path="res://scenes/world.gd" id="17_rysoc"]
 
+[sub_resource type="Theme" id="Theme_rysoc"]
+default_font = ExtResource("7_vtaks")
+default_font_size = 28
+
 [sub_resource type="Theme" id="Theme_kvpfn"]
 default_base_scale = 1.0
 default_font = ExtResource("7_vtaks")
@@ -34,36 +38,58 @@ default_font_size = 28
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" type="Control" parent="UI"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
-offset_right = 493.0
-offset_bottom = 236.0
+offset_right = 801.0
+offset_bottom = 597.0
 script = ExtResource("4_iywne")
 
 [node name="Title" type="Label" parent="UI/MainMenu"]
-layout_mode = 0
-offset_left = 353.0
-offset_top = 61.0
-offset_right = 393.0
-offset_bottom = 84.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -198.5
+offset_right = 104.0
+offset_bottom = -170.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_rysoc")
 text = "GRAVEBOUND"
+horizontal_alignment = 1
 
 [node name="Play" type="Button" parent="UI/MainMenu"]
-layout_mode = 0
-offset_left = 279.0
-offset_top = 126.0
-offset_right = 547.0
-offset_bottom = 268.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = -71.0
+offset_right = 134.0
+offset_bottom = 71.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "PLAY
 "
 
 [node name="Settings" type="Button" parent="UI/MainMenu"]
-layout_mode = 0
-offset_left = 277.0
-offset_top = 300.0
-offset_right = 545.0
-offset_bottom = 442.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = 123.5
+offset_right = 134.0
+offset_bottom = 265.5
+grow_horizontal = 2
+grow_vertical = 2
 text = "OPTIONS
 "
 
