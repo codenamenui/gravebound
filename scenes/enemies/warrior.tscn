@@ -787,7 +787,6 @@ animations = [{
 [node name="Enemy" instance=ExtResource("1_uo8vp")]
 
 [node name="Skill" parent="." index="0"]
-animation_name = "attack"
 animation_speed = 0.5
 anticipation_time = 0.02
 contact_time = 0.4
@@ -823,6 +822,9 @@ position = Vector2(1, -15)
 sprite_frames = SubResource("SpriteFrames_s0h66")
 animation = &"attack"
 frame = 13
+
+[node name="HealthComponent" parent="." index="5"]
+position = Vector2(2, -9)
 
 [node name="DamageNumber" parent="." index="6"]
 metadata/_edit_use_anchors_ = true

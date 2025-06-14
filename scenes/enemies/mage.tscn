@@ -1,9 +1,8 @@
-[gd_scene load_steps=180 format=3 uid="uid://buslbl5vp2txj"]
+[gd_scene load_steps=179 format=3 uid="uid://buslbl5vp2txj"]
 
 [ext_resource type="PackedScene" uid="uid://ciflnhdm2rhx1" path="res://scenes/enemies/enemy.tscn" id="1_ip61i"]
 [ext_resource type="Texture2D" uid="uid://ukhbitxgpc17" path="res://assets/Hero Knight/AllCharacters/Necromancer/Attack/spr_NecromancerAttackEffect_strip47.png" id="2_luofg"]
 [ext_resource type="Texture2D" uid="uid://dixu1347p8ny" path="res://assets/Hero Knight/AllCharacters/Necromancer/Attack/spr_NecromancerAttackWithEffect_strip47.png" id="2_qs5cf"]
-[ext_resource type="AudioStream" uid="uid://c2aw2utu3e7cm" path="res://scenes/enemies/magic-spell-6005.mp3" id="2_t3pau"]
 [ext_resource type="Texture2D" uid="uid://d2nk6he03msqt" path="res://assets/Hero Knight/AllCharacters/Necromancer/Death/spr_NecromancerDeath_strip52.png" id="3_luofg"]
 [ext_resource type="Texture2D" uid="uid://c6xmq0565syk3" path="res://assets/Hero Knight/AllCharacters/Necromancer/GetHit/spr_NecromancerGetHit_strip9.png" id="4_t3pau"]
 [ext_resource type="Texture2D" uid="uid://dlrun4c27i256" path="res://assets/Hero Knight/AllCharacters/Necromancer/Idle/spr_NecromancerIdle_strip50.png" id="5_jsf2g"]
@@ -1257,14 +1256,12 @@ animations = [{
 
 [node name="Skill" parent="." index="0"]
 skill_name = "orb"
-animation_name = "attack"
 animation_speed = 1.0
 contact_time = 0.4
 recovery_time = 0.3
 hitbox_lifetime = 1.5
 base_damage = 50.0
 sprite_offset = Vector2(-12, -35)
-skill_sfx = ExtResource("2_t3pau")
 display_hitbox = true
 is_projectile = true
 projectile_speed = 200.0
@@ -1310,3 +1307,6 @@ sprite_frames = SubResource("SpriteFrames_51u1s")
 animation = &"attack"
 frame = 35
 frame_progress = 1.0
+
+[node name="HealthComponent" parent="." index="5"]
+position = Vector2(-2, -31)

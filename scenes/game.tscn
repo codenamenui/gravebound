@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=16 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
 [ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
+[ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
+[ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
 
 [sub_resource type="Theme" id="Theme_kvpfn"]
 default_base_scale = 1.0
@@ -246,6 +248,7 @@ player = NodePath("../../../GameWorld/Player")
 position = Vector2(687, 489)
 
 [node name="PauseMenu" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 16.0
@@ -289,18 +292,72 @@ text = "BACK TO MAIN MENU
 "
 
 [node name="PerksPanel" type="Control" parent="UI"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("12_trtic")
+
+[node name="Title" type="Label" parent="UI/PerksPanel"]
+layout_mode = 0
+offset_left = 369.0
+offset_top = 76.0
+offset_right = 412.0
+offset_bottom = 99.0
+text = "Perks"
+
+[node name="Perk1" type="Button" parent="UI/PerksPanel"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 184.0
+offset_right = 266.0
+offset_bottom = 371.0
+
+[node name="Perk2" type="Button" parent="UI/PerksPanel"]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 182.0
+offset_right = 493.0
+offset_bottom = 369.0
+
+[node name="Perk3" type="Button" parent="UI/PerksPanel"]
+layout_mode = 0
+offset_left = 559.0
+offset_top = 181.0
+offset_right = 725.0
+offset_bottom = 368.0
 
 [node name="GameOverScreen" type="Control" parent="UI"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
+offset_left = 384.0
+offset_top = 150.0
+offset_right = 424.0
+offset_bottom = 190.0
+script = ExtResource("12_kvuet")
+
+[node name="Title" type="Label" parent="UI/GameOverScreen"]
+layout_mode = 0
 offset_right = 40.0
-offset_bottom = 40.0
+offset_bottom = 23.0
+text = "GAME OVER"
+
+[node name="Retry" type="Button" parent="UI/GameOverScreen"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 72.0
+offset_bottom = 79.0
+text = "RETRY"
+
+[node name="MainMenu" type="Button" parent="UI/GameOverScreen"]
+layout_mode = 0
+offset_left = -51.0
+offset_top = 107.0
+offset_right = 145.0
+offset_bottom = 138.0
+text = "RETURN TO MAIN MENU"
 
 [node name="TransitionOverlay" type="Control" parent="UI"]
 visible = false
@@ -321,8 +378,10 @@ player = NodePath("../Player")
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/Play" to="UI/PauseMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="UI/GameOverScreen/Retry" to="UI/GameOverScreen" method="_on_retry_pressed"]
+[connection signal="pressed" from="UI/GameOverScreen/MainMenu" to="UI/GameOverScreen" method="_on_main_menu_pressed"]
 
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]

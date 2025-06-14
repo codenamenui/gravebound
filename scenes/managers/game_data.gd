@@ -20,5 +20,6 @@ enum GameState {
 }
 
 var current_state: GameState = GameState.MAIN_MENU
+var previous_state: GameState
 var from_game: bool = false
 var from_pause: bool = false

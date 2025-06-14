@@ -61,6 +61,7 @@ func transition_to_state(new_state: GameData.GameState):
 			return
 	
 	var previous_state = GameData.current_state
+	GameData.previous_state = GameData.current_state
 	
 	if new_state != GameData.GameState.PAUSED:
 		hide_all_panels()
@@ -78,6 +79,14 @@ func transition_to_state(new_state: GameData.GameState):
 		GameData.current_state = new_state
 		return
 	
+	if new_state == GameData.GameState.MAIN_MENU and (previous_state == GameData.GameState.GAME_OVER or previous_state == GameData.GameState.PAUSED):
+		reset_game_world()
+		hide_all_panels()
+		show_main_menu()
+		reset_game_data()
+		reset_game_hud()
+		return
+		
 	match new_state:
 		GameData.GameState.MAIN_MENU:
 			show_main_menu()
@@ -95,6 +104,15 @@ func transition_to_state(new_state: GameData.GameState):
 	
 	GameData.current_state = new_state
 
+func reset_game_data():
+	GameData.current_state = GameData.GameState.MAIN_MENU
+	GameData.current_wave = 0
+	GameData.from_game = false
+	GameData.from_pause = false
+
+func reset_game_hud():
+	pass
+	
 func hide_all_panels(edge_case: bool = false):
 	if not is_initialized:
 		return
