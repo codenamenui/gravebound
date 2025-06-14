@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=17 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -11,12 +11,10 @@
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
-[ext_resource type="Script" uid="uid://cergd4fda30tf" path="res://scenes/wave_count.gd" id="11_ca42v"]
 [ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
 [ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
 [ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
 [ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
-[ext_resource type="Script" uid="uid://c2lfw3b6bu55b" path="res://scenes/world.gd" id="17_rysoc"]
 
 [sub_resource type="Theme" id="Theme_kvpfn"]
 default_base_scale = 1.0
@@ -235,49 +233,23 @@ theme = SubResource("Theme_kvpfn")
 text = "0"
 horizontal_alignment = 2
 
+[node name="WaveLabel" type="Label" parent="UI/GameHUD/PlayerInformation"]
+layout_mode = 0
+offset_left = 691.0
+offset_top = 17.0
+offset_right = 738.0
+offset_bottom = 40.0
+text = "Wave "
+
 [node name="Joystick" parent="UI/GameHUD" node_paths=PackedStringArray("player") instance=ExtResource("8_vtaks")]
 position = Vector2(105, 492)
 player = NodePath("../../../GameWorld/Player")
 
 [node name="SkillButton" parent="UI/GameHUD" instance=ExtResource("9_kvpfn")]
-position = Vector2(656, 456)
-
-[node name="WaveStartDisplay" type="Control" parent="UI/GameHUD"]
-anchors_preset = 0
-offset_left = 367.0
-offset_top = 264.0
-offset_right = 423.0
-offset_bottom = 287.0
-script = ExtResource("11_ca42v")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/GameHUD/WaveStartDisplay"]
-
-[node name="Background" type="ColorRect" parent="UI/GameHUD/WaveStartDisplay"]
-layout_mode = 0
-offset_left = -168.0
-offset_top = -48.0
-offset_right = 211.0
-offset_bottom = 173.0
-color = Color(0.203922, 0.203922, 0.0941176, 0.286275)
-
-[node name="MainContainer" type="VBoxContainer" parent="UI/GameHUD/WaveStartDisplay"]
-layout_mode = 0
-offset_left = -126.0
-offset_top = 32.0
-offset_right = 174.0
-offset_bottom = 82.0
-
-[node name="WaveLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
-layout_mode = 2
-text = "wave"
-horizontal_alignment = 1
-
-[node name="SubLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
-layout_mode = 2
-text = "weesss"
-horizontal_alignment = 1
+position = Vector2(687, 489)
 
 [node name="PauseMenu" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 16.0
@@ -288,66 +260,39 @@ script = ExtResource("11_dinhu")
 
 [node name="Title" type="Label" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 622.0
-offset_top = 68.0
-offset_right = 684.0
-offset_bottom = 91.0
+offset_left = 382.0
+offset_top = 63.0
+offset_right = 444.0
+offset_bottom = 86.0
 text = "PAUSED"
 
-[node name="StatsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+[node name="Play" type="Button" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 57.0
-offset_top = 73.0
-offset_right = 437.0
-offset_bottom = 457.0
-
-[node name="StatsTitle" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="HealthLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="DamageLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="SpeedLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="DashCountLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="DamageReductionLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="DamageResistanceLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="LifestealLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
-
-[node name="ButtonsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
-layout_mode = 0
-offset_left = 561.0
-offset_top = 130.0
-offset_right = 736.0
-offset_bottom = 231.0
-
-[node name="Play" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
+offset_left = 291.0
+offset_top = 93.0
+offset_right = 559.0
+offset_bottom = 235.0
 text = "RESUME"
 
-[node name="Settings" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
+[node name="Settings" type="Button" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 279.0
+offset_top = 261.0
+offset_right = 547.0
+offset_bottom = 403.0
 text = "OPTIONS
 "
 
-[node name="MainMenu" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
+[node name="MainMenu" type="Button" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 448.0
+offset_right = 557.0
+offset_bottom = 590.0
 text = "BACK TO MAIN MENU
 "
 
-[node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
-visible = false
+[node name="PerksPanel" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -425,22 +370,20 @@ offset_bottom = 40.0
 
 [node name="GameWorld" parent="." instance=ExtResource("4_lbhrr")]
 visible = false
-script = ExtResource("17_rysoc")
 
-[node name="EnemySpawn" parent="GameWorld" index="3" node_paths=PackedStringArray("score_label", "player")]
+[node name="EnemySpawn" parent="GameWorld" index="3" node_paths=PackedStringArray("score_label", "wave_label", "player")]
 score_label = NodePath("../../UI/GameHUD/PlayerInformation/Score")
+wave_label = NodePath("../../UI/GameHUD/PlayerInformation/WaveLabel")
 player = NodePath("../Player")
 
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
-
-[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Play" to="UI/PauseMenu" method="_on_play_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
-
+[connection signal="pressed" from="UI/PauseMenu/Play" to="UI/PauseMenu" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="UI/GameOverScreen/Retry" to="UI/GameOverScreen" method="_on_retry_pressed"]
 [connection signal="pressed" from="UI/GameOverScreen/MainMenu" to="UI/GameOverScreen" method="_on_main_menu_pressed"]
-[connection signal="wave_started" from="GameWorld/EnemySpawn" to="UI/GameHUD/WaveStartDisplay" method="_on_wave_started"]
 
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]
