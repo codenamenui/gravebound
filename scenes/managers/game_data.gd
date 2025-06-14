@@ -19,7 +19,7 @@ enum GameState {
 	PAUSED
 }
 
-var current_state: GameState = GameState.MAIN_MENU
+var current_state: GameState = GameState.PERK_SELECTION
 var previous_state: GameState
 var from_game: bool = false
 var from_pause: bool = false

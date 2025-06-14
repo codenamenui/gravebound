@@ -1,11 +1,9 @@
 extends Control
 class_name PerkDisplay
 
-# Perk data
 var perk_data: PerkSelectionUI.Perk
 var perk_index: int
 
-# UI Components
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var title_label: Label = $VBoxContainer/TitleLabel
 @onready var description_label: Label = $VBoxContainer/DescriptionLabel
@@ -16,42 +14,41 @@ var perk_index: int
 signal perk_clicked(perk_index: int)
 
 func _ready():
-	# Set up button to cover the entire perk area
-	button.pressed.connect(_on_button_pressed)
-	button.mouse_entered.connect(_on_mouse_entered)
-	button.mouse_exited.connect(_on_mouse_exited)
+	$".".set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
+
+	if button:
+		button.pressed.connect(_on_button_pressed)
+		button.mouse_entered.connect(_on_mouse_entered)
+		button.mouse_exited.connect(_on_mouse_exited)
+		button.flat = true
 	
-	# Make button transparent
-	button.flat = true
-	
-	# Set up background
-	background.color = Color(0.2, 0.2, 0.3, 0.8)  # Dark blue-gray background
+	if background:
+		background.color = Color(0.2, 0.2, 0.3, 0.8)
 
 func setup_perk(perk: PerkSelectionUI.Perk, index: int):
 	perk_data = perk
 	perk_index = index
 	
-	# Set title
-	title_label.text = perk.name
+	if title_label:
+		title_label.text = perk.name
 	
-	# Set description
-	description_label.text = perk.description
+	if description_label:
+		description_label.text = perk.description
 	
-	# Set effect text (more detailed breakdown)
-	effect_label.text = _get_effect_text(perk)
+	if effect_label:
+		effect_label.text = get_effect_text(perk)
 	
-	# Load and set sprite
-	if ResourceLoader.exists(perk.icon_path):
-		sprite.texture = load(perk.icon_path)
-	else:
-		# Create a simple colored square as fallback
-		var image = Image.create(64, 64, false, Image.FORMAT_RGB8)
-		image.fill(_get_perk_color(perk))
-		var texture = ImageTexture.new()
-		texture.set_image(image)
-		sprite.texture = texture
+	if sprite:
+		if ResourceLoader.exists(perk.icon_path):
+			sprite.texture = load(perk.icon_path)
+		else:
+			var image = Image.create(64, 64, false, Image.FORMAT_RGB8)
+			image.fill(get_perk_color(perk))
+			var texture = ImageTexture.new()
+			texture.set_image(image)
+			sprite.texture = texture
 
-func _get_effect_text(perk: PerkSelectionUI.Perk) -> String:
+func get_effect_text(perk: PerkSelectionUI.Perk) -> String:
 	match perk.effect_type:
 		"damage_bonus":
 			return "Damage: +" + str(perk.effect_value)
@@ -83,7 +80,7 @@ func _get_effect_text(perk: PerkSelectionUI.Perk) -> String:
 		_:
 			return "Unknown Effect"
 
-func _get_perk_color(perk: PerkSelectionUI.Perk) -> Color:
+func get_perk_color(perk: PerkSelectionUI.Perk) -> Color:
 	match perk.effect_type:
 		"damage_bonus", "damage_multiplier":
 			return Color.RED
@@ -101,19 +98,18 @@ func _get_perk_color(perk: PerkSelectionUI.Perk) -> Color:
 			return Color.WHITE
 
 func _on_button_pressed():
-	emit_signal("perk_clicked", perk_index)
+	perk_clicked.emit(perk_index)
 
 func _on_mouse_entered():
-	# Highlight effect
 	modulate = Color(1.2, 1.2, 1.2, 1.0)
-	background.color = Color(0.3, 0.3, 0.4, 0.9)
+	if background:
+		background.color = Color(0.3, 0.3, 0.4, 0.9)
 
 func _on_mouse_exited():
-	# Normal state
 	modulate = Color(1.0, 1.0, 1.0, 1.0)
-	background.color = Color(0.2, 0.2, 0.3, 0.8)
+	if background:
+		background.color = Color(0.2, 0.2, 0.3, 0.8)
 
 func set_interactable(interactable: bool):
-	button.disabled = !interactable
-	if !interactable:
-		modulate = Color(0.6, 0.6, 0.6, 1.0)
+	if button:
+		button.disabled = !interactable

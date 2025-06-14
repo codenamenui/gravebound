@@ -7,11 +7,45 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -640.0
+offset_bottom = -338.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tfqi5")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 159.0
+offset_bottom = 264.0
+color = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(53, 31)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 118.0
+offset_right = 91.0
+offset_bottom = 195.0
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "dw"
+
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "dwa"
+
+[node name="EffectLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "dwa"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+offset_left = -1.0
+offset_top = 1.0
+offset_right = 159.0
+offset_bottom = 264.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
