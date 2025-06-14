@@ -55,6 +55,7 @@ func cache_ui_panels():
 			ui_panels[panel_name] = panel
 
 func transition_to_state(new_state: GameData.GameState):
+	print("DEBUG: transition_to_state called with: ", new_state, " from: ", GameData.current_state)
 	if not is_initialized:
 		await get_tree().process_frame
 		if not is_initialized:
@@ -65,32 +66,31 @@ func transition_to_state(new_state: GameData.GameState):
 	
 	if new_state != GameData.GameState.PAUSED:
 		hide_all_panels()
-		await get_tree().process_frame
 	
 	if new_state == GameData.GameState.PAUSED and previous_state == GameData.GameState.SETTINGS:
 		hide_all_panels(true)
-		await get_tree().process_frame
 	
 	if new_state == GameData.GameState.PLAYING and previous_state == GameData.GameState.PAUSED:
 		get_tree().paused = false
 		hide_pause_menu()
 		show_game_hud()
-		prepare_game_world()
 		GameData.current_state = new_state
 		return
 	
 	if new_state == GameData.GameState.MAIN_MENU and (previous_state == GameData.GameState.GAME_OVER or previous_state == GameData.GameState.PAUSED):
-		reset_game_world()
+		hide_pause_menu()
 		hide_all_panels()
 		show_main_menu()
 		reset_game_data()
-		reset_game_hud()
+		game_world.EnemySpawner.reset_spawner()
+		GameData.current_state = new_state
 		return
 	
 	if new_state == GameData.GameState.PLAYING and previous_state == GameData.GameState.PERK_SELECTION:
 		hide_all_panels()
 		game_world.EnemySpawner.continue_waves()
 		show_game_hud()
+		GameData.current_state = new_state
 		return
 		
 	match new_state:
@@ -147,6 +147,8 @@ func show_main_menu():
 		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
 
 func show_settings():
+	print("DEBUG: show_settings() called! Current state: ", GameData.current_state)
+	print("DEBUG: Call stack: ", get_stack())
 	var settings = ui_panels.get("Settings")
 	if is_instance_valid(settings):
 		settings.visible = true
@@ -156,6 +158,7 @@ func show_settings():
 				ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
 		else:
 			settings.set_process_mode(Node.PROCESS_MODE_INHERIT)
+			ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
 
 func show_game_hud():
 	var game_hud = ui_panels.get("GameHUD")
@@ -235,14 +238,8 @@ func _input(event):
 		return
 	if event.is_action_pressed("ui_cancel"):
 		match GameData.current_state:
-			GameData.GameState.SETTINGS:
-				transition_to_state(GameData.GameState.MAIN_MENU)
-				return
 			GameData.GameState.PLAYING:
 				transition_to_state(GameData.GameState.PAUSED)
-				return
-			GameData.GameState.PAUSED:
-				resume_game()
 				return
 
 func show_pause_menu():
@@ -251,6 +248,7 @@ func show_pause_menu():
 		get_tree().paused = true
 		pause_menu.visible = true
 		pause_menu.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
+		pause_menu._on_visibility_changed()
 		if is_instance_valid(ui_layer):
 			ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
 

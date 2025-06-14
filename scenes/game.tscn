@@ -203,6 +203,7 @@ offset_bottom = 31.0
 text = "Settings"
 
 [node name="GameHUD" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -277,7 +278,6 @@ text = "weesss"
 horizontal_alignment = 1
 
 [node name="PauseMenu" type="Control" parent="UI"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 16.0
@@ -288,35 +288,61 @@ script = ExtResource("11_dinhu")
 
 [node name="Title" type="Label" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 382.0
-offset_top = 63.0
-offset_right = 444.0
-offset_bottom = 86.0
+offset_left = 622.0
+offset_top = 68.0
+offset_right = 684.0
+offset_bottom = 91.0
 text = "PAUSED"
 
-[node name="Play" type="Button" parent="UI/PauseMenu"]
+[node name="StatsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 291.0
-offset_top = 93.0
-offset_right = 559.0
-offset_bottom = 235.0
+offset_left = 57.0
+offset_top = 73.0
+offset_right = 437.0
+offset_bottom = 457.0
+
+[node name="StatsTitle" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="DamageLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="DashCountLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="DamageReductionLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="DamageResistanceLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="LifestealLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+layout_mode = 0
+offset_left = 561.0
+offset_top = 130.0
+offset_right = 736.0
+offset_bottom = 231.0
+
+[node name="Play" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
+layout_mode = 2
 text = "RESUME"
 
-[node name="Settings" type="Button" parent="UI/PauseMenu"]
-layout_mode = 0
-offset_left = 279.0
-offset_top = 261.0
-offset_right = 547.0
-offset_bottom = 403.0
+[node name="Settings" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
+layout_mode = 2
 text = "OPTIONS
 "
 
-[node name="MainMenu" type="Button" parent="UI/PauseMenu"]
-layout_mode = 0
-offset_left = 289.0
-offset_top = 448.0
-offset_right = 557.0
-offset_bottom = 590.0
+[node name="MainMenu" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
+layout_mode = 2
 text = "BACK TO MAIN MENU
 "
 
@@ -408,10 +434,9 @@ player = NodePath("../Player")
 
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/Play" to="UI/PauseMenu" method="_on_play_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
-[connection signal="pressed" from="UI/PauseMenu/MainMenu" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Play" to="UI/PauseMenu" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
 [connection signal="pressed" from="UI/GameOverScreen/Retry" to="UI/GameOverScreen" method="_on_retry_pressed"]
 [connection signal="pressed" from="UI/GameOverScreen/MainMenu" to="UI/GameOverScreen" method="_on_main_menu_pressed"]
 [connection signal="wave_started" from="GameWorld/EnemySpawn" to="UI/GameHUD/WaveStartDisplay" method="_on_wave_started"]
