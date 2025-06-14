@@ -59,6 +59,8 @@ var id = 0
 
 var spawn_timer: Timer
 var wave_break_timer: Timer
+var is_paused: bool = false
+var waiting_to_continue: bool = false
 
 # Calculated wave properties
 var current_wave_enemy_count: int
@@ -278,6 +280,8 @@ func _start_wave(wave_index: int):
 	print("  Available enemy types: ", available_enemy_types.size())
 
 func _on_spawn_timer_timeout():
+	if is_paused:
+		return
 	_spawn_enemy()
 
 func _on_wave_break_timeout():
@@ -285,7 +289,7 @@ func _on_wave_break_timeout():
 	_start_wave(current_wave_index)
 
 func _spawn_enemy():
-	if not wave_active:
+	if not wave_active or is_paused:
 		return
 	
 	# Check if we've spawned all enemies for this wave
@@ -359,14 +363,39 @@ func _complete_current_wave():
 	waiting_for_wave_clear = false
 	
 	# Emit wave completed signal
+	SceneManager.transition_to_state(GameData.GameState.PERK_SELECTION)
 	wave_completed.emit(current_wave_index + 1)
 
 	if infinite_waves or current_wave_index < total_waves - 1:
-		wave_break_timer.start()
+		# Don't automatically start next wave - wait for continue_waves()
+		is_paused = true
+		waiting_to_continue = true
+		print("Wave ", current_wave_index + 1, " completed. Waiting for perk selection...")
 	else:
 		update_wave_display()
 		all_waves_completed.emit()
 
+# Add these new public functions:
+func pause_waves():
+	"""Pause wave spawning (can be called anytime)"""
+	is_paused = true
+	spawn_timer.stop()
+	wave_break_timer.stop()
+
+func continue_waves():
+	"""Continue to the next wave after perk selection"""
+	if not waiting_to_continue:
+		return
+	
+	is_paused = false
+	waiting_to_continue = false
+	
+	# Start the break timer for next wave
+	wave_break_timer.start()
+
+func is_waves_paused() -> bool:
+	return is_paused
+	
 func _create_enemy_at_position(pos: Vector2, scene: PackedScene) -> Node2D:
 	if not scene or not enemy_container:
 		return null
@@ -378,7 +407,6 @@ func _create_enemy_at_position(pos: Vector2, scene: PackedScene) -> Node2D:
 	enemy.global_position = pos
 	enemy.container = enemy_container
 	enemy.target = player
-	print(enemy.target)
 	enemy_container.add_child(enemy)
 	return enemy
 

@@ -261,21 +261,20 @@ color = Color(0.203922, 0.203922, 0.0941176, 0.286275)
 
 [node name="MainContainer" type="VBoxContainer" parent="UI/GameHUD/WaveStartDisplay"]
 layout_mode = 0
-offset_left = -130.0
-offset_top = 64.0
-offset_right = 170.0
-offset_bottom = 186.0
+offset_left = -126.0
+offset_top = 32.0
+offset_right = 174.0
+offset_bottom = 82.0
 
 [node name="WaveLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
 text = "wave"
+horizontal_alignment = 1
 
 [node name="SubLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
 text = "weesss"
-
-[node name="ProgressBar" type="ProgressBar" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
-layout_mode = 2
+horizontal_alignment = 1
 
 [node name="PauseMenu" type="Control" parent="UI"]
 visible = false
@@ -321,13 +320,14 @@ offset_bottom = 590.0
 text = "BACK TO MAIN MENU
 "
 
-[node name="PerksPanel" type="Control" parent="UI"]
+[node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_trtic")
+player = NodePath("../../GameWorld/Player")
 metadata/_custom_type_script = "uid://bfqllaignaqa0"
 
 [node name="TitleLabel" type="Label" parent="UI/PerksPanel"]

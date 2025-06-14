@@ -86,6 +86,12 @@ func transition_to_state(new_state: GameData.GameState):
 		reset_game_data()
 		reset_game_hud()
 		return
+	
+	if new_state == GameData.GameState.PLAYING and previous_state == GameData.GameState.PERK_SELECTION:
+		hide_all_panels()
+		game_world.EnemySpawner.continue_waves()
+		show_game_hud()
+		return
 		
 	match new_state:
 		GameData.GameState.MAIN_MENU:
@@ -166,17 +172,15 @@ func show_game_hud():
 		enable_game_world_recursively(game_world)
 
 func show_perks_panel():
-	var perks_panel = ui_panels.get("PerksPanel")
-	if is_instance_valid(perks_panel):
-		if perks_panel.has_method("setup_perk_options"):
-			perks_panel.setup_perk_options(GameData.current_wave)
-		perks_panel.visible = true
-		perks_panel.set_process_mode(Node.PROCESS_MODE_INHERIT)
+	var perks_panel: PerkSelectionUI = ui_panels.get("PerksPanel")
 	
 	if is_instance_valid(game_world):
 		game_world.visible = true
 		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
-
+	
+	perks_panel._select_random_perks(3)
+	perks_panel.show_perk_selection(perks_panel.player)
+	
 func show_game_over_screen():
 	var game_over = ui_panels.get("GameOverScreen")
 	if is_instance_valid(game_over):
