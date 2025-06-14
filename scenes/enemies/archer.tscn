@@ -737,10 +737,9 @@ skill_name = "shoot"
 animation_speed = 1.0
 contact_time = 0.4
 recovery_time = 0.4
-hitbox_lifetime = 1.5
+hitbox_lifetime = 4.0
+base_damage = 25.0
 sfx_name = "enemy_range_attack"
-display_hitbox = true
-projectile_speed = 300.0
 
 [node name="AnimatedSprite2D" parent="Skill" index="0"]
 position = Vector2(-10, -11)
@@ -780,3 +779,6 @@ animation = &"walk"
 
 [node name="HealthComponent" parent="." index="5"]
 position = Vector2(-1, -18)
+
+[node name="AttackState" parent="StateMachine" index="0"]
+wind_up_duration = 0.1

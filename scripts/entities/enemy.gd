@@ -12,25 +12,57 @@ class_name Enemy
 @onready var soft_collision: SoftCollisionComponent = $SoftCollisionComponent
 @onready var state_machine: StateMachine = $StateMachine
 
-var target: Node2D  # Player reference
+var target: Node2D
 var id: int
 var container: EnemyContainer
 var last_direction: Vector2
 var is_attacking: bool = false
 var speed_multiplier: float = 1.0
 var current_skill
+var scaled_damage
+var scaled_health
+
+var base_damage: int
+var base_health: int
+var base_speed: float
+var current_wave: int = 1
+var scaled_points: int
 
 func _ready():
+	base_damage = skill.damage if skill and skill.has_method("get") and skill.get("damage") != null else 10
+	base_health = health_component.max_health if health_component else 100
+	base_speed = 50.0
+	
+	if container and container.has_method("get_current_wave"):
+		current_wave = container.get_current_wave()
+	
+	apply_wave_scaling()
+	
 	skill.initialize(self)
-	# Add to "enemies" group for easier management
 	add_to_group("enemies")
-		
-	# Wait until NavigationAgent is fully initialized
+	
 	await get_tree().physics_frame
 	if navigation_agent:
 		navigation_agent.radius = 16
 	
 	state_machine.change_state(state_machine.initial_state, {})
+
+func apply_wave_scaling():
+	var damage_scale = 1.0 + (current_wave - 1) * 0.25
+	var health_scale = 1.0 + (current_wave - 1) * 0.3
+	var speed_scale = 1.0 + (current_wave - 1) * 0.08
+	var points_scale = 1.0 + (current_wave - 1) * 0.2
+
+	scaled_damage = int(base_damage * damage_scale)
+	scaled_health = int(base_health * health_scale)
+	speed_multiplier = speed_scale
+	if skill:
+		skill.base_damage = scaled_damage
+	scaled_points = int(10 * points_scale)
+	
+	if health_component:
+		health_component.max_health = scaled_health
+		health_component.current_health = scaled_health
 
 func _physics_process(delta):
 	if state_machine:
@@ -42,7 +74,6 @@ func _process(delta: float) -> void:
 		state_machine._process(delta)
 		
 func _draw():
-	# Debug draw path
 	if Engine.is_editor_hint() && state_machine.current_state is ChaseState:
 		var points = state_machine.current_state._current_path
 		for i in range(points.size() - 1):
@@ -63,30 +94,29 @@ func show_damage_number(damage_amount: int) -> void:
 	damage_label.visible = true
 	damage_label.text = str(damage_amount)
 	
-	# Add the label as a child of the current node
 	add_child(damage_label)
 	
-	# Set initial properties
-	damage_label.modulate = Color(1, 0.3, 0.3, 1)  # Reddish color
+	damage_label.modulate = Color(1, 0.3, 0.3, 1)
 	
-	# Create a tween for animation
 	var tween = create_tween()
 	tween.set_parallel(true)
 	
-	# Move the label upward
 	tween.tween_property(damage_label, "position:y", damage_label.position.y - 50, 1.0)
-	
-	# Fade out the label
 	tween.tween_property(damage_label, "modulate:a", 0.0, 0.8)
 	
-	# Optional: add a slight random horizontal movement
 	var random_x = randf_range(-15, 15)
 	tween.tween_property(damage_label, "position:x", damage_label.position.x + random_x, 1.0)
 	
-	# Queue free the label after the animation
 	await tween.finished
 	damage_label.queue_free()
 	
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		enemy_manager.unregister_enemy(self)
+
+func get_scaled_speed() -> float:
+	return base_speed * speed_multiplier
+
+func set_wave_number(wave: int):
+	current_wave = wave
+	apply_wave_scaling()

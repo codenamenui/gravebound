@@ -279,8 +279,8 @@ func _on_dash_timer_timeout() -> void:
 
 func _on_health_component_health_depleted() -> void:
 	is_dying = true
-	$death.show()
 	character_sprite_component.play_death()
+	SceneManager.transition_to_state(GameData.GameState.GAME_OVER)
 
 # Existing additive bonus functions
 func add_damage_bonus(bonus: float):

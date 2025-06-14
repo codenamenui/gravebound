@@ -21,8 +21,3 @@ func _threaded_bake():
 
 func _direct_bake():
 	tilemap.bake_navigation_polygon(0)  # Main thread (small maps only)
-	_on_bake_complete()
-
-func _on_bake_complete():
-	print("Navigation bake finished")
-	# Optional: Enable enemy spawning here

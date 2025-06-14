@@ -39,6 +39,65 @@ var perk_displays: Array[PerkDisplay] = []
 signal perk_selected(perk: Perk)
 signal selection_closed()
 
+# Exported perk properties for inspector customization
+@export_group("Damage Bonus Perks")
+@export var dmg_bonus_small_weight: float = 25.0
+@export var dmg_bonus_small_value: float = 5.0
+@export var dmg_bonus_medium_weight: float = 15.0
+@export var dmg_bonus_medium_value: float = 10.0
+@export var dmg_bonus_large_weight: float = 5.0
+@export var dmg_bonus_large_value: float = 20.0
+
+@export_group("Damage Multiplier Perks")
+@export var dmg_mult_small_weight: float = 20.0
+@export var dmg_mult_small_value: float = 1.1
+@export var dmg_mult_medium_weight: float = 10.0
+@export var dmg_mult_medium_value: float = 1.25
+@export var dmg_mult_large_weight: float = 3.0
+@export var dmg_mult_large_value: float = 1.5
+
+@export_group("Speed Bonus Perks")
+@export var speed_bonus_small_weight: float = 25.0
+@export var speed_bonus_small_value: float = 30.0
+@export var speed_bonus_medium_weight: float = 15.0
+@export var speed_bonus_medium_value: float = 50.0
+
+@export_group("Speed Multiplier Perks")
+@export var speed_mult_small_weight: float = 20.0
+@export var speed_mult_small_value: float = 1.15
+@export var speed_mult_medium_weight: float = 8.0
+@export var speed_mult_medium_value: float = 1.3
+
+@export_group("Health Perks")
+@export var health_bonus_small_weight: float = 25.0
+@export var health_bonus_small_value: int = 20
+@export var health_bonus_medium_weight: float = 15.0
+@export var health_bonus_medium_value: int = 50
+@export var max_health_bonus_weight: float = 20.0
+@export var max_health_bonus_value: int = 30
+@export var health_mult_weight: float = 10.0
+@export var health_mult_value: float = 1.2
+
+@export_group("Defense Perks")
+@export var dmg_reduction_small_weight: float = 20.0
+@export var dmg_reduction_small_value: float = 3.0
+@export var dmg_reduction_medium_weight: float = 12.0
+@export var dmg_reduction_medium_value: float = 7.0
+@export var dmg_resistance_small_weight: float = 18.0
+@export var dmg_resistance_small_value: float = 0.9
+@export var dmg_resistance_medium_weight: float = 8.0
+@export var dmg_resistance_medium_value: float = 0.8
+
+@export_group("Special Perks")
+@export var lifesteal_small_weight: float = 15.0
+@export var lifesteal_small_value: float = 0.1
+@export var lifesteal_medium_weight: float = 8.0
+@export var lifesteal_medium_value: float = 0.2
+@export var dash_bonus_weight: float = 12.0
+@export var dash_bonus_value: int = 1
+@export var dash_bonus_rare_weight: float = 4.0
+@export var dash_bonus_rare_value: int = 2
+
 func get_all_buttons(node: Node) -> Array:
 	var buttons = []
 	for child in node.get_children():
@@ -56,39 +115,38 @@ func _ready():
 	_setup_ui()
 	hide()
 
-#func _exit_tree():
-	## Clean up when the node is about to be freed
-	#if is_paused:
-		#_unpause_game()
-
 func _initialize_perks():
-	available_perks.append(Perk.new("dmg_bonus_small", "Minor Damage", "Increases your base damage by a small amount", "res://icons/damage_small.png", 25.0, "damage_bonus", 5.0))
-	available_perks.append(Perk.new("dmg_bonus_medium", "Moderate Damage", "Increases your base damage by a moderate amount", "res://icons/damage_medium.png", 15.0, "damage_bonus", 10.0))
-	available_perks.append(Perk.new("dmg_bonus_large", "Major Damage", "Significantly increases your base damage", "res://icons/damage_large.png", 5.0, "damage_bonus", 20.0))
+	# Clear existing perks first
+	available_perks.clear()
 	
-	available_perks.append(Perk.new("dmg_mult_small", "Sharpened Blade", "Your attacks deal more damage", "res://icons/damage_mult_small.png", 20.0, "damage_multiplier", 1.1))
-	available_perks.append(Perk.new("dmg_mult_medium", "Berserker's Fury", "Enter a rage state that amplifies damage", "res://icons/damage_mult_medium.png", 10.0, "damage_multiplier", 1.25))
-	available_perks.append(Perk.new("dmg_mult_large", "Divine Strength", "Channel divine power for devastating attacks", "res://icons/damage_mult_large.png", 3.0, "damage_multiplier", 1.5))
+	# Use exported variables for perk initialization
+	available_perks.append(Perk.new("dmg_bonus_small", "Minor Damage", "Increases your base damage by a small amount", "res://icons/damage_small.png", dmg_bonus_small_weight, "damage_bonus", dmg_bonus_small_value))
+	available_perks.append(Perk.new("dmg_bonus_medium", "Moderate Damage", "Increases your base damage by a moderate amount", "res://icons/damage_medium.png", dmg_bonus_medium_weight, "damage_bonus", dmg_bonus_medium_value))
+	available_perks.append(Perk.new("dmg_bonus_large", "Major Damage", "Significantly increases your base damage", "res://icons/damage_large.png", dmg_bonus_large_weight, "damage_bonus", dmg_bonus_large_value))
 	
-	available_perks.append(Perk.new("speed_bonus_small", "Swift Steps", "Move faster across the battlefield", "res://icons/speed_small.png", 25.0, "speed_bonus", 30.0))
-	available_perks.append(Perk.new("speed_bonus_medium", "Wind Walker", "Harness the wind to boost your speed", "res://icons/speed_medium.png", 15.0, "speed_bonus", 50.0))
-	available_perks.append(Perk.new("speed_mult_small", "Fleet Footed", "Your natural agility is enhanced", "res://icons/speed_mult_small.png", 20.0, "speed_multiplier", 1.15))
-	available_perks.append(Perk.new("speed_mult_medium", "Lightning Reflexes", "Move with lightning-like speed", "res://icons/speed_mult_medium.png", 8.0, "speed_multiplier", 1.3))
+	available_perks.append(Perk.new("dmg_mult_small", "Sharpened Blade", "Your attacks deal more damage", "res://icons/damage_mult_small.png", dmg_mult_small_weight, "damage_multiplier", dmg_mult_small_value))
+	available_perks.append(Perk.new("dmg_mult_medium", "Berserker's Fury", "Enter a rage state that amplifies damage", "res://icons/damage_mult_medium.png", dmg_mult_medium_weight, "damage_multiplier", dmg_mult_medium_value))
+	available_perks.append(Perk.new("dmg_mult_large", "Divine Strength", "Channel divine power for devastating attacks", "res://icons/damage_mult_large.png", dmg_mult_large_weight, "damage_multiplier", dmg_mult_large_value))
 	
-	available_perks.append(Perk.new("health_bonus_small", "Vitality Boost", "Feel more energized and healthy", "res://icons/health_small.png", 25.0, "health_bonus", 0.0, 20))
-	available_perks.append(Perk.new("health_bonus_medium", "Hardy Constitution", "Your body becomes more resilient", "res://icons/health_medium.png", 15.0, "health_bonus", 0.0, 50))
-	available_perks.append(Perk.new("max_health_bonus", "Robust Body", "Permanently increase your maximum health", "res://icons/max_health.png", 20.0, "max_health_bonus", 0.0, 30))
-	available_perks.append(Perk.new("health_mult", "Troll Regeneration", "Your body heals like a mythical troll", "res://icons/health_mult.png", 10.0, "health_multiplier", 1.2))
+	available_perks.append(Perk.new("speed_bonus_small", "Swift Steps", "Move faster across the battlefield", "res://icons/speed_small.png", speed_bonus_small_weight, "speed_bonus", speed_bonus_small_value))
+	available_perks.append(Perk.new("speed_bonus_medium", "Wind Walker", "Harness the wind to boost your speed", "res://icons/speed_medium.png", speed_bonus_medium_weight, "speed_bonus", speed_bonus_medium_value))
+	available_perks.append(Perk.new("speed_mult_small", "Fleet Footed", "Your natural agility is enhanced", "res://icons/speed_mult_small.png", speed_mult_small_weight, "speed_multiplier", speed_mult_small_value))
+	available_perks.append(Perk.new("speed_mult_medium", "Lightning Reflexes", "Move with lightning-like speed", "res://icons/speed_mult_medium.png", speed_mult_medium_weight, "speed_multiplier", speed_mult_medium_value))
 	
-	available_perks.append(Perk.new("dmg_reduction_small", "Thick Skin", "Your skin hardens against attacks", "res://icons/defense_small.png", 20.0, "damage_reduction", 3.0))
-	available_perks.append(Perk.new("dmg_reduction_medium", "Iron Hide", "Your body becomes as tough as iron", "res://icons/defense_medium.png", 12.0, "damage_reduction", 7.0))
-	available_perks.append(Perk.new("dmg_resistance_small", "Armor Training", "Learn to deflect incoming attacks", "res://icons/resistance_small.png", 18.0, "damage_resistance", 0.9))
-	available_perks.append(Perk.new("dmg_resistance_medium", "Defensive Mastery", "Master the art of damage mitigation", "res://icons/resistance_medium.png", 8.0, "damage_resistance", 0.8))
+	available_perks.append(Perk.new("health_bonus_small", "Vitality Boost", "Feel more energized and healthy", "res://icons/health_small.png", health_bonus_small_weight, "health_bonus", 0.0, health_bonus_small_value))
+	available_perks.append(Perk.new("health_bonus_medium", "Hardy Constitution", "Your body becomes more resilient", "res://icons/health_medium.png", health_bonus_medium_weight, "health_bonus", 0.0, health_bonus_medium_value))
+	available_perks.append(Perk.new("max_health_bonus", "Robust Body", "Permanently increase your maximum health", "res://icons/max_health.png", max_health_bonus_weight, "max_health_bonus", 0.0, max_health_bonus_value))
+	available_perks.append(Perk.new("health_mult", "Troll Regeneration", "Your body heals like a mythical troll", "res://icons/health_mult.png", health_mult_weight, "health_multiplier", health_mult_value))
 	
-	available_perks.append(Perk.new("lifesteal_small", "Vampiric Touch", "Drain life from your enemies", "res://icons/lifesteal_small.png", 15.0, "lifesteal", 0.1))
-	available_perks.append(Perk.new("lifesteal_medium", "Blood Drinker", "Feast on the life force of your foes", "res://icons/lifesteal_medium.png", 8.0, "lifesteal", 0.2))
-	available_perks.append(Perk.new("dash_bonus", "Extra Dash", "Gain an additional dash charge", "res://icons/dash_bonus.png", 12.0, "dash_bonus", 0.0, 1))
-	available_perks.append(Perk.new("dash_bonus_rare", "Dash Master", "Master of evasive maneuvers", "res://icons/dash_bonus_rare.png", 4.0, "dash_bonus", 0.0, 2))
+	available_perks.append(Perk.new("dmg_reduction_small", "Thick Skin", "Your skin hardens against attacks", "res://icons/defense_small.png", dmg_reduction_small_weight, "damage_reduction", dmg_reduction_small_value))
+	available_perks.append(Perk.new("dmg_reduction_medium", "Iron Hide", "Your body becomes as tough as iron", "res://icons/defense_medium.png", dmg_reduction_medium_weight, "damage_reduction", dmg_reduction_medium_value))
+	available_perks.append(Perk.new("dmg_resistance_small", "Armor Training", "Learn to deflect incoming attacks", "res://icons/resistance_small.png", dmg_resistance_small_weight, "damage_resistance", dmg_resistance_small_value))
+	available_perks.append(Perk.new("dmg_resistance_medium", "Defensive Mastery", "Master the art of damage mitigation", "res://icons/resistance_medium.png", dmg_resistance_medium_weight, "damage_resistance", dmg_resistance_medium_value))
+	
+	available_perks.append(Perk.new("lifesteal_small", "Vampiric Touch", "Drain life from your enemies", "res://icons/lifesteal_small.png", lifesteal_small_weight, "lifesteal", lifesteal_small_value))
+	available_perks.append(Perk.new("lifesteal_medium", "Blood Drinker", "Feast on the life force of your foes", "res://icons/lifesteal_medium.png", lifesteal_medium_weight, "lifesteal", lifesteal_medium_value))
+	available_perks.append(Perk.new("dash_bonus", "Extra Dash", "Gain an additional dash charge", "res://icons/dash_bonus.png", dash_bonus_weight, "dash_bonus", 0.0, dash_bonus_value))
+	available_perks.append(Perk.new("dash_bonus_rare", "Dash Master", "Master of evasive maneuvers", "res://icons/dash_bonus_rare.png", dash_bonus_rare_weight, "dash_bonus", 0.0, dash_bonus_rare_value))
 
 func _setup_ui():
 	perk_displays = [perk1, perk2, perk3]
@@ -106,6 +164,9 @@ func _setup_ui():
 		background.color = Color(0, 0, 0, 0.8)
 
 func show_perk_selection(p_player: Node):
+	# Reinitialize perks to use current exported values
+	_initialize_perks()
+	
 	player = p_player
 	selected_perks = _select_random_perks(3)
 	_update_perk_displays()
@@ -124,7 +185,6 @@ func _select_random_perks(count: int) -> Array[Perk]:
 	
 	# Validate we have perks
 	if available_perks.is_empty():
-		print("Error: No available perks!")
 		return result
 	
 	for perk in available_perks:
@@ -133,7 +193,6 @@ func _select_random_perks(count: int) -> Array[Perk]:
 			weighted_pool.append(perk)
 	
 	if weighted_pool.is_empty():
-		print("Error: No weighted perks available!")
 		return result
 	
 	var used_perks: Array[String] = []
@@ -158,8 +217,6 @@ func _update_perk_displays():
 			display.setup_perk(perk, i)
 			display.set_interactable(true)
 			display.show()
-		else:
-			print("Warning: Perk display ", i, " is null or missing setup_perk method")
 	
 	for i in range(selected_perks.size(), perk_displays.size()):
 		if perk_displays[i]:
@@ -167,7 +224,6 @@ func _update_perk_displays():
 
 func _on_perk_selected(perk_index: int):
 	if perk_index >= selected_perks.size():
-		print("Error: Invalid perk index: ", perk_index)
 		return
 	
 	var selected_perk = selected_perks[perk_index]
@@ -194,7 +250,6 @@ func _safe_timer(duration: float):
 
 func _apply_perk_to_player(perk: Perk):
 	if not player or not is_instance_valid(player):
-		print("Error: No valid player reference!")
 		return
 	
 	match perk.effect_type:
@@ -231,8 +286,6 @@ func _apply_perk_to_player(perk: Perk):
 		"dash_bonus":
 			if player.has_method("add_dash_count_bonus"):
 				player.add_dash_count_bonus(perk.effect_value_int)
-		_:
-			print("Warning: Unknown perk effect type: ", perk.effect_type)
 
 func hide_perk_selection():
 	_close_selection()
@@ -246,3 +299,7 @@ func set_perk_weight(perk_id: String, new_weight: float):
 		if perk.id == perk_id:
 			perk.weight = new_weight
 			break
+
+# Helper function to refresh perks with current exported values (useful for runtime changes)
+func refresh_perk_values():
+	_initialize_perks()

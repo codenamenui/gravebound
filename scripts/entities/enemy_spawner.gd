@@ -412,6 +412,7 @@ func _create_enemy_at_position(pos: Vector2, scene: PackedScene) -> Node2D:
 	enemy.global_position = pos
 	enemy.container = enemy_container
 	enemy.target = player
+	enemy.set_wave_number(current_wave_index + 1)
 	enemy_container.add_child(enemy)
 	return enemy
 

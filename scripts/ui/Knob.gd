@@ -20,8 +20,6 @@ func _process(delta):
 			global_position.x = parent.global_position.x + cos(angle)*maxLength
 			global_position.y = parent.global_position.y + sin(angle)*maxLength
 		calculateVector()
-		print("maxLength: ", maxLength)
-		print("posVector: ", parent.posVector)
 		parent.player.handle_movement(parent.posVector * parent.movement_strength)
 	else:
 		global_position = lerp(global_position, parent.global_position, delta*50)

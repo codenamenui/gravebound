@@ -73,7 +73,6 @@ func play_music(track_name: String, fade_duration: float = 1.0):
 		return
 	
 	if not music_tracks.has(track_name):
-		print("Music track not found: " + track_name)
 		return
 	
 	current_music = track_name
@@ -113,9 +112,7 @@ func get_ui_target_db() -> float:
 	return linear_to_db(ui_volume * master_volume * volume_boost)
 
 func play_sfx(sound_name: String, pitch_variation: float = 0.0, volume_modifier: float = 1.0):
-	print(sound_name)
 	if not sfx_sounds.has(sound_name):
-		print("SFX sound not found: " + sound_name)
 		return
 	
 	var player = get_next_sfx_player()
@@ -131,9 +128,7 @@ func play_sfx(sound_name: String, pitch_variation: float = 0.0, volume_modifier:
 
 # Alternative function for positional audio when you DO want distance effects
 func play_sfx_at_position(sound_name: String, global_pos: Vector2, pitch_variation: float = 0.0, volume_modifier: float = 1.0):
-	print(sound_name + " at position")
 	if not sfx_sounds.has(sound_name):
-		print("SFX sound not found: " + sound_name)
 		return
 	
 	# Create a temporary AudioStreamPlayer2D for positional audio
@@ -155,7 +150,6 @@ func play_sfx_at_position(sound_name: String, global_pos: Vector2, pitch_variati
 
 func play_ui_sound(sound_name: String):
 	if not ui_sounds.has(sound_name):
-		print("UI sound not found: " + sound_name)
 		return
 	
 	ui_player.stream = ui_sounds[sound_name]
@@ -244,9 +238,9 @@ func get_player_position() -> Vector2:
 
 func play_music_for_wave(wave_number: int):
 	if wave_number <= 5:
-		play_music("gameplay")
-	else:
 		play_music("gameplay_intense")
+	else:
+		play_music("gameplay")
 
 # Getter functions
 func get_master_volume() -> float:
@@ -266,7 +260,6 @@ func get_volume_boost() -> float:
 
 # Debug function to test max volume
 func test_max_volume():
-	print("Testing max volume...")
 	set_master_volume(1.0)
 	set_music_volume(1.0)
 	set_sfx_volume(1.0)

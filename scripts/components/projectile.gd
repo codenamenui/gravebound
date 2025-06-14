@@ -19,16 +19,11 @@ func _physics_process(delta):
 	position += direction * speed * delta
 
 func _on_body_entered(body):
-	print("Body entered: ", body)
-	print("Body type: ", typeof(body))
-	print("Has take_damage method: ", body.has_method("take_damage"))
 	if body.name == "Walls":
 		queue_free()
 		return
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
-	else:
-		print("No take_damage method found")
 		
 func _on_lifetime_timeout():
 	queue_free()

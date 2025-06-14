@@ -47,23 +47,17 @@ func _on_main_menu_pressed() -> void:
 func _update_stats_display():
 	# Add more comprehensive null checks
 	if not player:
-		print("Player is null")
 		return
 	
 	if not is_instance_valid(player):
-		print("Player instance is not valid")
 		return
 		
 	if not player.health_component:
-		print("Health component is null - trying to get it...")
 		# Try to get the health component directly
 		player.health_component = player.get_node_or_null("HealthComponent")
 		if not player.health_component:
-			print("Still couldn't find health component")
 			return
-	
-	print("Updating stats - health component found!")
-	
+		
 	# Update health display
 	var current_health = player.health_component.current_health
 	var max_health = player.health_component.max_health

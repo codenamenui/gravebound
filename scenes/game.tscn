@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="5_gee14"]
 [ext_resource type="Script" uid="uid://cq80vmh053868" path="res://scenes/settings.gd" id="5_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="6_0tnpc"]
-[ext_resource type="Theme" uid="uid://bk7i5lqjy3gy" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
+[ext_resource type="Theme" uid="uid://hbags6yvwwfc" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
@@ -391,7 +391,7 @@ layout_mode = 2
 text = "BACK TO MAIN MENU
 "
 
-[node name="PerksPanel" type="Control" parent="UI"]
+[node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -399,6 +399,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_trtic")
 player = NodePath("../../GameWorld/Player")
+dash_bonus_weight = 8.0
 metadata/_custom_type_script = "uid://bfqllaignaqa0"
 
 [node name="TitleLabel" type="Label" parent="UI/PerksPanel"]

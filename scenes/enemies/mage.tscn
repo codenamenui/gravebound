@@ -1259,14 +1259,12 @@ skill_name = "orb"
 animation_speed = 1.0
 contact_time = 0.4
 recovery_time = 0.3
-hitbox_lifetime = 1.5
-base_damage = 50.0
+hitbox_lifetime = 4.0
+base_damage = 40.0
 sprite_offset = Vector2(-12, -35)
 sfx_name = "enemy_mage_attack"
-display_hitbox = true
 is_projectile = true
 projectile_speed = 200.0
-projectile_distance = 1000.0
 
 [node name="AnimatedSprite2D" parent="Skill" index="0"]
 position = Vector2(6, -42)

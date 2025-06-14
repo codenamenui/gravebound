@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bf4opgk0oe25u" path="res://assets/Hero Knight/AllCharacters/Cat/Walk/spr_SkeletonCatRun_strip8.png" id="6_dl6p7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5c477"]
-size = Vector2(24, 33)
+size = Vector2(36, 60.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dl6p7"]
 size = Vector2(30, 6)
@@ -615,7 +615,7 @@ skill_name = "slash"
 animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.4
-base_damage = 20.0
+base_damage = 15.0
 sfx_name = "enemy_cat_attack"
 projectile_speed = 0.0
 
@@ -623,7 +623,7 @@ projectile_speed = 0.0
 position = Vector2(1, -9)
 
 [node name="CollisionShape2D" parent="Skill/Hitbox" index="0"]
-position = Vector2(30, 2)
+position = Vector2(29, 2)
 shape = SubResource("RectangleShape2D_5c477")
 
 [node name="CollisionShape2D" parent="." index="1"]

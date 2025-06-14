@@ -309,6 +309,7 @@ func _handle_hit(target) -> void:
 	if owner_node is Player:
 		if target.has_method("take_damage") and target.is_in_group("Enemy"):
 			var damage = get_current_damage()
+			damage = owner_node.deal_damage_to_enemy(damage)
 			var knockback_direction = (target.global_position - owner_node.global_position).normalized()
 			var knockback = knockback_direction * knockback_force
 			
@@ -416,17 +417,24 @@ class Attack:
 	var pierce_count: int 
 	var hit_targets: Array = []
 	var start_position: Vector2
+	var current_position: Vector2
+	var sprite_start_position: Vector2
 	var traveled_distance: float = 0.0
 	var hitbox: Area2D
 	var sprite: AnimatedSprite2D
 	var is_projectile: bool
 	var hitbox_timer: Timer
+	var is_active: bool = false
 	
 	func _init(skill_owner: BaseSkill, parent_node: Node, start_position: Vector2,
 			   direction: Vector2, is_projectile: bool, hitbox_delay: float, hitbox_lifetime: float):
 		self.skill_owner = skill_owner
 		self.parent_node = parent_node
 		self.start_position = start_position
+		self.current_position = start_position
+		
+		var sprite_offset_rotated = skill_owner.sprite_offset.rotated(direction.angle())
+		self.sprite_start_position = start_position + sprite_offset_rotated
 		self.direction = direction.normalized()
 		self.speed = skill_owner.projectile_speed
 		self.max_distance = skill_owner.projectile_distance
@@ -435,76 +443,80 @@ class Attack:
 		self.pierce_count = skill_owner.projectile_pierce_count
 		self.is_projectile = is_projectile
 		
-		self.hitbox = skill_owner.hitbox.duplicate()
-		if is_instance_valid(self.hitbox):
-			self.hitbox.global_position = start_position
-			self.hitbox.body_entered.connect(_on_hitbox_body_entered)
-			self.hitbox.area_entered.connect(_on_hitbox_area_entered)
-			parent_node.add_child(self.hitbox)
-		
-		self.sprite = skill_owner.sprite.duplicate()
-		if is_instance_valid(self.sprite):
-			# Apply sprite offset and scale
-			var sprite_offset_rotated = skill_owner.sprite_offset.rotated(direction.angle())
-			self.sprite.global_position = start_position + sprite_offset_rotated
-			self.sprite.scale = skill_owner.sprite_scale
-			self.sprite.play("default")
-			parent_node.add_child(self.sprite)
-		
-		self.hitbox_timer = Timer.new()
-		self.hitbox_timer.one_shot = true
-		self.hitbox_timer.connect("timeout", _on_hitbox_timeout)
-		parent_node.add_child(self.hitbox_timer)
-		
-		update_orientation(self.direction)
+		_setup_hitbox()
+		_setup_sprite()
+		_setup_timer()
 		
 		await parent_node.get_tree().create_timer(hitbox_delay).timeout
-		if is_instance_valid(self.hitbox):
-			self.hitbox.monitoring = true
-			self.hitbox.monitorable = true
-			self.hitbox.set_as_top_level(true)
+		_activate_hitbox()
 		
 		self.hitbox_timer.start(hitbox_lifetime)
 		skill_owner._show_hitbox_visualization(self.hitbox)
 
+	func _setup_hitbox() -> void:
+		self.hitbox = skill_owner.hitbox.duplicate()
+		if is_instance_valid(self.hitbox):
+			self.hitbox.global_position = start_position
+			self.hitbox.rotation = direction.angle()
+			self.hitbox.monitoring = false
+			self.hitbox.monitorable = false
+			self.hitbox.body_entered.connect(_on_hitbox_body_entered)
+			self.hitbox.area_entered.connect(_on_hitbox_area_entered)
+			parent_node.add_child(self.hitbox)
+
+	func _setup_sprite() -> void:
+		self.sprite = skill_owner.sprite.duplicate()
+		if is_instance_valid(self.sprite):
+			self.sprite.global_position = sprite_start_position
+			self.sprite.rotation = direction.angle()
+			self.sprite.scale = skill_owner.sprite_scale
+			self.sprite.play("default")
+			parent_node.add_child(self.sprite)
+
+	func _setup_timer() -> void:
+		self.hitbox_timer = Timer.new()
+		self.hitbox_timer.one_shot = true
+		self.hitbox_timer.connect("timeout", _on_hitbox_timeout)
+		parent_node.add_child(self.hitbox_timer)
+
+	func _activate_hitbox() -> void:
+		if is_instance_valid(self.hitbox):
+			self.hitbox.monitoring = true
+			self.hitbox.monitorable = true
+			self.is_active = true
+
 	func update(delta: float) -> void:
-		if (max_distance > 0 and traveled_distance >= max_distance):
+		if not is_active:
+			return
+			
+		if max_distance > 0 and traveled_distance >= max_distance:
+			expire()
 			return
 		
 		var movement := direction * speed * delta
-		
-		if is_instance_valid(hitbox):
-			hitbox.global_position += movement
-		
-		if is_instance_valid(sprite):
-			# Update sprite position with offset
-			var sprite_offset_rotated = skill_owner.sprite_offset.rotated(direction.angle())
-			sprite.global_position = (hitbox.global_position if is_instance_valid(hitbox) else start_position) + sprite_offset_rotated
-		
+		current_position += movement
 		traveled_distance += movement.length()
-
-	func update_orientation(facing_direction: Vector2) -> void:
+		
 		if is_instance_valid(hitbox):
-			hitbox.rotation = facing_direction.angle()
+			hitbox.global_position = current_position
 		
 		if is_instance_valid(sprite):
-			sprite.rotation = facing_direction.angle()
-			sprite.flip_h = false
-			sprite.flip_v = false
-			# Use the sprite scale from the skill owner instead of projectile scale
-			sprite.scale = skill_owner.sprite_scale
+			sprite.global_position = sprite_start_position + (current_position - start_position)
 
 	func _on_hitbox_body_entered(body) -> void:
-		skill_owner._handle_hit(body)
+		if is_active:
+			skill_owner._handle_hit(body)
 
 	func _on_hitbox_area_entered(area) -> void:
-		if area.get_parent() and area.name.begins_with("Hurtbox"):
+		if is_active and area.get_parent() and area.name.begins_with("Hurtbox"):
 			skill_owner._handle_hit(area.get_parent())
 
 	func _on_hitbox_timeout() -> void:
 		expire()
 
 	func expire() -> void:
+		is_active = false
+		
 		if is_instance_valid(skill_owner):
 			skill_owner._hide_hitbox_visualization(hitbox)
 		

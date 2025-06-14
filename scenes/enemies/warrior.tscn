@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cx37q2q6j1qby" path="res://assets/dump/AllCharacters/Warrior/Walk/spr_WarriorWalk_strip11.png" id="8_xro8k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s0h66"]
-size = Vector2(20.75, 37)
+size = Vector2(40, 67)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s0ndi"]
 radius = 7.0
@@ -791,7 +791,7 @@ animation_speed = 0.5
 anticipation_time = 0.02
 contact_time = 0.4
 recovery_time = 0.2
-base_damage = 10.0
+base_damage = 20.0
 sfx_name = "enemy_melee_attack"
 projectile_speed = 0.0
 
@@ -799,6 +799,7 @@ projectile_speed = 0.0
 position = Vector2(25, 2)
 
 [node name="CollisionShape2D" parent="Skill/Hitbox" index="0"]
+position = Vector2(2, -16.5)
 shape = SubResource("RectangleShape2D_s0h66")
 
 [node name="CollisionShape2D" parent="." index="1"]

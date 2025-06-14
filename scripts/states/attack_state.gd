@@ -11,6 +11,7 @@ var is_winding_up: bool = false
 var is_red_tinted: bool = false
 var wind_up_elapsed: float = 0.0
 var next_blink_time: float = 0.0
+var is_immobilized: bool = false
 
 var original_collision_layer: int
 var original_collision_mask: int
@@ -33,6 +34,7 @@ func enter(msg: Dictionary = {}) -> void:
 	is_red_tinted = false
 	wind_up_elapsed = 0.0
 	next_blink_time = 0.0
+	is_immobilized = false
 	
 	original_collision_layer = enemy.collision_layer
 	original_collision_mask = enemy.collision_mask
@@ -63,13 +65,15 @@ func physics_update(delta: float) -> void:
 		transition_requested.emit("ChaseState")
 		return
 	
-	if !target_in_range:
+	if !target_in_range and !is_winding_up:
 		transition_requested.emit("ChaseState")
 		return
 	
 	if is_winding_up:
 		_face_target()
 		_update_blinking(delta)
+		if is_immobilized:
+			enemy.velocity = Vector2.ZERO
 	
 	if enemy.id in enemy.container.enemy_queue and !is_winding_up:
 		_make_immovable()
@@ -107,6 +111,7 @@ func _calculate_next_blink_interval(elapsed: float) -> float:
 	return lerp(start_interval, end_interval, eased_progress)
 
 func _make_immovable() -> void:
+	is_immobilized = true
 	enemy.velocity = Vector2.ZERO
 	
 	if enemy.has_method("get_node") and enemy.get_node_or_null("NavigationAgent"):
@@ -114,13 +119,9 @@ func _make_immovable() -> void:
 		nav_agent.set_velocity(Vector2.ZERO)
 		nav_agent.avoidance_enabled = false
 		nav_agent.set_target_position(enemy.global_position)
-	
-	enemy.collision_layer = 0
-	enemy.collision_mask = 0
 
 func _make_movable() -> void:
-	enemy.collision_layer = original_collision_layer
-	enemy.collision_mask = original_collision_mask
+	is_immobilized = false
 	
 	if enemy.has_method("get_node") and enemy.get_node_or_null("NavigationAgent"):
 		var nav_agent: NavigationAgent2D = enemy.get_node("NavigationAgent")

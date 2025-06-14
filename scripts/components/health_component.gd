@@ -38,10 +38,12 @@ func add_current_health(bonus: int):
 	current_health += bonus
 	
 func add_max_health(bonus: int):
+	current_health += bonus
 	max_health += bonus
 
 func reset_health():
 	max_health = init_max_health
+	current_health = init_max_health
 
 func heal(health: int):
 	current_health += health

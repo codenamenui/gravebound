@@ -55,7 +55,6 @@ func cache_ui_panels():
 			ui_panels[panel_name] = panel
 
 func transition_to_state(new_state: GameData.GameState):
-	print("DEBUG: transition_to_state called with: ", new_state, " from: ", GameData.current_state)
 	if not is_initialized:
 		await get_tree().process_frame
 		if not is_initialized:
@@ -64,7 +63,7 @@ func transition_to_state(new_state: GameData.GameState):
 	var previous_state = GameData.current_state
 	GameData.previous_state = GameData.current_state
 	
-	if new_state != GameData.GameState.PAUSED:
+	if new_state != GameData.GameState.PAUSED or new_state != GameData.GameState.GAME_OVER:
 		hide_all_panels()
 	
 	if new_state == GameData.GameState.PAUSED and previous_state == GameData.GameState.SETTINGS:
@@ -148,8 +147,6 @@ func show_main_menu():
 		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
 
 func show_settings():
-	print("DEBUG: show_settings() called! Current state: ", GameData.current_state)
-	print("DEBUG: Call stack: ", get_stack())
 	var settings = ui_panels.get("Settings")
 	if is_instance_valid(settings):
 		settings.visible = true
@@ -192,13 +189,19 @@ func show_perks_panel():
 	perks_panel.show_perk_selection(perks_panel.player)
 	
 func show_game_over_screen():
+	show_game_hud()
 	var game_over = ui_panels.get("GameOverScreen")
 	if is_instance_valid(game_over):
-		if game_over.has_method("update_final_stats"):
-			game_over.update_final_stats(GameData.total_score, GameData.current_wave - 1)
 		game_over.visible = true
 		game_over.set_process_mode(Node.PROCESS_MODE_INHERIT)
 
+func reset_player():
+	if game_world.has_node("Player"):
+		var player = game_world.get_node("Player")
+		if player and player.has_method("reset_player"):
+			print('dwaw')
+			player.reset_player()
+			
 func prepare_game_world():
 	if not is_instance_valid(game_world):
 		return
@@ -259,6 +262,8 @@ func show_pause_menu():
 		pause_menu._on_visibility_changed()
 		if is_instance_valid(ui_layer):
 			ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
+		game_world.visible = true
+		print(game_world.visible)
 
 func hide_pause_menu():
 	var pause_menu = ui_panels.get("PauseMenu")
