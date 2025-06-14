@@ -12,12 +12,12 @@
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
-[ext_resource type="Script" uid="uid://cergd4fda30tf" path="res://scenes/wave_count.gd" id="11_ca42v"]
+[ext_resource type="Script" path="res://scenes/wave_count.gd" id="11_ca42v"]
 [ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
 [ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
 [ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
 [ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
-[ext_resource type="Script" uid="uid://c2lfw3b6bu55b" path="res://scenes/world.gd" id="17_rysoc"]
+[ext_resource type="Script" path="res://scenes/world.gd" id="17_rysoc"]
 
 [sub_resource type="Theme" id="Theme_rysoc"]
 default_font = ExtResource("7_vtaks")
@@ -398,6 +398,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_trtic")
+player = NodePath("../../GameWorld/Player")
 metadata/_custom_type_script = "uid://bfqllaignaqa0"
 
 [node name="TitleLabel" type="Label" parent="UI/PerksPanel"]
