@@ -14,7 +14,18 @@ extends Control
 
 var player: Player
 
+func get_all_buttons(node: Node) -> Array:
+	var buttons = []
+	for child in node.get_children():
+		if child is Button:
+			buttons.append(child)
+		buttons += get_all_buttons(child)
+	return buttons
+	
 func _ready():
+	for button in get_all_buttons(self):
+		button.pressed.connect(func(): AudioManager.play_ui_sound("button_click"))
+		button.mouse_entered.connect(func(): AudioManager.play_ui_sound("button_hover"))
 	# Find the player node
 	player = get_tree().get_first_node_in_group("Player")
 	if not player:

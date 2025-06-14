@@ -14,7 +14,7 @@ func enter(msg: Dictionary = {}):
 		knockback_velocity = msg["knockback"]
 	
 	play_hit_effects()
-	
+	print(knockback_velocity)
 	if enemy.health_component:
 		enemy.health_component.take_damage(msg["damage"])
 		if enemy.health_component.current_health <= 0:

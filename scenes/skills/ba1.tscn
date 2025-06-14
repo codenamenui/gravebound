@@ -24,12 +24,12 @@ recovery_time = 0.02
 hitbox_lifetime = 0.1
 speed_multiplier = 0.0
 contact_impulse = Vector2(50, 0)
-movement_control_mode = 1
-base_damage = 100.0
+base_damage = 20.0
 knockback_force = 5.0
-hit_stop_time = 0.4
-zoom_amount = 1.1
-zoom_duration = 0.2
+hit_stop_time = 0.3
+zoom_amount = 1.03
+zoom_duration = 0.5
+sfx_name = "player_short_slash"
 projectile_speed = 0.0
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 

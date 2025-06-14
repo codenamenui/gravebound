@@ -612,11 +612,11 @@ animations = [{
 
 [node name="Skill" parent="." index="0"]
 skill_name = "slash"
-animation_name = "attack"
 animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.4
 base_damage = 20.0
+sfx_name = "enemy_cat_attack"
 projectile_speed = 0.0
 
 [node name="Hitbox" parent="Skill" index="1"]

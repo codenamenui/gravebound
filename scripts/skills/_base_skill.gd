@@ -179,8 +179,8 @@ func execute(direction: Vector2) -> bool:
 	if owner_node.get_node("CharacterSpriteComponent").has_method("play_animation"):
 		owner_node.get_node("CharacterSpriteComponent").play_animation(animation_name, animation_speed)
 
-	#if sfx_name != null:
-		#AudioManager.play_sfx(sfx_name)
+	if sfx_name != null:
+		AudioManager.play_sfx(sfx_name, 0.3)
 
 	owner_node.speed_multiplier = speed_multiplier
 

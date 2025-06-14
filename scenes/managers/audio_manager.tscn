@@ -5,14 +5,14 @@
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_aybmh")
 
-[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="UIPlayer" type="AudioStreamPlayer2D" parent="."]
+[node name="UIPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="SFXPool" type="AudioStreamPlayer2D" parent="."]
+[node name="SFXPool" type="AudioStreamPlayer" parent="."]
 
-[node name="SFXPlayer1" type="AudioStreamPlayer2D" parent="SFXPool"]
+[node name="SFXPlayer1" type="AudioStreamPlayer" parent="SFXPool"]
 
-[node name="SFXPlayer2" type="AudioStreamPlayer2D" parent="SFXPool"]
+[node name="SFXPlayer2" type="AudioStreamPlayer" parent="SFXPool"]
 
-[node name="SFXPlayer3" type="AudioStreamPlayer2D" parent="SFXPool"]
+[node name="SFXPlayer3" type="AudioStreamPlayer" parent="SFXPool"]

@@ -152,6 +152,7 @@ avoidance_enabled = true
 neighbor_distance = 40.0
 max_speed = 200.0
 avoidance_priority = 0.45
+debug_enabled = true
 debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
@@ -162,7 +163,7 @@ attack_range_area_path = NodePath("../../AttackArea")
 wind_up_duration = 0.2
 
 [node name="ChaseState" parent="StateMachine" instance=ExtResource("4_md484")]
-speed = 100
+speed = 200
 
 [node name="DamageState" parent="StateMachine" instance=ExtResource("5_md484")]
 

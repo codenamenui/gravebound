@@ -35,20 +35,31 @@ var selected_perks: Array[Perk] = []
 @onready var close_button: Button = $CloseButton
 
 var perk_displays: Array[PerkDisplay] = []
-var is_paused: bool = false
 
 signal perk_selected(perk: Perk)
 signal selection_closed()
 
+func get_all_buttons(node: Node) -> Array:
+	var buttons = []
+	for child in node.get_children():
+		if child is Button:
+			buttons.append(child)
+		buttons += get_all_buttons(child)
+	return buttons
+	
 func _ready():
+	for button in get_all_buttons(self):
+		button.pressed.connect(func(): AudioManager.play_ui_sound("button_click"))
+		button.mouse_entered.connect(func(): AudioManager.play_ui_sound("button_hover"))
+		
 	_initialize_perks()
 	_setup_ui()
 	hide()
 
-func _input(event):
-	# Emergency escape with ESC key
-	if visible and event.is_action_pressed("ui_cancel"):
-		_close_selection()
+#func _exit_tree():
+	## Clean up when the node is about to be freed
+	#if is_paused:
+		#_unpause_game()
 
 func _initialize_perks():
 	available_perks.append(Perk.new("dmg_bonus_small", "Minor Damage", "Increases your base damage by a small amount", "res://icons/damage_small.png", 25.0, "damage_bonus", 5.0))
@@ -100,26 +111,12 @@ func show_perk_selection(p_player: Node):
 	_update_perk_displays()
 	show()
 	
-	# Only pause if we have valid perk displays and player
-	if selected_perks.size() > 0 and player:
-		_pause_game()
-	else:
-		print("Warning: Perk selection failed, not pausing game")
-
-func _pause_game():
-	get_tree().paused = true
-	is_paused = true
-
-func _unpause_game():
-	if is_paused:
-		get_tree().paused = false
-		is_paused = false
-
 func _close_selection():
-	_unpause_game()
 	hide()
 	selection_closed.emit()
-	SceneManager.transition_to_state(GameData.GameState.PLAYING)
+	# Only call SceneManager if it exists and is valid
+	if is_instance_valid(SceneManager) and SceneManager.has_method("transition_to_state"):
+		SceneManager.transition_to_state(GameData.GameState.PLAYING)
 
 func _select_random_perks(count: int) -> Array[Perk]:
 	var result: Array[Perk] = []
@@ -182,13 +179,22 @@ func _on_perk_selected(perk_index: int):
 	
 	perk_selected.emit(selected_perk)
 	
-	# Short delay then close
-	await get_tree().create_timer(0.3).timeout
+	# Short delay then close - use safer timer approach
+	await _safe_timer(0.3)
 	_close_selection()
 
+func _safe_timer(duration: float):
+	# Create a safe timer that handles tree being null
+	var tree = get_tree()
+	if tree:
+		await tree.create_timer(duration).timeout
+	else:
+		# Fallback if tree is null - just wait a frame
+		await get_tree().process_frame
+
 func _apply_perk_to_player(perk: Perk):
-	if not player:
-		print("Error: No player reference!")
+	if not player or not is_instance_valid(player):
+		print("Error: No valid player reference!")
 		return
 	
 	match perk.effect_type:

@@ -21,6 +21,7 @@ var speed_multiplier: float = 1.0  # For skill effects - don't change this
 var current_skill = null
 var current_ba = -1
 var current_dash = 0
+var is_walking_sfx_playing: bool = false
 
 # Existing additive bonuses
 var additional_damage: float = 0.0
@@ -36,6 +37,11 @@ var damage_reduction: float = 0.0  # Flat damage reduction
 var damage_resistance: float = 1.0  # Multiplicative damage reduction (1.0 = no resistance, 0.8 = 20% less damage)
 var lifesteal_percent: float = 0.0  # 0.0 to 1.0 (0% to 100%)
 var max_dash_bonus: int = 0  # Additional dashes beyond base 3
+
+# Add these variables at the top of your script
+var footstep_timer: float = 0.0
+var footstep_interval: float = 0.25
+var was_walking: bool = false
 
 @onready var character_sprite_component: CharacterSpriteComponent = $CharacterSpriteComponent
 @onready var health_component: HealthComponent = $HealthComponent
@@ -110,8 +116,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		if ba_timer.is_stopped():
 			ba_timer.start(ba_time)
-		if current_ba == 4:
-			ba_timer.start(1.2)
+		if current_ba == 1:  # Changed from 4 to 1
+			ba_timer.start(ba_time)
 			current_ba = -1
 		if ba_timer.time_left > 0:
 			current_ba += 1
@@ -153,9 +159,23 @@ func _update_animation():
 	
 	if velocity.length() > 10.0:
 		character_sprite_component.play_walk()
-		pass
+		
+		# Handle footstep sound timing
+		if not was_walking:
+			# Just started walking, play sound immediately
+			play_sfx("player_walk")
+			footstep_timer = footstep_interval
+			was_walking = true
+		else:
+			# Continue walking, check timer
+			footstep_timer -= get_process_delta_time()
+			if footstep_timer <= 0.0:
+				play_sfx("player_walk")
+				footstep_timer = footstep_interval
 	else:
 		character_sprite_component.play_idle()
+		was_walking = false
+		footstep_timer = 0.0
 		
 func _on_skill_executed(skill: BaseSkill) -> void:
 	is_attacking = true
@@ -218,6 +238,9 @@ func take_damage(damage: int):
 	if is_invincible:
 		return
 	
+	# Play hurt sound
+	play_sfx("player_hurt")
+	
 	emit_signal("took_damage")
 	
 	if hit_timer.timeout.is_connected(_on_hit_timer_timeout):
@@ -241,6 +264,9 @@ func deal_damage_to_enemy(base_damage: float) -> float:
 			health_component.heal(int(heal_amount))
 	
 	return total_damage
+
+func play_sfx(sound_name: String):
+	AudioManager.play_sfx(sound_name)
 
 func _on_hit_timer_timeout():
 	is_hit = false
@@ -342,6 +368,7 @@ func reset_player():
 	current_skill = null
 	current_ba = -1
 	current_dash = 0
+	is_walking_sfx_playing = false
 	
 	velocity = Vector2.ZERO
 	

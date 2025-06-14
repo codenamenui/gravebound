@@ -792,6 +792,7 @@ anticipation_time = 0.02
 contact_time = 0.4
 recovery_time = 0.2
 base_damage = 10.0
+sfx_name = "enemy_melee_attack"
 projectile_speed = 0.0
 
 [node name="Hitbox" parent="Skill" index="1"]

@@ -137,6 +137,7 @@ func hide_all_panels(edge_case: bool = false):
 		game_world.visible = true
 
 func show_main_menu():
+	AudioManager.play_music("menu")
 	var main_menu = ui_panels.get("MainMenu")
 	if is_instance_valid(main_menu):
 		main_menu.visible = true
@@ -158,9 +159,13 @@ func show_settings():
 				ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
 		else:
 			settings.set_process_mode(Node.PROCESS_MODE_INHERIT)
-			ui_layer.set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
 
 func show_game_hud():
+	if GameData.current_wave > 10:
+		AudioManager.play_music("gameplay_intense")
+	else:
+		AudioManager.play_music("gameplay")
+	
 	var game_hud = ui_panels.get("GameHUD")
 	if is_instance_valid(game_hud):
 		game_hud.visible = true
@@ -181,7 +186,9 @@ func show_perks_panel():
 		game_world.visible = true
 		game_world.set_process_mode(Node.PROCESS_MODE_DISABLED)
 	
-	perks_panel._select_random_perks(3)
+	AudioManager.play_music("perk_selection")
+	
+	perks_panel.set_process_mode(Node.PROCESS_MODE_INHERIT)
 	perks_panel.show_perk_selection(perks_panel.player)
 	
 func show_game_over_screen():
@@ -239,6 +246,7 @@ func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		match GameData.current_state:
 			GameData.GameState.PLAYING:
+				AudioManager.play_ui_sound("menu_open")
 				transition_to_state(GameData.GameState.PAUSED)
 				return
 

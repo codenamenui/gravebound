@@ -1262,6 +1262,7 @@ recovery_time = 0.3
 hitbox_lifetime = 1.5
 base_damage = 50.0
 sprite_offset = Vector2(-12, -35)
+sfx_name = "enemy_mage_attack"
 display_hitbox = true
 is_projectile = true
 projectile_speed = 200.0

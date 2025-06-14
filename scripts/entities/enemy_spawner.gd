@@ -130,7 +130,7 @@ func start_waves():
 	if enemy_scenes.is_empty():
 		push_warning("No enemy scenes configured for WaveEnemySpawner")
 		return
-
+	
 	current_wave_index = 0
 	current_wave_enemies_spawned = 0
 	current_enemies_alive = 0
@@ -256,6 +256,8 @@ func _start_wave(wave_index: int):
 		all_waves_completed.emit()
 		return
 	
+	AudioManager.play_sfx("wave_start")
+	
 	current_wave_index = wave_index
 	current_wave_enemies_spawned = 0
 	waiting_for_wave_clear = false
@@ -362,14 +364,17 @@ func get_current_enemy_count() -> int:
 func _complete_current_wave():
 	waiting_for_wave_clear = false
 	
+	
 	# Emit wave completed signal
 	SceneManager.transition_to_state(GameData.GameState.PERK_SELECTION)
 	wave_completed.emit(current_wave_index + 1)
 
+	
 	if infinite_waves or current_wave_index < total_waves - 1:
 		# Don't automatically start next wave - wait for continue_waves()
 		is_paused = true
 		waiting_to_continue = true
+		AudioManager.play_sfx("wave_complete")
 		print("Wave ", current_wave_index + 1, " completed. Waiting for perk selection...")
 	else:
 		update_wave_display()

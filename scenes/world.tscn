@@ -59,10 +59,14 @@ script = ExtResource("6_i7141")
 enemy_scenes = Array[PackedScene]([ExtResource("10_e3hyu"), ExtResource("9_w7kh3"), ExtResource("12_o8fc1"), ExtResource("11_jhx03")])
 enemy_container = NodePath("../EnemyContainer")
 camera = NodePath("../Camera2D")
+time_between_waves = 3.0
 infinite_waves = true
+base_enemies_per_wave = 3
+base_spawn_interval = 1.0
 base_max_enemies_alive = 5
 absolute_max_enemies_alive = 50
-enemy_introduction_waves = Array[int]([1, 5, 8, 12])
+enemy_introduction_waves = Array[int]([1, 2, 3, 4])
+probability_shift_speed = 0.1
 difficulty_spike_waves = Array[int]([5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]

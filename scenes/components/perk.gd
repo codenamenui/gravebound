@@ -14,8 +14,6 @@ var perk_index: int
 signal perk_clicked(perk_index: int)
 
 func _ready():
-	$".".set_process_mode(Node.PROCESS_MODE_WHEN_PAUSED)
-
 	if button:
 		button.pressed.connect(_on_button_pressed)
 		button.mouse_entered.connect(_on_mouse_entered)
@@ -98,6 +96,7 @@ func get_perk_color(perk: PerkSelectionUI.Perk) -> Color:
 			return Color.WHITE
 
 func _on_button_pressed():
+	print('dwadw')
 	perk_clicked.emit(perk_index)
 
 func _on_mouse_entered():
