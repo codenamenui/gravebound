@@ -52,7 +52,7 @@ func load_audio_resources():
 		"enemy_range_attack": preload("res://audio/sfx/enemy_range_attack.mp3"),
 		"enemy_melee_attack": preload("res://audio/sfx/enemy_melee_attack.mp3"),
 		"enemy_mage_attack": preload("res://audio/sfx/enemy_mage_attack.mp3"),
-		"enemy_cat_attack": preload("res://audio/sfx/enemy_cat_attack.ogg"),
+		"enemy_cat_attack": preload("res://audio/sfx/enemy_cat_attack.mp3"),
 		"pickup_collect": preload("res://audio/sfx/pickup_collect.mp3"),
 		"wave_complete": preload("res://audio/sfx/wave_complete.mp3"),
 		"wave_start": preload("res://audio/sfx/wave_start.mp3"),
