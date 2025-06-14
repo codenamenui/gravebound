@@ -474,9 +474,8 @@ offset_bottom = 40.0
 visible = false
 script = ExtResource("17_rysoc")
 
-[node name="EnemySpawn" parent="GameWorld" index="3" node_paths=PackedStringArray("score_label", "player")]
+[node name="EnemySpawn" parent="GameWorld" index="3" node_paths=PackedStringArray("score_label")]
 score_label = NodePath("../../UI/GameHUD/PlayerInformation/Score")
-player = NodePath("../Player")
 
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]

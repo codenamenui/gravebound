@@ -78,10 +78,10 @@ shader_parameter/red_intensity = 0.7
 shader_parameter/red_color = Color(1, 0.3, 0.3, 1)
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
+y_sort_enabled = true
 collision_layer = 2
 collision_mask = 9
 motion_mode = 1
-wall_min_slide_angle = 0.0
 script = ExtResource("1_c4w8v")
 
 [node name="Skill" type="Node" parent="."]
