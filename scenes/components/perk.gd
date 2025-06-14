@@ -98,6 +98,7 @@ func get_perk_color(perk: PerkSelectionUI.Perk) -> Color:
 			return Color.WHITE
 
 func _on_button_pressed():
+	print('dwa')
 	perk_clicked.emit(perk_index)
 
 func _on_mouse_entered():

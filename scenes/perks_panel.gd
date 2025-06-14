@@ -119,6 +119,7 @@ func _close_selection():
 	_unpause_game()
 	hide()
 	selection_closed.emit()
+	SceneManager.transition_to_state(GameData.GameState.PLAYING)
 
 func _select_random_perks(count: int) -> Array[Perk]:
 	var result: Array[Perk] = []
