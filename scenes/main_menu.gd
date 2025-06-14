@@ -1,6 +1,7 @@
 extends Control
 
 func _on_play_pressed() -> void:
+	self.hide() # Hide the entire MainMenu (including CanvasLayers)
 	SceneManager.transition_to_state(GameData.GameState.PLAYING)
 
 func _on_settings_pressed() -> void:
