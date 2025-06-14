@@ -32,32 +32,38 @@ func setup_sfx_pool():
 
 func load_audio_resources():
 	music_tracks = {
-		#"menu": preload("res://audio/music/menu_music.ogg"),
+		"menu": preload("res://audio/music/main_menu.mp3"),
 		"gameplay": preload("res://audio/music/gameplay.mp3"),
-		#"gameplay_intense": preload("res://audio/music/gameplay_intense.ogg"),
-		#"perk_selection": preload("res://audio/music/perk_selection.ogg"),
-		#"game_over": preload("res://audio/music/game_over.ogg")
+		"gameplay_intense": preload("res://audio/music/gameplay_intense.mp3"),
+		"perk_selection": preload("res://audio/music/perk_selection.mp3"),
+		"game_over": preload("res://audio/music/game_over.mp3")
 	}
 	
 	sfx_sounds = {
-		#"player_shoot": preload("res://audio/sfx/player_shoot.ogg"),
-		#"player_hurt": preload("res://audio/sfx/player_hurt.ogg"),
-		#"player_walk": preload("res://audio/sfx/player_walk.ogg"),
-		#"enemy_death": preload("res://audio/sfx/enemy_death.ogg"),
-		#"enemy_spawn": preload("res://audio/sfx/enemy_spawn.ogg"),
-		#"pickup_collect": preload("res://audio/sfx/pickup_collect.ogg"),
-		#"wave_complete": preload("res://audio/sfx/wave_complete.ogg"),
-		#"wave_start": preload("res://audio/sfx/wave_start.ogg"),
-		#"explosion": preload("res://audio/sfx/explosion.ogg"),
-		#"perk_select": preload("res://audio/sfx/perk_select.ogg")
+		"player_shoot": preload("res://audio/sfx/player_shoot.wav"),
+		"player_short_slash": preload("res://audio/sfx/short_slash.mp3"),
+		"player_heavy_downlash": preload("res://audio/sfx/heavy_downlash.mp3"),
+		"player_hurt": preload("res://audio/sfx/player_hurt.mp3"),
+		"player_walk": preload("res://audio/sfx/player_walk.ogg"),
+		"enemy_death": preload("res://audio/sfx/enemy_death.wav"),
+		"enemy_spawn": preload("res://audio/sfx/enemy_spawn.mp3"),
+		"enemy_range_attack": preload("res://audio/sfx/enemy_range_attack.mp3"),
+		"enemy_melee_attack": preload("res://audio/sfx/enemy_melee_attack.mp3"),
+		"enemy_mage_attack": preload("res://audio/sfx/enemy_mage_attack.mp3"),
+		"enemy_cat_attack": preload("res://audio/sfx/enemy_cat_attack.ogg"),
+		"pickup_collect": preload("res://audio/sfx/pickup_collect.mp3"),
+		"wave_complete": preload("res://audio/sfx/wave_complete.mp3"),
+		"wave_start": preload("res://audio/sfx/wave_start.mp3"),
+		"explosion": preload("res://audio/sfx/explosion.mp3"),
+		"perk_select": preload("res://audio/sfx/perk_select.mp3")
 	}
 	
 	ui_sounds = {
-		#"button_click": preload("res://audio/ui/button_click.ogg"),
-		#"button_hover": preload("res://audio/ui/button_hover.ogg"),
-		#"menu_open": preload("res://audio/ui/menu_open.ogg"),
-		#"menu_close": preload("res://audio/ui/menu_close.ogg"),
-		#"error": preload("res://audio/ui/error.ogg")
+		"button_click": preload("res://audio/ui/button_click.mp3"),
+		"button_hover": preload("res://audio/ui/button_hover.mp3"),
+		"menu_open": preload("res://audio/ui/menu_open.mp3"),
+		"menu_close": preload("res://audio/ui/menu_close.mp3"),
+		"error": preload("res://audio/ui/error.mp3")
 	}
 
 func play_music(track_name: String, fade_duration: float = 1.0):
