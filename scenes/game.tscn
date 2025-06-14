@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=21 format=3 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="5_gee14"]
 [ext_resource type="Script" uid="uid://cq80vmh053868" path="res://scenes/settings.gd" id="5_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="6_0tnpc"]
+[ext_resource type="Theme" uid="uid://bk7i5lqjy3gy" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
@@ -52,9 +53,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -104.0
-offset_top = -198.5
+offset_top = -218.5
 offset_right = 104.0
-offset_bottom = -170.5
+offset_bottom = -190.5
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_rysoc")
@@ -68,14 +69,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -134.0
-offset_top = -71.0
-offset_right = 134.0
-offset_bottom = 71.0
+offset_left = -62.0
+offset_top = -26.85
+offset_right = 62.0
+offset_bottom = 27.15
 grow_horizontal = 2
 grow_vertical = 2
-text = "PLAY
-"
+theme = ExtResource("6_ssvqc")
+text = "Play"
+metadata/_edit_lock_ = true
 
 [node name="Settings" type="Button" parent="UI/MainMenu"]
 layout_mode = 1
@@ -84,14 +86,31 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -134.0
-offset_top = 123.5
-offset_right = 134.0
-offset_bottom = 265.5
+offset_left = -62.0
+offset_top = 32.5
+offset_right = 62.0
+offset_bottom = 86.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "OPTIONS
-"
+theme = ExtResource("6_ssvqc")
+text = "Options"
+metadata/_edit_lock_ = true
+
+[node name="Exit" type="Button" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = 92.5
+offset_right = 62.0
+offset_bottom = 146.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_ssvqc")
+text = "Exit"
 
 [node name="Settings" type="Control" parent="UI"]
 visible = false
@@ -372,7 +391,7 @@ layout_mode = 2
 text = "BACK TO MAIN MENU
 "
 
-[node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
+[node name="PerksPanel" type="Control" parent="UI"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
