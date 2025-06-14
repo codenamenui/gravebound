@@ -43,6 +43,7 @@ func load_audio_resources():
 	
 	sfx_sounds = {
 		"player_shoot": preload("res://audio/sfx/player_shoot.wav"),
+		"player_dash": preload("res://audio/sfx/player_dash.mp3"),
 		"player_short_slash": preload("res://audio/sfx/short_slash.mp3"),
 		"player_heavy_downlash": preload("res://audio/sfx/heavy_downlash.mp3"),
 		"player_hurt": preload("res://audio/sfx/player_hurt.mp3"),
