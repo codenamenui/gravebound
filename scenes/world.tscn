@@ -56,15 +56,14 @@ tile_set = ExtResource("4_i7141")
 
 [node name="EnemySpawn" type="Node2D" parent="." node_paths=PackedStringArray("enemy_container", "camera")]
 script = ExtResource("6_i7141")
-enemy_scenes = Array[PackedScene]([ExtResource("10_e3hyu"), ExtResource("9_w7kh3"), ExtResource("11_jhx03"), ExtResource("12_o8fc1")])
-enemy_weights = Array[float]([1.0, 1.0, 1.0, 1.0])
+enemy_scenes = Array[PackedScene]([ExtResource("10_e3hyu"), ExtResource("9_w7kh3"), ExtResource("12_o8fc1"), ExtResource("11_jhx03")])
 enemy_container = NodePath("../EnemyContainer")
 camera = NodePath("../Camera2D")
-spawn_distance_from_camera = 0.0
-time_between_waves = 0.0
-max_enemies_alive = 20
-enemies_per_wave = 10
-spawn_interval = 0.0
+infinite_waves = true
+base_max_enemies_alive = 5
+absolute_max_enemies_alive = 50
+enemy_introduction_waves = Array[int]([1, 5, 8, 12])
+difficulty_spike_waves = Array[int]([5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.101961, 0.14902, 0.25098, 1)

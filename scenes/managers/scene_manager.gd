@@ -1,7 +1,7 @@
 extends Node
 
 var ui_layer: CanvasLayer
-var game_world: Node2D
+var game_world: GameWorld
 var game_scene: Node
 var ui_panels = {}
 var is_initialized = false
@@ -200,10 +200,7 @@ func prepare_game_world():
 	
 	get_tree().paused = false
 	
-	if game_world.has_node("WaveManager"):
-		var wave_manager = game_world.get_node("WaveManager")
-		if wave_manager and wave_manager.has_method("start_wave"):
-			wave_manager.start_wave(GameData.current_wave)
+	game_world.EnemySpawner.start_waves()
 
 func enable_game_world_recursively(node: Node):
 	if not is_instance_valid(node):
