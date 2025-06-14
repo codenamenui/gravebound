@@ -609,13 +609,14 @@ animations = [{
 }]
 
 [node name="Enemy" instance=ExtResource("1_in750")]
+points = 15
 
 [node name="Skill" parent="." index="0"]
 skill_name = "slash"
 animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.4
-base_damage = 15.0
+base_damage = 40.0
 sfx_name = "enemy_cat_attack"
 projectile_speed = 0.0
 
@@ -652,3 +653,6 @@ position = Vector2(-1, -6)
 sprite_frames = SubResource("SpriteFrames_dl6p7")
 animation = &"walk"
 frame_progress = 0.961916
+
+[node name="HealthComponent" parent="." index="5"]
+max_health = 60

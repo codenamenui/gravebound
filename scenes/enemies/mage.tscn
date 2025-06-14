@@ -1253,6 +1253,7 @@ animations = [{
 }]
 
 [node name="Enemy" instance=ExtResource("1_ip61i")]
+points = 30
 
 [node name="Skill" parent="." index="0"]
 skill_name = "orb"

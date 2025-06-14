@@ -17,31 +17,39 @@ var current_direction: Vector2 = Vector2.ZERO
 var is_hit: bool = false
 var is_attacking: bool = false
 var is_dying: bool = false
-var speed_multiplier: float = 1.0  # For skill effects - don't change this
+var speed_multiplier: float = 1.0
 var current_skill = null
 var current_ba = -1
 var current_dash = 0
 var is_walking_sfx_playing: bool = false
 
-# Existing additive bonuses
 var additional_damage: float = 0.0
 var speed_bonus: float = 0.0
 var health_bonus: int = 0
 var max_health_bonus: int = 0
 
-# New multiplicative and bonus stats
 var damage_multiplier: float = 1.0
-var movement_speed_multiplier: float = 1.0  # New multiplier for movement speed bonuses
+var movement_speed_multiplier: float = 1.0
 var health_multiplier: float = 1.0
-var damage_reduction: float = 0.0  # Flat damage reduction
-var damage_resistance: float = 1.0  # Multiplicative damage reduction (1.0 = no resistance, 0.8 = 20% less damage)
-var lifesteal_percent: float = 0.0  # 0.0 to 1.0 (0% to 100%)
-var max_dash_bonus: int = 0  # Additional dashes beyond base 3
+var damage_reduction: float = 0.0
+var damage_resistance: float = 1.0
+var lifesteal_percent: float = 0.0
+var max_dash_bonus: int = 0
 
-# Add these variables at the top of your script
 var footstep_timer: float = 0.0
 var footstep_interval: float = 0.25
 var was_walking: bool = false
+
+var player_level: int = 1
+
+var stat_growth = {
+	"base_damage": 2.0,
+	"max_health": 5,
+	"movement_speed": 3.0,
+	"damage_multiplier": 0.02,
+	"speed_multiplier": 0.015,
+	"damage_reduction": 0.5
+}
 
 @onready var character_sprite_component: CharacterSpriteComponent = $CharacterSpriteComponent
 @onready var health_component: HealthComponent = $HealthComponent
@@ -116,14 +124,13 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		if ba_timer.is_stopped():
 			ba_timer.start(ba_time)
-		if current_ba == 1:  # Changed from 4 to 1
+		if current_ba == 1:
 			ba_timer.start(ba_time)
 			current_ba = -1
 		if ba_timer.time_left > 0:
 			current_ba += 1
 			attack_index = current_ba
 	
-	# Fixed dash implementation - limit to 3 + bonus dashes
 	var max_dashes = 3 + max_dash_bonus
 	var can_dash = true
 	if Input.is_action_just_pressed("dash"):
@@ -134,7 +141,7 @@ func _process(delta: float) -> void:
 			current_dash += 1
 		if current_dash > max_dashes:
 			can_dash = false
-			current_dash = max_dashes  # Cap at maximum
+			current_dash = max_dashes
 			
 	var action_pressed = {
 		"skill_1": Input.is_action_just_pressed("skill_1"),
@@ -160,14 +167,11 @@ func _update_animation():
 	if velocity.length() > 10.0:
 		character_sprite_component.play_walk()
 		
-		# Handle footstep sound timing
 		if not was_walking:
-			# Just started walking, play sound immediately
 			play_sfx("player_walk")
 			footstep_timer = footstep_interval
 			was_walking = true
 		else:
-			# Continue walking, check timer
 			footstep_timer -= get_process_delta_time()
 			if footstep_timer <= 0.0:
 				play_sfx("player_walk")
@@ -209,7 +213,6 @@ func handle_movement(direction: Vector2 = Vector2()):
 		current_direction = direction.normalized()
 		last_direction = current_direction
 		character_sprite_component.set_direction(last_direction)
-		# Apply both additive and multiplicative speed bonuses
 		var current_speed = ((speed + speed_bonus) * movement_speed_multiplier) * speed_multiplier
 		velocity = current_direction * current_speed
 	else:
@@ -230,7 +233,6 @@ func take_damage(damage: int):
 	if is_dying:
 		return
 	
-	# Apply damage reduction and resistance
 	var final_damage = max(1, (damage - damage_reduction) * damage_resistance)
 	
 	var is_invincible = health_component.take_damage(int(final_damage))
@@ -238,7 +240,6 @@ func take_damage(damage: int):
 	if is_invincible:
 		return
 	
-	# Play hurt sound
 	play_sfx("player_hurt")
 	
 	emit_signal("took_damage")
@@ -257,7 +258,6 @@ func take_damage(damage: int):
 func deal_damage_to_enemy(base_damage: float) -> float:
 	var total_damage = (base_damage + additional_damage) * damage_multiplier
 	
-	# Apply lifesteal if we have any
 	if lifesteal_percent > 0.0:
 		var heal_amount = total_damage * lifesteal_percent
 		if health_component.has_method("heal"):
@@ -282,7 +282,6 @@ func _on_health_component_health_depleted() -> void:
 	character_sprite_component.play_death()
 	SceneManager.transition_to_state(GameData.GameState.GAME_OVER)
 
-# Existing additive bonus functions
 func add_damage_bonus(bonus: float):
 	additional_damage += bonus
 
@@ -299,7 +298,6 @@ func add_max_health_bonus(bonus: int):
 	if health_component.has_method("add_max_health"):
 		health_component.add_max_health(bonus)
 
-# New multiplicative and special bonus functions
 func add_damage_multiplier(multiplier: float):
 	damage_multiplier *= multiplier
 
@@ -308,7 +306,6 @@ func add_movement_speed_multiplier(multiplier: float):
 
 func add_health_multiplier(multiplier: float):
 	health_multiplier *= multiplier
-	# Apply to current and max health if methods exist
 	if health_component.has_method("multiply_health"):
 		health_component.multiply_health(multiplier)
 
@@ -316,17 +313,15 @@ func add_damage_reduction(reduction: float):
 	damage_reduction += reduction
 
 func add_damage_resistance(resistance_multiplier: float):
-	# Stack resistance multiplicatively (0.8 * 0.9 = 0.72 = 28% total reduction)
 	damage_resistance *= resistance_multiplier
 
 func add_lifesteal(percent: float):
 	lifesteal_percent += percent
-	lifesteal_percent = clamp(lifesteal_percent, 0.0, 1.0)  # Cap at 100%
+	lifesteal_percent = clamp(lifesteal_percent, 0.0, 1.0)
 
 func add_dash_count_bonus(bonus: int):
 	max_dash_bonus += bonus
 
-# Getter functions for total stats
 func get_total_damage() -> float:
 	return (additional_damage) * damage_multiplier
 
@@ -336,6 +331,76 @@ func get_total_speed() -> float:
 func get_max_dashes() -> int:
 	return 3 + max_dash_bonus
 
+func level_up(level_amount: int = 1):
+	for i in range(level_amount):
+		player_level += 1
+		
+		_apply_base_level_bonuses()
+		
+		var num_random_bonuses = randi_range(1, 2)
+		for j in range(num_random_bonuses):
+			_apply_random_level_bonus()
+		
+		_play_level_up_effects()
+		
+		print("Level Up! Now level ", player_level)
+
+func _apply_base_level_bonuses():
+	additional_damage += stat_growth.base_damage
+	add_max_health_bonus(stat_growth.max_health)
+	speed_bonus += stat_growth.movement_speed
+
+func _apply_random_level_bonus():
+	var random_bonuses = [
+		"damage_mult",
+		"speed_mult", 
+		"damage_reduction",
+		"health_bonus",
+		"lifesteal",
+		"dash_bonus"
+	]
+	
+	var chosen_bonus = random_bonuses[randi() % random_bonuses.size()]
+	
+	match chosen_bonus:
+		"damage_mult":
+			add_damage_multiplier(1.0 + stat_growth.damage_multiplier)
+			print("  + Damage multiplier increased!")
+			
+		"speed_mult":
+			add_movement_speed_multiplier(1.0 + stat_growth.speed_multiplier)
+			print("  + Movement speed multiplier increased!")
+			
+		"damage_reduction":
+			add_damage_reduction(stat_growth.damage_reduction)
+			print("  + Damage reduction improved!")
+			
+		"health_bonus":
+			var health_boost = randi_range(8, 15)
+			add_health_bonus(health_boost)
+			print("  + Health restored by ", health_boost, "!")
+			
+		"lifesteal":
+			var lifesteal_boost = randf_range(0.01, 0.03)
+			add_lifesteal(lifesteal_boost)
+			print("  + Lifesteal increased by ", lifesteal_boost * 100, "%!")
+			
+		"dash_bonus":
+			if player_level % 5 == 0:
+				add_dash_count_bonus(1)
+				print("  + Extra dash charge gained!")
+
+func _play_level_up_effects():
+	play_sfx("level_up")
+	_create_level_up_particle_effect()
+
+func _create_level_up_particle_effect():
+	if has_node("LevelUpEffect"):
+		$LevelUpEffect.restart()
+
+func get_current_level() -> int:
+	return player_level
+
 func reset_player():
 	global_position = initial_position
 	
@@ -344,13 +409,11 @@ func reset_player():
 	hit_timer_duration = base_hit_timer_duration
 	ba_time = base_ba_time
 	
-	# Reset additive bonuses
 	additional_damage = 0.0
 	speed_bonus = 0.0
 	health_bonus = 0
 	max_health_bonus = 0
 	
-	# Reset multiplicative bonuses
 	damage_multiplier = 1.0
 	movement_speed_multiplier = 1.0
 	health_multiplier = 1.0
@@ -358,6 +421,8 @@ func reset_player():
 	damage_resistance = 1.0
 	lifesteal_percent = 0.0
 	max_dash_bonus = 0
+	
+	player_level = 1
 	
 	last_direction = Vector2(0, 1)
 	current_direction = Vector2.ZERO

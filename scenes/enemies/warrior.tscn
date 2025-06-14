@@ -785,6 +785,7 @@ animations = [{
 }]
 
 [node name="Enemy" instance=ExtResource("1_uo8vp")]
+points = 20
 
 [node name="Skill" parent="." index="0"]
 animation_speed = 0.5
@@ -827,6 +828,7 @@ frame = 13
 
 [node name="HealthComponent" parent="." index="5"]
 position = Vector2(2, -9)
+max_health = 120
 
 [node name="DamageNumber" parent="." index="6"]
 metadata/_edit_use_anchors_ = true

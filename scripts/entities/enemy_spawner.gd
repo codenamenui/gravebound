@@ -48,6 +48,10 @@ signal all_waves_completed()
 @export var difficulty_spike_waves: Array[int] = [5, 10, 15]  # Waves with extra difficulty
 @export var spike_multiplier: float = 1.5
 
+@export_group("Level Up System")
+@export var base_points_per_level: int = 100
+@export var points_scaling_factor: float = 1.1
+
 # Runtime variables
 var current_wave_index: int = 0
 var current_wave_enemies_spawned: int = 0
@@ -55,6 +59,7 @@ var current_enemies_alive: int = 0
 var wave_active: bool = false
 var waiting_for_wave_clear: bool = false
 var current_score: int = 0
+var wave_start_score: int = 0
 var id = 0
 
 var spawn_timer: Timer
@@ -152,6 +157,7 @@ func reset_spawner():
 	current_wave_enemies_spawned = 0
 	current_enemies_alive = 0
 	current_score = 0
+	wave_start_score = 0
 	id = 0
 	waiting_for_wave_clear = false
 	
@@ -262,6 +268,7 @@ func _start_wave(wave_index: int):
 	current_wave_enemies_spawned = 0
 	waiting_for_wave_clear = false
 	wave_active = true
+	wave_start_score = current_score
 	
 	# Calculate properties for this wave
 	_calculate_wave_properties(wave_index)
@@ -364,14 +371,17 @@ func get_current_enemy_count() -> int:
 func _complete_current_wave():
 	waiting_for_wave_clear = false
 	
+	var wave_points = current_score - wave_start_score
+	var level_amount = _calculate_level_amount(wave_points)
 	
-	# Emit wave completed signal
+	if player and player.has_method("level_up"):
+		player.level_up(level_amount)
+	
 	SceneManager.transition_to_state(GameData.GameState.PERK_SELECTION)
 	wave_completed.emit(current_wave_index + 1)
 
 	
 	if infinite_waves or current_wave_index < total_waves - 1:
-		# Don't automatically start next wave - wait for continue_waves()
 		is_paused = true
 		waiting_to_continue = true
 		AudioManager.play_sfx("wave_complete")
@@ -380,7 +390,10 @@ func _complete_current_wave():
 		update_wave_display()
 		all_waves_completed.emit()
 
-# Add these new public functions:
+func _calculate_level_amount(points: int) -> int:
+	var points_needed = base_points_per_level * pow(points_scaling_factor, current_wave_index)
+	return max(1, int(points / points_needed))
+
 func pause_waves():
 	"""Pause wave spawning (can be called anytime)"""
 	is_paused = true
@@ -480,7 +493,6 @@ func _is_position_walkable(pos: Vector2) -> bool:
 	
 	return distance_to_nav <= 0
 
-# Public API functions
 func set_score(score: int):
 	current_score = score
 	update_score_display()

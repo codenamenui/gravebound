@@ -731,6 +731,7 @@ animations = [{
 }]
 
 [node name="Enemy" instance=ExtResource("1_cvuhk")]
+points = 20
 
 [node name="Skill" parent="." index="0"]
 skill_name = "shoot"
@@ -779,6 +780,7 @@ animation = &"walk"
 
 [node name="HealthComponent" parent="." index="5"]
 position = Vector2(-1, -18)
+max_health = 80
 
 [node name="AttackState" parent="StateMachine" index="0"]
 wind_up_duration = 0.1

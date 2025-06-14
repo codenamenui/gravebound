@@ -66,9 +66,10 @@ base_max_enemies_alive = 5
 absolute_max_enemies_alive = 50
 probability_shift_speed = 0.1
 difficulty_spike_waves = Array[int]([5, 10, 15, 20, 25, 30, 35, 40, 45, 50])
+base_points_per_level = 20
+points_scaling_factor = 1.05
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
 color = Color(0.101961, 0.14902, 0.25098, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_kqs1s")]
