@@ -78,8 +78,8 @@ shader_parameter/red_intensity = 0.7
 shader_parameter/red_color = Color(1, 0.3, 0.3, 1)
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
+z_index = 1
 collision_layer = 2
-collision_mask = 9
 motion_mode = 1
 script = ExtResource("1_c4w8v")
 
