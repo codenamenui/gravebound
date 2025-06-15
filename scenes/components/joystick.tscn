@@ -9,11 +9,11 @@
 script = ExtResource("1_ii2vn")
 
 [node name="Ring" type="Sprite2D" parent="."]
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("2_luu5j")
 
 [node name="Knob" type="Sprite2D" parent="."]
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.35, 0.35)
 texture = ExtResource("3_g1lyw")
 script = ExtResource("4_g4kk1")
 
