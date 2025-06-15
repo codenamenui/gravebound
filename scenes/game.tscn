@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cg6ofrnh6up5w" path="res://scenes/managers/game_data.tscn" id="3_iywne"]
 [ext_resource type="Script" uid="uid://qwei4nq02xow" path="res://scenes/main_menu.gd" id="4_iywne"]
 [ext_resource type="PackedScene" uid="uid://7p3caqed67be" path="res://scenes/world.tscn" id="4_lbhrr"]
-[ext_resource type="PackedScene" uid="uid://cfywq0k0a4dsa" path="res://scenes/background.tscn" id="5_5newe"]
+[ext_resource type="PackedScene" path="res://scenes/background.tscn" id="5_5newe"]
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="5_gee14"]
 [ext_resource type="Script" uid="uid://cq80vmh053868" path="res://scenes/settings.gd" id="5_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="6_0tnpc"]
@@ -14,15 +14,15 @@
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
 [ext_resource type="Theme" uid="uid://c7sybxxxgdo5x" path="res://assets/ui/font.tres" id="9_37s47"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
-[ext_resource type="Script" uid="uid://cy5puddudvoyh" path="res://scenes/level.gd" id="10_264po"]
-[ext_resource type="Script" uid="uid://cergd4fda30tf" path="res://scenes/wave_count.gd" id="11_ca42v"]
-[ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
+[ext_resource type="Script" path="res://scenes/level.gd" id="10_264po"]
+[ext_resource type="Script" path="res://scenes/wave_count.gd" id="11_ca42v"]
+[ext_resource type="Script" path="res://scenes/pause_menu.gd" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://dg7db0xjdy4hc" path="res://assets/ui/char_pic.png" id="12_bt5mj"]
-[ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
-[ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
+[ext_resource type="Script" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
+[ext_resource type="Script" path="res://scenes/perks_panel.gd" id="12_trtic"]
 [ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
 [ext_resource type="Texture2D" uid="uid://ddawp54djy8ts" path="res://assets/ui/information.png" id="17_e1j6l"]
-[ext_resource type="Script" uid="uid://c2lfw3b6bu55b" path="res://scenes/world.gd" id="17_rysoc"]
+[ext_resource type="Script" path="res://scenes/world.gd" id="17_rysoc"]
 [ext_resource type="Texture2D" uid="uid://b50fhfl5xo7k1" path="res://assets/ui/information2.png" id="19_pl11u"]
 [ext_resource type="Texture2D" uid="uid://qx6r6qcd8paw" path="res://assets/shaders/light.png" id="20_1kice"]
 
@@ -536,10 +536,13 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -21.5
-offset_right = 21.5
-offset_bottom = 23.0
+offset_left = -36.0
+offset_top = 35.0
+offset_right = 36.0
+offset_bottom = 59.0
 grow_horizontal = 2
+theme = ExtResource("9_37s47")
+theme_override_font_sizes/font_size = 24
 text = "Perks"
 
 [node name="Perk1" parent="UI/PerksPanel" instance=ExtResource("13_ir15t")]
