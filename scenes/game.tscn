@@ -1681,6 +1681,7 @@ metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="UI/MainMenu/Play" to="UI/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="UI/MainMenu" method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/GameHUD/PauseButton" to="UI/GameHUD/PauseButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Play" to="UI/PauseMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/Settings" to="UI/PauseMenu" method="_on_settings_pressed"]
 [connection signal="pressed" from="UI/PauseMenu/ButtonsContainer/MainMenu" to="UI/PauseMenu" method="_on_main_menu_pressed"]
