@@ -107,51 +107,45 @@ metadata/_edit_lock_ = true
 
 [node name="Settings" type="Control" parent="UI"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 800.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_right = 400.0
 offset_bottom = 600.0
+grow_horizontal = 2
 script = ExtResource("5_kvpfn")
 
 [node name="Background" parent="UI/Settings" instance=ExtResource("5_5newe")]
 
 [node name="VBoxContainer" type="Control" parent="UI/Settings"]
-anchors_preset = 0
-offset_left = 362.0
-offset_top = 162.0
-offset_right = 554.0
-offset_bottom = 449.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="AudioSection" type="Control" parent="UI/Settings/VBoxContainer"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = -361.0
-offset_top = -163.0
-offset_right = 443.0
-offset_bottom = 436.0
+offset_left = 3.0
+offset_top = -0.5
+offset_right = 803.0
+offset_bottom = 599.5
 grow_horizontal = 2
 
 [node name="MasterVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 800.0
-offset_bottom = 600.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MasterVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MasterVolumeContainer"]
-z_index = 1
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -74.0
-offset_top = -70.0
-offset_right = 74.0
-offset_bottom = -54.0
+offset_left = -402.0
+offset_top = 200.0
+offset_right = 398.0
+offset_bottom = 254.0
 grow_horizontal = 2
-grow_vertical = 2
 
 [node name="MasterVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/MasterVolumeContainer"]
 layout_mode = 1
@@ -159,29 +153,31 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -69.5
-offset_top = 210.0
 offset_right = 69.5
-offset_bottom = 233.0
+offset_bottom = 23.0
 grow_horizontal = 2
 theme = ExtResource("9_37s47")
 text = "Master Volume"
 
-[node name="MusicVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
-layout_mode = 1
-anchors_preset = 0
-offset_right = 800.0
-offset_bottom = 600.0
-
-[node name="MusicVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MusicVolumeContainer"]
+[node name="MasterVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MasterVolumeContainer"]
+z_index = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -76.0
-offset_top = 280.0
-offset_right = 76.0
-offset_bottom = 296.0
+offset_left = -74.0
+offset_top = 20.0
+offset_right = 74.0
+offset_bottom = 36.0
 grow_horizontal = 2
+
+[node name="MusicVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = -2.0
+offset_top = 250.0
+offset_right = 798.0
+offset_bottom = 304.0
 
 [node name="MusicVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/MusicVolumeContainer"]
 layout_mode = 1
@@ -189,29 +185,30 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -63.0
-offset_top = 260.0
 offset_right = 63.0
-offset_bottom = 283.0
+offset_bottom = 23.0
 grow_horizontal = 2
 theme = ExtResource("9_37s47")
 text = "Music Volume"
 
-[node name="SFXVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
-layout_mode = 1
-anchors_preset = 0
-offset_right = 800.0
-offset_bottom = 600.0
-
-[node name="SFXVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/SFXVolumeContainer"]
+[node name="MusicVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/MusicVolumeContainer"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -74.0
-offset_top = 330.0
-offset_right = 74.0
-offset_bottom = 346.0
+offset_left = -76.0
+offset_top = 20.0
+offset_right = 76.0
+offset_bottom = 36.0
 grow_horizontal = 2
+
+[node name="SFXVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = -2.0
+offset_top = 300.0
+offset_right = 798.0
+offset_bottom = 354.0
 
 [node name="SFXVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/SFXVolumeContainer"]
 layout_mode = 1
@@ -219,28 +216,32 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -56.5
-offset_top = 310.0
 offset_right = 56.5
-offset_bottom = 333.0
+offset_bottom = 23.0
 grow_horizontal = 2
 theme = ExtResource("9_37s47")
 text = "SFX Volume"
 
-[node name="UIVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
-layout_mode = 1
-anchors_preset = 0
-offset_right = 800.0
-offset_bottom = 600.0
-
-[node name="UIVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/UIVolumeContainer"]
+[node name="SFXVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/SFXVolumeContainer"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -72.5
-offset_top = 380.0
-offset_right = 72.5
-offset_bottom = 396.0
+offset_left = -74.0
+offset_top = 20.0
+offset_right = 74.0
+offset_bottom = 36.0
+grow_horizontal = 2
+
+[node name="UIVolumeContainer" type="Control" parent="UI/Settings/VBoxContainer/AudioSection"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -402.0
+offset_top = 350.0
+offset_right = 398.0
+offset_bottom = 404.0
 grow_horizontal = 2
 
 [node name="UIVolumeLabel" type="Label" parent="UI/Settings/VBoxContainer/AudioSection/UIVolumeContainer"]
@@ -248,21 +249,31 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -40.0
-offset_top = 360.0
-offset_right = 40.0
-offset_bottom = 383.0
+offset_left = -49.0
+offset_right = 49.0
+offset_bottom = 23.0
 grow_horizontal = 2
 theme = ExtResource("9_37s47")
 text = "UI Volume"
 
+[node name="UIVolumeSlider" type="HSlider" parent="UI/Settings/VBoxContainer/AudioSection/UIVolumeContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.5
+offset_top = 20.0
+offset_right = 72.5
+offset_bottom = 40.0
+grow_horizontal = 2
+
 [node name="ButtonsContainer" type="Control" parent="UI/Settings/VBoxContainer"]
 layout_mode = 1
 anchors_preset = 0
-offset_left = -361.0
-offset_top = -162.0
-offset_right = 439.0
-offset_bottom = 438.0
+offset_left = 4.0
+offset_top = 446.0
+offset_right = 804.0
+offset_bottom = 602.0
 
 [node name="BackButton" type="Button" parent="UI/Settings/VBoxContainer/ButtonsContainer"]
 layout_mode = 1
@@ -270,9 +281,8 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -62.0
-offset_top = 420.0
 offset_right = 62.0
-offset_bottom = 474.0
+offset_bottom = 54.0
 grow_horizontal = 2
 theme = ExtResource("6_ssvqc")
 text = "Back
