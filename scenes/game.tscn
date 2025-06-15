@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=28 format=4 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -12,7 +12,7 @@
 [ext_resource type="Theme" uid="uid://dbpv2jfsmqnxs" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
-[ext_resource type="Theme" path="res://assets/ui/font.tres" id="9_37s47"]
+[ext_resource type="Theme" uid="uid://c7sybxxxgdo5x" path="res://assets/ui/font.tres" id="9_37s47"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
 [ext_resource type="Script" path="res://scenes/level.gd" id="10_264po"]
 [ext_resource type="Script" path="res://scenes/wave_count.gd" id="11_ca42v"]
@@ -20,9 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://dg7db0xjdy4hc" path="res://assets/ui/char_pic.png" id="12_bt5mj"]
 [ext_resource type="Script" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
 [ext_resource type="Script" path="res://scenes/perks_panel.gd" id="12_trtic"]
-[ext_resource type="PackedScene" path="res://scenes/components/perk.tscn" id="13_ir15t"]
-[ext_resource type="Texture2D" uid="uid://b50fhfl5xo7k1" path="res://assets/ui/information2.png" id="17_e1j6l"]
+[ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
+[ext_resource type="Texture2D" uid="uid://ddawp54djy8ts" path="res://assets/ui/information.png" id="17_e1j6l"]
 [ext_resource type="Script" path="res://scenes/world.gd" id="17_rysoc"]
+[ext_resource type="Texture2D" uid="uid://b50fhfl5xo7k1" path="res://assets/ui/information2.png" id="19_pl11u"]
 [ext_resource type="Texture2D" uid="uid://qx6r6qcd8paw" path="res://assets/shaders/light.png" id="20_1kice"]
 
 [sub_resource type="Theme" id="Theme_rysoc"]
@@ -380,9 +381,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -125.0
+offset_left = -75.0
 offset_top = -75.0
-offset_right = 125.0
+offset_right = 75.0
 offset_bottom = 75.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -401,22 +402,24 @@ offset_right = 150.0
 offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("9_37s47")
 alignment = 1
 
 [node name="WaveLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
 theme = ExtResource("9_37s47")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "wave"
 horizontal_alignment = 1
 
 [node name="SubLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
 theme = ExtResource("9_37s47")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "weesss"
 horizontal_alignment = 1
 
 [node name="PauseMenu" type="Control" parent="UI"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 16.0
@@ -425,23 +428,20 @@ offset_right = 509.0
 offset_bottom = 222.0
 script = ExtResource("11_dinhu")
 
-[node name="Title" type="Label" parent="UI/PauseMenu"]
+[node name="TextureRect" type="TextureRect" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 622.0
-offset_top = 68.0
-offset_right = 684.0
-offset_bottom = 91.0
-text = "PAUSED"
+offset_top = 100.0
+offset_right = 480.0
+offset_bottom = 420.0
+texture = ExtResource("19_pl11u")
 
 [node name="StatsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
 layout_mode = 0
-offset_left = 57.0
-offset_top = 73.0
-offset_right = 437.0
-offset_bottom = 457.0
-
-[node name="StatsTitle" type="Label" parent="UI/PauseMenu/StatsContainer"]
-layout_mode = 2
+offset_left = 66.0
+offset_top = 170.0
+offset_right = 415.0
+offset_bottom = 363.0
+theme = ExtResource("9_37s47")
 
 [node name="HealthLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
 layout_mode = 2
@@ -464,26 +464,59 @@ layout_mode = 2
 [node name="LifestealLabel" type="Label" parent="UI/PauseMenu/StatsContainer"]
 layout_mode = 2
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="UI/PauseMenu"]
+[node name="Title" type="Label" parent="UI/PauseMenu"]
 layout_mode = 0
+offset_left = 584.0
+offset_top = 75.0
+offset_right = 661.0
+offset_bottom = 98.0
+theme = ExtResource("9_37s47")
+text = "Paused"
+
+[node name="ButtonsContainer" type="Control" parent="UI/PauseMenu"]
+anchors_preset = 0
 offset_left = 561.0
 offset_top = 130.0
 offset_right = 736.0
-offset_bottom = 231.0
+offset_bottom = 332.0
 
 [node name="Play" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
-text = "RESUME"
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_right = 36.5
+offset_bottom = 54.0
+grow_horizontal = 2
+theme = ExtResource("6_ssvqc")
+text = "Resume"
 
 [node name="Settings" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
-text = "OPTIONS
-"
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_top = 70.0
+offset_right = 36.5
+offset_bottom = 124.0
+grow_horizontal = 2
+theme = ExtResource("6_ssvqc")
+text = "Options"
 
 [node name="MainMenu" type="Button" parent="UI/PauseMenu/ButtonsContainer"]
-layout_mode = 2
-text = "BACK TO MAIN MENU
-"
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_top = 140.0
+offset_right = 36.5
+offset_bottom = 194.0
+grow_horizontal = 2
+theme = ExtResource("6_ssvqc")
+text = "Quit"
 
 [node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
 visible = false
