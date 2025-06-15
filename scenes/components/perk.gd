@@ -37,14 +37,21 @@ func setup_perk(perk: PerkSelectionUI.Perk, index: int):
 		effect_label.text = get_effect_text(perk)
 	
 	if sprite:
+		var final_texture: ImageTexture
+		
 		if ResourceLoader.exists(perk.icon_path):
-			sprite.texture = load(perk.icon_path)
+			var loaded_texture = load(perk.icon_path)
+			var image = loaded_texture.get_image()
+			image.resize(128, 128)
+			final_texture = ImageTexture.new()
+			final_texture.set_image(image)
 		else:
-			var image = Image.create(64, 64, false, Image.FORMAT_RGB8)
+			var image = Image.create(128, 128, false, Image.FORMAT_RGB8)  # Create at 128x128 directly
 			image.fill(get_perk_color(perk))
-			var texture = ImageTexture.new()
-			texture.set_image(image)
-			sprite.texture = texture
+			final_texture = ImageTexture.new()
+			final_texture.set_image(image)
+		
+		sprite.texture = final_texture
 
 func get_effect_text(perk: PerkSelectionUI.Perk) -> String:
 	match perk.effect_type:
