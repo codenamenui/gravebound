@@ -1207,6 +1207,7 @@ theme = ExtResource("6_ssvqc")
 text = "Settings"
 
 [node name="GameHUD" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
