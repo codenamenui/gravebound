@@ -11,7 +11,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1i5x"]
-size = Vector2(54.8322, 54.1891)
+size = Vector2(91.2327, 39.5262)
 
 [node name="BA1" type="Node"]
 script = ExtResource("1_ib5y3")
@@ -29,7 +29,9 @@ knockback_force = 5.0
 hit_stop_time = 0.3
 zoom_amount = 1.03
 zoom_duration = 0.5
+hitbox_offset = Vector2(0, 0)
 sfx_name = "player_short_slash"
+display_hitbox = true
 projectile_speed = 0.0
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 
@@ -41,7 +43,7 @@ frame_progress = 1.0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(24.2458, 2.5)
+position = Vector2(15.9891, -9.53674e-07)
 scale = Vector2(0.329068, 1.56858)
 shape = SubResource("RectangleShape2D_h1i5x")
 debug_color = Color(0.995272, 0, 0.208146, 0.42)

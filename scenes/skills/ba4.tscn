@@ -27,6 +27,7 @@ hit_stop_time = 0.5
 zoom_amount = 1.1
 zoom_duration = 0.1
 sfx_name = "player_heavy_downlash"
+display_hitbox = true
 projectile_speed = 0.0
 metadata/_custom_type_script = "uid://btielatq3l0jg"
 

@@ -740,6 +740,7 @@ contact_time = 0.4
 recovery_time = 0.4
 hitbox_lifetime = 4.0
 base_damage = 25.0
+hitbox_offset = Vector2(0, 0)
 sfx_name = "enemy_range_attack"
 
 [node name="AnimatedSprite2D" parent="Skill" index="0"]
