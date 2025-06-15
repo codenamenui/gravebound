@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=26 format=4 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://cy5puddudvoyh" path="res://scenes/level.gd" id="10_264po"]
 [ext_resource type="Script" uid="uid://cergd4fda30tf" path="res://scenes/wave_count.gd" id="11_ca42v"]
 [ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
+[ext_resource type="Texture2D" uid="uid://dg7db0xjdy4hc" path="res://assets/ui/char_pic.png" id="12_bt5mj"]
 [ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
 [ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
 [ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
@@ -105,6 +106,7 @@ text = "Options"
 metadata/_edit_lock_ = true
 
 [node name="Settings" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 800.0
@@ -290,7 +292,6 @@ theme = ExtResource("6_ssvqc")
 text = "Settings"
 
 [node name="GameHUD" type="Control" parent="UI"]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -322,12 +323,22 @@ theme = SubResource("Theme_kvpfn")
 text = "0"
 horizontal_alignment = 2
 
+[node name="Character Picture" type="TextureRect" parent="UI/GameHUD/PlayerInformation"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 70.0
+offset_bottom = 66.0
+texture = ExtResource("12_bt5mj")
+expand_mode = 1
+
 [node name="Level" type="Label" parent="UI/GameHUD/PlayerInformation"]
 layout_mode = 0
-offset_left = 41.0
-offset_top = 43.0
-offset_right = 71.0
-offset_bottom = 66.0
+offset_left = 39.0
+offset_top = 45.675
+offset_right = 69.0
+offset_bottom = 65.675
+theme = ExtResource("9_37s47")
 text = "1"
 horizontal_alignment = 2
 script = ExtResource("10_264po")
