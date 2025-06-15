@@ -1,27 +1,28 @@
-[gd_scene load_steps=26 format=4 uid="uid://dnoq6gw7imio3"]
+[gd_scene load_steps=27 format=4 uid="uid://dnoq6gw7imio3"]
 
 [ext_resource type="PackedScene" uid="uid://bo4xvvcabdlik" path="res://scenes/managers/scene_manager.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://dub1b3f8e2v5a" path="res://scenes/managers/audio_manager.tscn" id="2_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://cg6ofrnh6up5w" path="res://scenes/managers/game_data.tscn" id="3_iywne"]
 [ext_resource type="Script" uid="uid://qwei4nq02xow" path="res://scenes/main_menu.gd" id="4_iywne"]
 [ext_resource type="PackedScene" uid="uid://7p3caqed67be" path="res://scenes/world.tscn" id="4_lbhrr"]
-[ext_resource type="PackedScene" uid="uid://cfywq0k0a4dsa" path="res://scenes/background.tscn" id="5_5newe"]
+[ext_resource type="PackedScene" path="res://scenes/background.tscn" id="5_5newe"]
 [ext_resource type="Texture2D" uid="uid://b1rminomcnyo5" path="res://assets/ui/playerinfo.png" id="5_gee14"]
 [ext_resource type="Script" uid="uid://cq80vmh053868" path="res://scenes/settings.gd" id="5_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://dgx6lqroxutd5" path="res://scenes/components/health_bar.tscn" id="6_0tnpc"]
-[ext_resource type="Theme" uid="uid://hbags6yvwwfc" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
+[ext_resource type="Theme" uid="uid://dbpv2jfsmqnxs" path="res://assets/ui/ui_theme.tres" id="6_ssvqc"]
 [ext_resource type="FontFile" uid="uid://cw1fu4g1orqhd" path="res://assets/ui/MinimalPixel v2.ttf" id="7_vtaks"]
 [ext_resource type="PackedScene" uid="uid://dm6q0abakck7u" path="res://scenes/components/joystick.tscn" id="8_vtaks"]
-[ext_resource type="Theme" uid="uid://c7sybxxxgdo5x" path="res://assets/ui/font.tres" id="9_37s47"]
+[ext_resource type="Theme" path="res://assets/ui/font.tres" id="9_37s47"]
 [ext_resource type="PackedScene" uid="uid://ba6jo7xbq72sm" path="res://scenes/skills/skill_button.tscn" id="9_kvpfn"]
-[ext_resource type="Script" uid="uid://cy5puddudvoyh" path="res://scenes/level.gd" id="10_264po"]
-[ext_resource type="Script" uid="uid://cergd4fda30tf" path="res://scenes/wave_count.gd" id="11_ca42v"]
-[ext_resource type="Script" uid="uid://c7lu7xryquj32" path="res://scenes/pause_menu.gd" id="11_dinhu"]
+[ext_resource type="Script" path="res://scenes/level.gd" id="10_264po"]
+[ext_resource type="Script" path="res://scenes/wave_count.gd" id="11_ca42v"]
+[ext_resource type="Script" path="res://scenes/pause_menu.gd" id="11_dinhu"]
 [ext_resource type="Texture2D" uid="uid://dg7db0xjdy4hc" path="res://assets/ui/char_pic.png" id="12_bt5mj"]
-[ext_resource type="Script" uid="uid://csbxv6xyjvg53" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
-[ext_resource type="Script" uid="uid://bfqllaignaqa0" path="res://scenes/perks_panel.gd" id="12_trtic"]
-[ext_resource type="PackedScene" uid="uid://sel0adpo13pr" path="res://scenes/components/perk.tscn" id="13_ir15t"]
-[ext_resource type="Script" uid="uid://c2lfw3b6bu55b" path="res://scenes/world.gd" id="17_rysoc"]
+[ext_resource type="Script" path="res://scenes/game_over_screen.gd" id="12_kvuet"]
+[ext_resource type="Script" path="res://scenes/perks_panel.gd" id="12_trtic"]
+[ext_resource type="PackedScene" path="res://scenes/components/perk.tscn" id="13_ir15t"]
+[ext_resource type="Texture2D" uid="uid://b50fhfl5xo7k1" path="res://assets/ui/information2.png" id="17_e1j6l"]
+[ext_resource type="Script" path="res://scenes/world.gd" id="17_rysoc"]
 [ext_resource type="Texture2D" uid="uid://qx6r6qcd8paw" path="res://assets/shaders/light.png" id="20_1kice"]
 
 [sub_resource type="Theme" id="Theme_rysoc"]
@@ -106,6 +107,7 @@ text = "Options"
 metadata/_edit_lock_ = true
 
 [node name="Settings" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
@@ -371,28 +373,45 @@ script = ExtResource("11_ca42v")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/GameHUD/WaveStartDisplay"]
 
-[node name="Background" type="ColorRect" parent="UI/GameHUD/WaveStartDisplay"]
-layout_mode = 0
-offset_left = -168.0
-offset_top = -48.0
-offset_right = 211.0
-offset_bottom = 173.0
-color = Color(0.203922, 0.203922, 0.0941176, 0.286275)
+[node name="Background" type="TextureRect" parent="UI/GameHUD/WaveStartDisplay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -75.0
+offset_right = 125.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_e1j6l")
 
 [node name="MainContainer" type="VBoxContainer" parent="UI/GameHUD/WaveStartDisplay"]
-layout_mode = 0
-offset_left = -126.0
-offset_top = 32.0
-offset_right = 174.0
-offset_bottom = 82.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -25.0
+offset_right = 150.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
 [node name="WaveLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
+theme = ExtResource("9_37s47")
 text = "wave"
 horizontal_alignment = 1
 
 [node name="SubLabel" type="Label" parent="UI/GameHUD/WaveStartDisplay/MainContainer"]
 layout_mode = 2
+theme = ExtResource("9_37s47")
 text = "weesss"
 horizontal_alignment = 1
 
@@ -475,7 +494,6 @@ offset_bottom = 40.0
 script = ExtResource("12_trtic")
 player = NodePath("../../GameWorld/Player")
 dash_bonus_weight = 8.0
-metadata/_custom_type_script = "uid://bfqllaignaqa0"
 
 [node name="TitleLabel" type="Label" parent="UI/PerksPanel"]
 layout_mode = 0
