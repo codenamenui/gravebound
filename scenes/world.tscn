@@ -68,7 +68,7 @@ points_scaling_factor = 1.05
 color = Color(0.101961, 0.14902, 0.25098, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_kqs1s")]
-position = Vector2(1929, 413)
+position = Vector2(2173, 181)
 collision_mask = 8
 
 [editable path="Player"]
