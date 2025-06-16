@@ -146,12 +146,12 @@ autostart = true
 ignore_time_scale = true
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="."]
+path_max_distance = 661.0
 navigation_layers = 8
 avoidance_enabled = true
+radius = 14.72
 neighbor_distance = 40.0
 max_speed = 200.0
-avoidance_priority = 0.45
-debug_enabled = true
 debug_path_custom_color = Color(0.513753, 1.11904e-06, 1.92523e-07, 1)
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("initial_state") instance=ExtResource("2_c4w8v")]
