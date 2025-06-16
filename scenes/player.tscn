@@ -478,11 +478,14 @@ ignore_time_scale = true
 anticipation_impulse = Vector2(50, 0)
 zoom_amount = 1.1
 zoom_duration = 0.2
+display_hitbox = false
 
 [node name="BA4" parent="Skills" instance=ExtResource("5_fulsm")]
+recovery_time = 0.4
 hitbox_lifetime = 0.1
 zoom_amount = 1.3
 zoom_duration = 0.2
+display_hitbox = false
 
 [node name="Dash" parent="Skills" instance=ExtResource("5_d2wvv")]
 

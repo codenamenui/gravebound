@@ -792,7 +792,7 @@ animation_speed = 0.5
 anticipation_time = 0.02
 contact_time = 0.4
 recovery_time = 0.2
-base_damage = 20.0
+base_damage = 40.0
 sfx_name = "enemy_melee_attack"
 projectile_speed = 0.0
 
@@ -832,3 +832,6 @@ max_health = 120
 
 [node name="DamageNumber" parent="." index="6"]
 metadata/_edit_use_anchors_ = true
+
+[node name="ChaseState" parent="StateMachine" index="1"]
+speed = 150

@@ -784,4 +784,7 @@ position = Vector2(-1, -18)
 max_health = 80
 
 [node name="AttackState" parent="StateMachine" index="0"]
-wind_up_duration = 0.1
+wind_up_duration = 0.4
+
+[node name="ChaseState" parent="StateMachine" index="1"]
+speed = 150

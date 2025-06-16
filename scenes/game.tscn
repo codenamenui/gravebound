@@ -1704,7 +1704,9 @@ metadata/_edit_lock_ = true
 [connection signal="pressed" from="UI/GameOverScreen/MainMenu" to="UI/GameOverScreen" method="_on_main_menu_pressed"]
 [connection signal="wave_started" from="GameWorld/EnemySpawn" to="UI/GameHUD/PlayerInformation/Level" method="_on_enemy_spawn_wave_started"]
 [connection signal="wave_started" from="GameWorld/EnemySpawn" to="UI/GameHUD/WaveStartDisplay" method="_on_wave_started"]
+[connection signal="took_damage" from="GameWorld/Player" to="GameWorld/Camera2D" method="_on_player_took_damage"]
 
+[editable path="UI/GameHUD/Joystick"]
 [editable path="UI/GameHUD/SkillButton2"]
 [editable path="GameWorld"]
 [editable path="GameWorld/Player"]

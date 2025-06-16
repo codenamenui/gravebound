@@ -616,7 +616,7 @@ skill_name = "slash"
 animation_speed = 1.0
 anticipation_time = 0.02
 contact_time = 0.4
-base_damage = 40.0
+base_damage = 60.0
 sfx_name = "enemy_cat_attack"
 projectile_speed = 0.0
 

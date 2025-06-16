@@ -196,7 +196,7 @@ func _on_skill_finished():
 	current_skill = null
 	
 func handle_movement(direction: Vector2 = Vector2()):
-	direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	#direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if is_dying:
 		velocity = velocity.move_toward(Vector2.ZERO, speed * deceleration_factor * get_physics_process_delta_time())
