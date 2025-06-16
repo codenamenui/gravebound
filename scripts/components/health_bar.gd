@@ -32,6 +32,10 @@ func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.took_damage.connect(_on_took_damage)
 
+func update_bars():
+	health_bar.max_value = health_component.max_health
+	damage_bar.max_value = health_component.max_health
+	
 func _setup_damage_bar():
 	if not damage_bar:
 		damage_bar = TextureProgressBar.new()

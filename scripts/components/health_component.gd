@@ -10,6 +10,7 @@ signal took_damage(damage, knockback_direction)
 
 @onready var current_health: int = max_health
 @onready var init_max_health: int = max_health
+@onready var health_bar: HealthBar = $"HealthBar"
 var is_invincible: bool = false
 
 func take_damage(damage: int):
@@ -36,16 +37,24 @@ func _temp_invincibility():
 
 func add_current_health(bonus: int):
 	current_health += bonus
+	if current_health > max_health:
+		current_health = max_health
+	health_bar.update_bars()
 	
 func add_max_health(bonus: int):
 	current_health += bonus
 	max_health += bonus
-
+	if current_health > max_health:
+		current_health = max_health
+	health_bar.update_bars()
+	
 func reset_health():
 	max_health = init_max_health
 	current_health = init_max_health
-
+	health_bar.update_bars()
+	
 func heal(health: int):
 	current_health += health
 	if current_health > max_health:
 		current_health = max_health
+	health_bar.update_bars()

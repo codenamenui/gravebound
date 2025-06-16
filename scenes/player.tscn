@@ -476,6 +476,7 @@ ignore_time_scale = true
 
 [node name="BA1" parent="Skills" instance=ExtResource("2_ur7pv")]
 anticipation_impulse = Vector2(50, 0)
+base_damage = 100.0
 zoom_amount = 1.1
 zoom_duration = 0.2
 display_hitbox = false

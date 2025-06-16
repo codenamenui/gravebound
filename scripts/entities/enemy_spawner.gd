@@ -280,7 +280,11 @@ func _start_wave(wave_index: int):
 	
 	# Emit wave started signal
 	wave_started.emit(wave_index + 1)
-	
+	if (wave_index + 1) % 2 == 0:
+		AudioManager.play_music("gameplay_intense")
+	else:
+		AudioManager.play_music("gameplay")
+		
 	# Debug info
 	print("Wave ", wave_index + 1, " started:")
 	print("  Enemies to spawn: ", current_wave_enemy_count)
@@ -376,6 +380,8 @@ func _complete_current_wave():
 	
 	if player and player.has_method("level_up"):
 		player.level_up(level_amount)
+	
+	GameData.current_wave += 1
 	
 	SceneManager.transition_to_state(GameData.GameState.PERK_SELECTION)
 	wave_completed.emit(current_wave_index + 1)

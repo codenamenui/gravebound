@@ -158,11 +158,6 @@ func show_settings():
 			settings.set_process_mode(Node.PROCESS_MODE_INHERIT)
 
 func show_game_hud():
-	if GameData.current_wave > 10:
-		AudioManager.play_music("gameplay_intense")
-	else:
-		AudioManager.play_music("gameplay")
-	
 	var game_hud = ui_panels.get("GameHUD")
 	if is_instance_valid(game_hud):
 		game_hud.visible = true
@@ -190,6 +185,7 @@ func show_perks_panel():
 	
 func show_game_over_screen():
 	show_game_hud()
+	AudioManager.play_music("game_over")
 	var game_over = ui_panels.get("GameOverScreen")
 	if is_instance_valid(game_over):
 		game_over.visible = true

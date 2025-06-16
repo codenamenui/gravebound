@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=20 format=3 uid="uid://cv4ud6kohhc7h"]
+[gd_resource type="TileSet" load_steps=21 format=3 uid="uid://cv4ud6kohhc7h"]
 
 [ext_resource type="Texture2D" uid="uid://dcn6y8nstyrcr" path="res://assets/ui/fantasy_dungeon_tileset.png" id="1_tfoj2"]
 [ext_resource type="Texture2D" uid="uid://bpk0w3hj4yryq" path="res://assets/ui/top down tileset.png" id="2_50j78"]
@@ -52,6 +52,12 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-16, -16, 16, -16, 16, 
 agent_radius = 0.0
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tfoj2"]
+vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_rsl6n"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)])
@@ -433,7 +439,7 @@ texture_region_size = Vector2i(32, 32)
 2:11/0 = 0
 2:11/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_h86ru")
 3:11/0 = 0
-3:11/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_h86ru")
+3:11/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_rsl6n")
 4:11/0 = 0
 4:11/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_h86ru")
 5:11/0 = 0
