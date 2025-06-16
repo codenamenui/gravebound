@@ -1209,6 +1209,7 @@ theme = ExtResource("6_ssvqc")
 text = "Settings"
 
 [node name="GameHUD" type="Control" parent="UI"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -1456,11 +1457,14 @@ theme = ExtResource("6_ssvqc")
 text = "Quit"
 
 [node name="PerksPanel" type="Control" parent="UI" node_paths=PackedStringArray("player")]
-visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 800.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_right = 400.0
 offset_bottom = 40.0
+grow_horizontal = 2
 script = ExtResource("12_trtic")
 player = NodePath("../../GameWorld/Player")
 dash_bonus_weight = 8.0
@@ -1471,9 +1475,11 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -21.5
+offset_top = 35.0
 offset_right = 21.5
-offset_bottom = 23.0
+offset_bottom = 58.0
 grow_horizontal = 2
+theme = ExtResource("9_37s47")
 text = "Perks"
 
 [node name="Perk1" parent="UI/PerksPanel" instance=ExtResource("13_ir15t")]
